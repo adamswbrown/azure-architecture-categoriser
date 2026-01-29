@@ -176,6 +176,45 @@ def render_filter_presets() -> None:
     """Render the filter presets tab."""
     st.header("Filter Presets")
 
+    # Explanation section
+    with st.expander("ℹ️ How Filters Work", expanded=False):
+        st.markdown("""
+        ### Filter Types
+
+        **1. Topic Filters (ms.topic)**
+        Controls which document types are included:
+        - `reference-architecture` - Curated, production-ready patterns (~50 docs)
+        - `example-scenario` - Real-world implementation examples (~100 docs)
+        - `solution-idea` - Conceptual solution designs (~80 docs)
+
+        By default, all three topic types are included. Other document types (tutorials, guides,
+        how-to articles) are excluded as they're not architecture patterns.
+
+        **2. Product Filters**
+        Filter by Azure products mentioned in the architecture. Uses prefix matching:
+        - `azure` matches all Azure products
+        - `azure-kubernetes` matches azure-kubernetes-service
+        - `azure-sql` matches azure-sql-database, azure-sql-managed-instance
+
+        **3. Category Filters**
+        Filter by Azure categories (azureCategories metadata):
+        - web, containers, databases, ai-machine-learning, analytics, etc.
+
+        ### Filter Logic
+        - **Products**: If set, at least one product must match
+        - **Categories**: If set, at least one category must match
+        - **Topics**: If set, ms.topic must be in the allowed list
+        - **Empty filter = no restriction** for that dimension
+
+        ### Typical Counts
+        | Filter | Approximate Results |
+        |--------|---------------------|
+        | No filters | ~171 architectures |
+        | Reference only | ~50 architectures |
+        | Azure Kubernetes | ~25 architectures |
+        | AI/ML category | ~30 architectures |
+        """)
+
     config = get_state('config')
     active_filters = get_state('active_filters')
 

@@ -58,6 +58,54 @@ DICTIONARIES = {
 def render_keywords_editor() -> None:
     """Render the keywords editor tab."""
     st.header("Keyword Dictionaries")
+
+    # Explanation section
+    with st.expander("ℹ️ How Classification Works", expanded=False):
+        st.markdown("""
+        ### Automatic Classification
+
+        The catalog builder automatically classifies architectures into categories by scanning
+        document content for keywords. Each dictionary controls one dimension of classification.
+
+        ### The 9 Classification Dictionaries
+
+        | Dictionary | Purpose | Used For |
+        |------------|---------|----------|
+        | **Workload Domain** | What problem does it solve? | web, data, AI, security, integration |
+        | **Architecture Family** | What technology tier? | IaaS, PaaS, cloud-native, data pipelines |
+        | **Runtime Model** | How does it execute? | microservices, event-driven, batch, API |
+        | **Availability Model** | What's the HA design? | multi-region, zone-redundant |
+        | **Gartner 8R Treatment** | Migration strategy? | rehost, replatform, refactor |
+        | **TIME Category** | Investment posture? | invest, migrate, tolerate, eliminate |
+        | **Operating Model** | Ops maturity required? | DevOps, SRE, traditional IT |
+        | **Security Level** | Compliance needs? | highly regulated, enterprise, basic |
+        | **Cost Profile** | Cost optimization? | minimized, balanced, scale-optimized |
+
+        ### How Matching Works
+
+        1. Document content is scanned for keywords (case-insensitive)
+        2. Keyword matches are counted per category
+        3. The category with the most matches wins
+        4. Confidence is based on match count and keyword specificity
+
+        ### Keyword Tips
+
+        - **Be specific**: "azure kubernetes service" > "kubernetes"
+        - **Include variants**: "aks", "azure-kubernetes-service", "kubernetes service"
+        - **Avoid common words**: Don't use "the", "and", generic terms
+        - **Use phrases**: Multi-word phrases are more precise
+
+        ### Example
+        For `cloud_native` family:
+        ```
+        kubernetes
+        container
+        serverless
+        microservices
+        service mesh
+        ```
+        """)
+
     st.markdown("""
     Edit the keyword dictionaries used for automatic classification.
     Each dictionary maps categories to lists of keywords used to detect that classification.

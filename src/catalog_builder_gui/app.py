@@ -213,13 +213,60 @@ def main() -> None:
 
     # Main content area with tabs
     st.title("Azure Architecture Catalog Builder")
-    st.markdown("Configure the catalog builder settings through this interactive interface.")
+
+    # Welcome/Overview section
+    with st.expander("📖 Getting Started", expanded=not get_state('repo_path')):
+        st.markdown("""
+        ### What This Tool Does
+
+        The Catalog Builder scans the [Azure Architecture Center](https://learn.microsoft.com/en-us/azure/architecture/)
+        repository and creates a structured catalog of architecture patterns. This catalog is used by the
+        **Architecture Scorer** to recommend patterns for your applications.
+
+        ### Quick Start
+
+        1. **Clone the Repository** (sidebar) - Get the Azure Architecture Center content
+        2. **Preview Build** (tab 3) - See what architectures will be included
+        3. **Adjust Filters** (tab 2) - Customize which architectures to include
+        4. **Export Config** (tab 4) - Save your configuration for CLI use
+
+        ### Default Settings
+
+        The builder uses sensible defaults that work for most use cases:
+
+        | Setting | Default | Effect |
+        |---------|---------|--------|
+        | **Topic Filter** | reference-architecture, example-scenario, solution-idea | Includes ~171 architectures |
+        | **Product Filter** | None (all) | No product restrictions |
+        | **Category Filter** | None (all) | No category restrictions |
+        | **Require YML** | No | Includes both YML-tagged and detected architectures |
+
+        ### Workflow
+
+        ```
+        Repository → Detection → Filtering → Classification → Catalog JSON
+        ```
+
+        1. **Detection**: Identifies architecture documents by folder, metadata, and content signals
+        2. **Filtering**: Applies your topic/product/category filters
+        3. **Classification**: Assigns workload domain, family, runtime model, etc.
+        4. **Output**: Generates `architecture-catalog.json` for the scorer
+
+        ### CLI Usage
+
+        After configuring, use the CLI to build the full catalog:
+        ```bash
+        catalog-builder build-catalog --repo-path ./architecture-center --out catalog.json --config my-config.yaml
+        ```
+        """)
+
+    st.markdown("Configure the catalog builder settings through the tabs below.")
 
     tab1, tab2, tab3, tab4 = st.tabs([
-        "Keyword Dictionaries",
-        "Filter Presets",
-        "Preview Build",
-        "Config Editor"
+        "📚 Keyword Dictionaries",
+        "🎛️ Filter Presets",
+        "👁️ Preview Build",
+        "⚙️ Config Editor"
     ])
 
     with tab1:

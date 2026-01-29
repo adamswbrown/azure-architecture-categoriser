@@ -11,6 +11,59 @@ from catalog_builder_gui.state import get_state, set_state
 def render_config_editor() -> None:
     """Render the config editor tab."""
     st.header("Configuration Editor")
+
+    # Explanation section
+    with st.expander("ℹ️ Configuration Reference", expanded=False):
+        st.markdown("""
+        ### Configuration Sections
+
+        **1. Detection Settings**
+        Controls how architectures are identified in documents:
+
+        | Setting | Default | Purpose |
+        |---------|---------|---------|
+        | Folder Score | 0.3 | Weight when doc is in architecture folder |
+        | Diagram Score | 0.2 | Weight when doc has architecture diagrams |
+        | Section Score | 0.2 | Weight when doc has "Architecture" sections |
+        | Keyword Score | 0.15 | Weight for architecture keywords |
+        | Frontmatter Score | 0.15 | Weight for ms.topic metadata |
+        | Min Confidence | 0.3 | Threshold to include (sum of weights) |
+
+        A document needs total score ≥ min_confidence AND ≥2 signals to be included.
+
+        **2. Filter Settings**
+        Controls which documents make it into the catalog:
+
+        | Setting | Default | Purpose |
+        |---------|---------|---------|
+        | Allowed Topics | reference-architecture, example-scenario, solution-idea | Only include these ms.topic values |
+        | Allowed Categories | [] (all) | Restrict to specific azureCategories |
+        | Require YML | False | Only include docs with YamlMime:Architecture |
+        | Exclude Examples | False | Exclude example-scenario and solution-idea |
+
+        **3. Classification Thresholds**
+        Controls automatic classification assignment:
+
+        | Setting | Default | Purpose |
+        |---------|---------|---------|
+        | Treatment Threshold | 2.0 | Min keyword score for treatment |
+        | TIME Category Threshold | 2.0 | Min score for TIME category |
+        | Security Score Threshold | 3.0 | Min for regulated security levels |
+        | VM Rehost Boost | 3.0 | Boost rehost score when VMs present |
+        | Container Refactor Boost | 2.0 | Boost refactor when containers present |
+        | Managed Replatform Boost | 2.0 | Boost replatform for managed services |
+
+        ### Using the Configuration
+
+        Save the YAML and use with the CLI:
+        ```bash
+        catalog-builder build-catalog \\
+            --repo-path ./architecture-center \\
+            --config catalog-config.yaml \\
+            --out catalog.json
+        ```
+        """)
+
     st.markdown("""
     Edit the complete configuration visually or directly in YAML format.
     Changes in either column will sync when applied.

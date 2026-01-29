@@ -10,6 +10,26 @@
 3. Fixed Learn URLs - now properly link to Microsoft Learn pages
 4. All 173 tests passing
 
+#### GUI Improvements (Later in Session)
+
+Enhanced the GUI with comprehensive explanations and sensible defaults:
+
+1. **Getting Started Guide** - Expandable overview in main app explaining:
+   - What the tool does
+   - Quick start workflow
+   - Default settings table
+   - CLI usage examples
+
+2. **Preview Panel Fix** - Now scans architecture folders first (example-scenario,
+   reference-architectures, ai-ml, etc.) instead of alphabetically, so previews
+   show meaningful results with default 100 file limit
+
+3. **Inline Documentation** - Added "How it Works" expanders to each tab:
+   - Keywords Editor: Classification process and keyword tips
+   - Filter Presets: Filter types, logic, and typical counts
+   - Preview Panel: Detection process and key metadata fields
+   - Config Editor: Complete configuration reference
+
 #### Streamlit GUI (`catalog_builder_gui/`)
 
 | Component | Purpose | Status |

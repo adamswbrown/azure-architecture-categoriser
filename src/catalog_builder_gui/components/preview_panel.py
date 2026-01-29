@@ -11,9 +11,37 @@ from catalog_builder_gui.state import get_state
 def render_preview_panel() -> None:
     """Render the preview build tab."""
     st.header("Preview Catalog Build")
+
+    # Explanation section
+    with st.expander("ℹ️ How Preview Works", expanded=False):
+        st.markdown("""
+        ### What This Does
+        The preview scans the Azure Architecture Center repository to find architecture documents
+        and shows which ones would be included in the catalog based on your current settings.
+
+        ### Detection Process
+        1. **Folder Scanning**: Prioritizes architecture folders (example-scenario, reference-architectures, etc.)
+        2. **Document Parsing**: Extracts frontmatter metadata (ms.topic, products, categories)
+        3. **Architecture Detection**: Applies heuristics to identify architecture content
+        4. **Filter Application**: Applies your topic/product/category filters
+
+        ### Key Metadata Fields
+        - **ms.topic**: Document type (reference-architecture, example-scenario, solution-idea)
+        - **azureCategories**: Categories like web, containers, databases, ai-machine-learning
+        - **products**: Azure products like azure-kubernetes-service, azure-app-service
+
+        ### Default Behavior
+        By default, the catalog includes documents with ms.topic values:
+        - `reference-architecture` - Curated reference architectures
+        - `example-scenario` - Real-world implementation examples
+        - `solution-idea` - Conceptual solution designs
+
+        Documents without these topic values (tutorials, guides, landing pages) are excluded.
+        """)
+
     st.markdown("""
     Preview what architectures would be included in the catalog with current settings.
-    This scans the repository without building the full catalog.
+    The scan prioritizes architecture folders to show relevant results quickly.
     """)
 
     repo_path = get_state('repo_path', '')
@@ -66,9 +94,48 @@ def _run_preview_scan(repo_path: Path, max_files: int) -> None:
             parser = MarkdownParser()
             detector = ArchitectureDetector()
 
-            # Find markdown files
+            # Find markdown files - prioritize architecture folders
             docs_path = repo_path / 'docs'
-            md_files = list(docs_path.rglob('*.md'))[:max_files]
+
+            # Architecture folders to scan first (where architectures are most likely)
+            priority_folders = [
+                'example-scenario',
+                'reference-architectures',
+                'solution-ideas',
+                'ai-ml',
+                'databases',
+                'web-apps',
+                'networking',
+                'security',
+                'hybrid',
+                'microservices',
+                'serverless',
+                'iot',
+                'data',
+                'integration',
+                'high-availability',
+            ]
+
+            md_files = []
+
+            # Collect files from priority folders first
+            for folder in priority_folders:
+                folder_path = docs_path / folder
+                if folder_path.exists():
+                    folder_files = list(folder_path.rglob('*.md'))
+                    md_files.extend(folder_files)
+                    if len(md_files) >= max_files:
+                        break
+
+            # If we still need more files, add from other locations
+            if len(md_files) < max_files:
+                all_files = set(docs_path.rglob('*.md'))
+                existing = set(md_files)
+                remaining = list(all_files - existing)
+                md_files.extend(remaining[:max_files - len(md_files)])
+
+            # Limit to max_files
+            md_files = md_files[:max_files]
 
             total = len(md_files)
             included = []
