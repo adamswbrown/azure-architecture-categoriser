@@ -1,0 +1,68 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "HRArchiveTool",
+        "app_type": "Utility",
+        "business_crtiticality": "Low",
+        "treatment": "Tolerate"
+      }
+    ],
+    "detected_technology_running": [
+      "Microsoft Access",
+      "Windows Forms"
+    ],
+    "app_approved_azure_services": [
+      {}
+    ],
+    "server_details": [
+      {
+        "machine": "HRARCH01",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2012 R2",
+        "ip_address": [
+          "10.30.5.10"
+        ],
+        "StorageGB": 50.0,
+        "MemoryGB": 4.0,
+        "Cores": 2.0,
+        "CPUUsage": 10.0,
+        "MemoryUsage": 25.0,
+        "DiskReadOpsPersec": 10.0,
+        "DiskWriteOpsPerSec": 5.0,
+        "NetworkInMBPS": 2.0,
+        "NetworkOutMBPS": 1.0,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 1.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "NotReady",
+        "AzureReadinessIssues": "Unsupported OS",
+        "migration_strategy": "Tolerate",
+        "treatment_option": "Keep as-is",
+        "detected_COTS": [
+          "Microsoft Access"
+        ]
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": "Legacy",
+        "summary": {
+          "modernization_feasible": false
+        },
+        "findings": [
+          {
+            "type": "UnsupportedTechnology",
+            "severity": "Critical",
+            "description": "Access backend detected."
+          }
+        ],
+        "compatibility": {},
+        "recommended_targets": [],
+        "blockers": [
+          "Unsupported technology stack"
+        ]
+      }
+    ]
+  }
+]

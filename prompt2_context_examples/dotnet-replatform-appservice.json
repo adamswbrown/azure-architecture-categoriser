@@ -1,0 +1,80 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "FinanceLedger",
+        "app_type": "Web Application",
+        "business_crtiticality": "High",
+        "treatment": "Replatform"
+      }
+    ],
+    "detected_technology_running": [
+      "Microsoft IIS",
+      "ASP.NET Framework 4.7",
+      "Microsoft SQL Server 2017"
+    ],
+    "app_approved_azure_services": [
+      {
+        "Microsoft IIS": "Azure App Service",
+        "Microsoft SQL Server 2017": "Azure SQL Managed Instance"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "FINWEB01",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2016",
+        "ip_address": [
+          "10.10.1.10"
+        ],
+        "StorageGB": 200,
+        "MemoryGB": 16,
+        "Cores": 4,
+        "CPUUsage": 35,
+        "MemoryUsage": 60,
+        "DiskReadOpsPersec": 120,
+        "DiskWriteOpsPerSec": 90,
+        "NetworkInMBPS": 15,
+        "NetworkOutMBPS": 12,
+        "StandardSSDDisks": 2,
+        "StandardHDDDisks": 0,
+        "PremiumDisks": 0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform",
+        "detected_COTS": [
+          "Microsoft IIS",
+          "ASP.NET Framework 4.7"
+        ]
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": ".NET",
+        "summary": {
+          "projects": 10,
+          "container_ready": false
+        },
+        "findings": [
+          {
+            "type": "FrameworkDependency",
+            "severity": "High",
+            "description": "System.Web dependency detected."
+          }
+        ],
+        "compatibility": {
+          "azure_app_service": "SupportedWithChanges",
+          "azure_container_apps": "NotSupported",
+          "azure_kubernetes_service": "SupportedWithRefactor"
+        },
+        "recommended_targets": [
+          "Azure App Service",
+          "Azure SQL Managed Instance"
+        ],
+        "blockers": [
+          "System.Web dependency prevents containerization"
+        ]
+      }
+    ]
+  }
+]

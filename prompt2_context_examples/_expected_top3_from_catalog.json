@@ -1,0 +1,51 @@
+{
+  "catalog_version": "1.0.0",
+  "catalog_generated_at": "2026-01-29T06:20:41.376377",
+  "mapping": {
+    "01-java-refactor-aks.json": {
+      "expected_top3": [
+        {
+          "architecture_id": "reference-architectures-containers-aks-start-here",
+          "name": "Azure Kubernetes Service (AKS) - planning",
+          "catalog_quality": null
+        }
+      ],
+      "notes": "Container-ready Java refactor; expect AKS/containers patterns to dominate."
+    },
+    "02-dotnet-replatform-appservice.json": {
+      "expected_top3": [],
+      "notes": ".NET Framework replatform; App Mod blocks containers; expect App Service patterns."
+    },
+    "03-legacy-tolerate.json": {
+      "expected_top3": [
+        {
+          "architecture_id": "example-scenario-gateway-application-gateway-befor-98274a03",
+          "name": "Implement a Zero Trust Network for Web Applications by Using Azure Firewall and Azure Application Gateway",
+          "catalog_quality": null
+        },
+        {
+          "architecture_id": "example-scenario-gateway-firewall-application-gate-5badaa77",
+          "name": "Azure Firewall-only design",
+          "catalog_quality": null
+        }
+      ],
+      "notes": "Tolerate legacy; engine should likely exclude most patterns; top3 here are fallback infra patterns."
+    },
+    "04-mixed-java-dotnet-partial-appmod.json": {
+      "expected_top3": [],
+      "notes": "Mixed stack with partial App Mod; should still prefer container/microservices-friendly patterns but may ask questions."
+    },
+    "05-java-replatform-partial-appmod-missing-compat.json": {
+      "expected_top3": [],
+      "notes": "Incomplete App Mod; should lean toward App Service patterns with lower confidence and ask for confirmation."
+    },
+    "06-dotnet-conflicting-signals-appmod-overrides.json": {
+      "expected_top3": [],
+      "notes": "Conflicting approved services vs App Mod; App Mod wins; recommend App Service over AKS."
+    },
+    "07-greenfield-cloud-native-perfect.json": {
+      "expected_top3": [],
+      "notes": "Cloud-native, event-driven, container-ready; expect AKS/containers patterns."
+    }
+  }
+}

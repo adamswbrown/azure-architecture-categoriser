@@ -1,0 +1,140 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "CustomerPortalSuite",
+        "app_type": "Distributed Application",
+        "business_crtiticality": "High",
+        "treatment": "Refactor"
+      }
+    ],
+    "detected_technology_running": [
+      "Java 17",
+      "Spring Boot",
+      "ASP.NET Core 6",
+      "Nginx",
+      "Redis",
+      "Microsoft SQL Server 2019"
+    ],
+    "app_approved_azure_services": [
+      {
+        "Redis": "Azure Cache for Redis",
+        "Microsoft SQL Server 2019": "Azure SQL Managed Instance",
+        "Nginx": "Azure Kubernetes Service"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "CUSTAPI01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.40.0.10"
+        ],
+        "StorageGB": 80.0,
+        "MemoryGB": 8.0,
+        "Cores": 4.0,
+        "CPUUsage": 60.0,
+        "MemoryUsage": 70.0,
+        "DiskReadOpsPersec": 55.0,
+        "DiskWriteOpsPerSec": 40.0,
+        "NetworkInMBPS": 35.0,
+        "NetworkOutMBPS": 38.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Refactor",
+        "treatment_option": "Containerize",
+        "detected_COTS": [
+          "Java 17",
+          "Spring Boot",
+          "Nginx"
+        ]
+      },
+      {
+        "machine": "CUSTWEB01",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2022",
+        "ip_address": [
+          "10.40.0.11"
+        ],
+        "StorageGB": 120.0,
+        "MemoryGB": 16.0,
+        "Cores": 4.0,
+        "CPUUsage": 40.0,
+        "MemoryUsage": 55.0,
+        "DiskReadOpsPersec": 70.0,
+        "DiskWriteOpsPerSec": 60.0,
+        "NetworkInMBPS": 25.0,
+        "NetworkOutMBPS": 28.0,
+        "StandardSSDDisks": 2.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Refactor",
+        "treatment_option": "Modernize",
+        "detected_COTS": [
+          "ASP.NET Core 6"
+        ]
+      },
+      {
+        "machine": "CUSTDB01",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2019",
+        "ip_address": [
+          "10.40.0.12"
+        ],
+        "StorageGB": 2048.0,
+        "MemoryGB": 64.0,
+        "Cores": 16.0,
+        "CPUUsage": 55.0,
+        "MemoryUsage": 75.0,
+        "DiskReadOpsPersec": 420.0,
+        "DiskWriteOpsPerSec": 390.0,
+        "NetworkInMBPS": 40.0,
+        "NetworkOutMBPS": 35.0,
+        "StandardSSDDisks": 6.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 2.0,
+        "AzureVMReadiness": "ReadyWithConditions",
+        "AzureReadinessIssues": "Upgrade to supported SQL build recommended",
+        "migration_strategy": "Replatform",
+        "treatment_option": "SQL MI",
+        "detected_COTS": [
+          "Microsoft SQL Server 2019",
+          "Redis"
+        ]
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": "Java",
+        "summary": {
+          "services_scanned": 3,
+          "container_ready": true,
+          "externalized_configuration": true
+        },
+        "findings": [
+          {
+            "type": "Dependency",
+            "severity": "Medium",
+            "description": "One service uses local filesystem for temp files."
+          }
+        ],
+        "compatibility": {
+          "azure_app_service": "Supported",
+          "azure_container_apps": "Supported",
+          "azure_kubernetes_service": "FullySupported"
+        },
+        "recommended_targets": [
+          "Azure Kubernetes Service",
+          "Azure Container Apps"
+        ],
+        "blockers": []
+      }
+    ]
+  }
+]

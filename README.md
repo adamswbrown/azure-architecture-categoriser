@@ -233,16 +233,24 @@ catalog-builder build-catalog --repo-path ./architecture-center --out catalog.js
 
 ## Prompt Documentation
 
-The design decisions and rules for this catalog builder are documented in the `prompts/` folder:
+The design decisions and rules are documented in the `prompts/` folder:
 
-- [catalog-builder-prompt-v1.md](prompts/catalog-builder-prompt-v1.md) - Complete specification for v1.0 catalog generation
+- [catalog-builder-prompt-v1.md](prompts/catalog-builder-prompt-v1.md) - Catalog builder specification
+- [architecture-scorer-prompt-v1.md](prompts/architecture-scorer-prompt-v1.md) - Architecture scorer specification
 
-This prompt documentation serves as the authoritative reference for:
+**Catalog Builder prompt** covers:
 - Service extraction rules (allow-list matching, prose filtering)
 - Pattern name inference and truncation rules
 - Quality level determination criteria
 - Classification keyword scoring
 - Junk name detection
+
+**Architecture Scorer prompt** covers:
+- Input normalization and signal extraction
+- Dynamic clarification question generation
+- Eligibility filtering rules
+- Scoring weights and confidence penalties
+- Interactive CLI mode
 
 ## Architecture
 
@@ -250,11 +258,165 @@ This tool is part of a three-tier architecture:
 
 | Component | Role | Characteristics |
 |-----------|------|-----------------|
-| **Catalog Builder** (this tool) | Neutral catalog compiler | Explainable, deterministic, no scoring |
-| **Scorer** (future) | Scoring and recommendation | Uses catalog as input |
+| **Catalog Builder** | Neutral catalog compiler | Build-time, deterministic, no scoring |
+| **Architecture Scorer** | Scoring and recommendation | Runtime, explainable, interactive |
 | **Browser App** (future) | User interface | Explainability and confirmation |
 
+---
+
+## Architecture Scorer
+
+The Architecture Scorer is the second component - a runtime engine that evaluates application contexts against the catalog and returns ranked recommendations with explanations.
+
+### Installation
+
+The scorer is included when you install the package:
+
+```bash
+pip install -e .
+```
+
+### Usage
+
+```bash
+# Score an application context against the catalog
+architecture-scorer score \
+  --catalog architecture-catalog.json \
+  --context app-context.json
+
+# Interactive mode (default) - prompts for answers to clarification questions
+architecture-scorer score -c catalog.json -x context.json
+
+# Non-interactive mode - skip question prompts
+architecture-scorer score -c catalog.json -x context.json --no-interactive
+
+# Provide answers directly
+architecture-scorer score -c catalog.json -x context.json \
+  -a treatment=replatform \
+  -a security_level=enterprise \
+  -a operating_model=devops
+
+# Show only clarification questions
+architecture-scorer questions -c catalog.json -x context.json
+
+# Validate inputs
+architecture-scorer validate -c catalog.json -x context.json
+```
+
+### Interactive Question Mode
+
+By default, the scorer runs in interactive mode. When clarification questions are generated, you're prompted to answer them:
+
+```
+╭─────────────────────────────────────────────────────────────────────────────╮
+│  Clarification Questions                                                    │
+╰─────────────────────────────────────────────────────────────────────────────╯
+
+Question 1 of 3:
+What security/compliance level is required for this application?
+Current inference: basic (confidence: LOW)
+
+    1. Basic - Standard security practices, no specific compliance
+    2. Enterprise - Enterprise security (Zero Trust, private endpoints)
+  → 3. Regulated - Industry compliance (SOC 2, ISO 27001, GDPR)
+    4. Highly Regulated - Strict compliance (HIPAA, PCI-DSS, FedRAMP)
+
+Enter choice (1-4) or value [press Enter to keep current]:
+```
+
+Enter a number (1-4) to select an option, type a value directly, or press Enter to keep the current inference.
+
+### Clarification Questions
+
+Questions are **dynamically generated** based on signal confidence levels. The scorer only asks when:
+- A signal has LOW or UNKNOWN confidence
+- The answer materially affects eligibility or scoring
+
+| Question | Dimension | When Asked |
+|----------|-----------|------------|
+| Migration strategy | `treatment` | No declared treatment, low confidence |
+| Strategic investment posture | `time_category` | UNKNOWN confidence only |
+| Availability requirements | `availability` | Low confidence |
+| Security/compliance level | `security_level` | No compliance requirements specified |
+| Operational maturity | `operating_model` | Low confidence |
+| Cost optimization priority | `cost_posture` | Low confidence |
+
+### Confidence Levels
+
+Each recommendation includes a confidence assessment:
+
+| Level | Score Threshold | Penalty | Low Signals | Description |
+|-------|-----------------|---------|-------------|-------------|
+| **High** | ≥75% | <10% | ≤1 | Strong match, minimal assumptions |
+| **Medium** | ≥50% | <20% | ≤3 | Reasonable match with some assumptions |
+| **Low** | <50% | ≥20% | >3 | Weak match, many assumptions |
+
+**Confidence Penalties by Signal:**
+- HIGH confidence: 0% penalty
+- MEDIUM confidence: 5% penalty per signal
+- LOW confidence: 15% penalty per signal
+- UNKNOWN confidence: 25% penalty per signal
+
+### Output Example
+
+```
+╭─────────────────────────────────────────────────────────────────────────────╮
+│  Architecture Scoring Results                                               │
+╰─────────────────────────────────────────────────────────────────────────────╯
+
+Application: PaymentGateway
+Treatment: refactor | TIME Category: invest
+Eligible Architectures: 12 | Excluded: 159
+
+Your Answers Applied:
+  • security_level: regulated
+  • operating_model: devops
+
+╭─────────────────────────────────────────────────────────────────────────────╮
+│  Top 5 Recommendations                                                      │
+╰─────────────────────────────────────────────────────────────────────────────╯
+
+1. AKS Baseline Cluster Architecture
+   Score: 74% | Confidence: MEDIUM | Quality: curated
+   URL: https://learn.microsoft.com/en-us/azure/architecture/...
+
+   ✓ Matched: treatment_alignment, platform_compatibility, service_overlap
+   ✗ Gaps: availability_alignment (partial)
+   ⚠ Assumptions: runtime_model inferred from app type
+```
+
+### Scoring Weights
+
+| Dimension | Weight | Description |
+|-----------|--------|-------------|
+| treatment_alignment | 20% | Gartner 8R treatment match |
+| platform_compatibility | 15% | App Mod platform status |
+| app_mod_recommended | 10% | Boost for App Mod recommended targets |
+| runtime_model_compatibility | 10% | Runtime model match |
+| service_overlap | 10% | Approved Azure services match |
+| availability_alignment | 10% | Availability model match |
+| operating_model_fit | 8% | Operational maturity fit |
+| complexity_tolerance | 7% | Complexity vs business criticality |
+| browse_tag_overlap | 5% | Relevant browse tags match |
+| cost_posture_alignment | 5% | Cost profile match |
+
+### Catalog Quality Weights
+
+| Quality | Weight | Description |
+|---------|--------|-------------|
+| curated | 100% | From authoritative YamlMime:Architecture |
+| ai_enriched | 95% | Partial authoritative data |
+| ai_suggested | 85% | AI-extracted metadata |
+| example_only | 70% | Example scenarios, not prescriptive |
+
 ## Version
+
+**v1.1** - Architecture Scorer release:
+- Interactive CLI with numbered question options
+- Dynamic clarification question generation
+- Confidence level calculations with penalty system
+- Cost posture question dimension added
+- User answers displayed in scoring summary
 
 **v1.0** - Initial release with:
 - 171 architectures from Azure Architecture Center

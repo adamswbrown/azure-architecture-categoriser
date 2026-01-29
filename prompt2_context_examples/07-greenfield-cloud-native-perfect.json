@@ -1,0 +1,87 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "RealtimeFraudDetection",
+        "app_type": "Cloud Native Application",
+        "business_crtiticality": "High",
+        "treatment": "Rebuild"
+      }
+    ],
+    "detected_technology_running": [
+      "Java 21",
+      "Spring Boot",
+      "gRPC",
+      "Kafka",
+      "PostgreSQL",
+      "OpenTelemetry"
+    ],
+    "app_approved_azure_services": [
+      {
+        "Kafka": "Azure Event Hubs",
+        "PostgreSQL": "Azure Database for PostgreSQL",
+        "OpenTelemetry": "Azure Monitor"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "K8S-NODE-01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.70.0.10"
+        ],
+        "StorageGB": 200.0,
+        "MemoryGB": 32.0,
+        "Cores": 8.0,
+        "CPUUsage": 65.0,
+        "MemoryUsage": 70.0,
+        "DiskReadOpsPersec": 140.0,
+        "DiskWriteOpsPerSec": 120.0,
+        "NetworkInMBPS": 120.0,
+        "NetworkOutMBPS": 110.0,
+        "StandardSSDDisks": 2.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 1.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Rebuild",
+        "treatment_option": "Cloud-native",
+        "detected_COTS": [
+          "Java 21",
+          "Kafka",
+          "OpenTelemetry"
+        ]
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": "Java",
+        "summary": {
+          "container_ready": true,
+          "microservices_detected": true,
+          "externalized_configuration": true
+        },
+        "findings": [
+          {
+            "type": "Observability",
+            "severity": "Low",
+            "description": "OpenTelemetry present; compatible with Azure Monitor."
+          }
+        ],
+        "compatibility": {
+          "azure_kubernetes_service": "FullySupported",
+          "azure_container_apps": "Supported",
+          "azure_app_service": "Supported"
+        },
+        "recommended_targets": [
+          "Azure Kubernetes Service",
+          "Azure Container Apps",
+          "Azure Event Hubs",
+          "Azure Database for PostgreSQL"
+        ],
+        "blockers": []
+      }
+    ]
+  }
+]

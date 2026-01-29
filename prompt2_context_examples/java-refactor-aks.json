@@ -1,0 +1,77 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "OrderProcessingPlatform",
+        "app_type": "Distributed Application",
+        "business_crtiticality": "Medium",
+        "treatment": "Refactor"
+      }
+    ],
+    "detected_technology_running": [
+      "Java 11",
+      "Spring Boot",
+      "Apache Tomcat",
+      "RabbitMQ",
+      "PostgreSQL"
+    ],
+    "app_approved_azure_services": [
+      {
+        "Apache Tomcat": "Azure Kubernetes Service",
+        "RabbitMQ": "Azure Service Bus",
+        "PostgreSQL": "Azure Database for PostgreSQL"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "ORDERSVC01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 20.04",
+        "ip_address": [
+          "10.20.0.5"
+        ],
+        "StorageGB": 120,
+        "MemoryGB": 8,
+        "Cores": 4,
+        "CPUUsage": 55,
+        "MemoryUsage": 65,
+        "DiskReadOpsPersec": 90,
+        "DiskWriteOpsPerSec": 70,
+        "NetworkInMBPS": 28,
+        "NetworkOutMBPS": 32,
+        "StandardSSDDisks": 1,
+        "StandardHDDDisks": 0,
+        "PremiumDisks": 0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Refactor",
+        "detected_COTS": [
+          "Java 11",
+          "Spring Boot",
+          "Apache Tomcat"
+        ]
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": "Java",
+        "summary": {
+          "services_scanned": 6,
+          "spring_boot_apps": 6,
+          "container_ready": true
+        },
+        "findings": [],
+        "compatibility": {
+          "azure_app_service": "Supported",
+          "azure_container_apps": "Supported",
+          "azure_kubernetes_service": "FullySupported"
+        },
+        "recommended_targets": [
+          "Azure Kubernetes Service",
+          "Azure Container Apps"
+        ],
+        "blockers": []
+      }
+    ]
+  }
+]

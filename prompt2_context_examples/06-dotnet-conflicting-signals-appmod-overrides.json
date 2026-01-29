@@ -1,0 +1,79 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "ClaimsIntake",
+        "app_type": "Web Application",
+        "business_crtiticality": "High",
+        "treatment": "Replatform"
+      }
+    ],
+    "detected_technology_running": [
+      "ASP.NET Framework 4.8",
+      "Microsoft IIS",
+      "Azure DevOps Pipelines"
+    ],
+    "app_approved_azure_services": [
+      {
+        "Microsoft IIS": "Azure Kubernetes Service"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "CLAIMSWEB01",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2019",
+        "ip_address": [
+          "10.60.0.10"
+        ],
+        "StorageGB": 150.0,
+        "MemoryGB": 16.0,
+        "Cores": 4.0,
+        "CPUUsage": 30.0,
+        "MemoryUsage": 50.0,
+        "DiskReadOpsPersec": 110.0,
+        "DiskWriteOpsPerSec": 85.0,
+        "NetworkInMBPS": 18.0,
+        "NetworkOutMBPS": 20.0,
+        "StandardSSDDisks": 2.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform",
+        "treatment_option": "App Service",
+        "detected_COTS": [
+          "ASP.NET Framework 4.8",
+          "Microsoft IIS"
+        ]
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": ".NET",
+        "summary": {
+          "container_ready": false,
+          "windows_dependencies": true
+        },
+        "findings": [
+          {
+            "type": "FrameworkDependency",
+            "severity": "High",
+            "description": "Uses System.Web and IIS-integrated pipeline."
+          }
+        ],
+        "compatibility": {
+          "azure_kubernetes_service": "NotSupported",
+          "azure_container_apps": "NotSupported",
+          "azure_app_service": "SupportedWithChanges"
+        },
+        "recommended_targets": [
+          "Azure App Service"
+        ],
+        "blockers": [
+          "Cannot containerize without significant refactor"
+        ]
+      }
+    ]
+  }
+]

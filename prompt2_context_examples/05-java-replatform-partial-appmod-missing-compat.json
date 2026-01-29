@@ -1,0 +1,72 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "InventoryBatchRunner",
+        "app_type": "Batch Processing",
+        "business_crtiticality": "Medium",
+        "treatment": "Replatform"
+      }
+    ],
+    "detected_technology_running": [
+      "Java 8",
+      "Quartz Scheduler",
+      "Oracle Database 12c"
+    ],
+    "app_approved_azure_services": [
+      {
+        "Oracle Database 12c": "Oracle on Azure Virtual Machines"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "INVBATCH01",
+        "environment": "Production",
+        "OperatingSystem": "Red Hat Enterprise Linux 8",
+        "ip_address": [
+          "10.50.1.10"
+        ],
+        "StorageGB": 300.0,
+        "MemoryGB": 16.0,
+        "Cores": 4.0,
+        "CPUUsage": 25.0,
+        "MemoryUsage": 40.0,
+        "DiskReadOpsPersec": 60.0,
+        "DiskWriteOpsPerSec": 50.0,
+        "NetworkInMBPS": 10.0,
+        "NetworkOutMBPS": 8.0,
+        "StandardSSDDisks": 2.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform",
+        "treatment_option": "Move to PaaS if possible",
+        "detected_COTS": [
+          "Java 8",
+          "Quartz Scheduler"
+        ]
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": "Java",
+        "summary": {
+          "container_ready": false,
+          "notes": "Scan incomplete: build pipeline missing"
+        },
+        "findings": [
+          {
+            "type": "ScanIncomplete",
+            "severity": "Medium",
+            "description": "Could not determine container readiness due to missing Dockerfile/build scripts."
+          }
+        ],
+        "recommended_targets": [
+          "Azure App Service"
+        ],
+        "blockers": []
+      }
+    ]
+  }
+]

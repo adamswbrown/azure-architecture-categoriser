@@ -1,0 +1,95 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "PaymentGateway",
+        "app_type": "Cloud Native Application",
+        "business_crtiticality": "High",
+        "treatment": "Refactor"
+      }
+    ],
+    "detected_technology_running": [
+      "Java 17",
+      "Spring Boot",
+      "Kubernetes",
+      "Kafka",
+      "PostgreSQL",
+      "Prometheus",
+      "Grafana",
+      "Azure DevOps Pipelines",
+      "Terraform",
+      "GitOps"
+    ],
+    "app_approved_azure_services": [
+      {
+        "Kubernetes": "Azure Kubernetes Service",
+        "Kafka": "Azure Event Hubs",
+        "PostgreSQL": "Azure Database for PostgreSQL",
+        "Prometheus": "Azure Monitor"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "K8S-PAYMENT-01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": ["10.80.0.10"],
+        "StorageGB": 500.0,
+        "MemoryGB": 64.0,
+        "Cores": 16.0,
+        "CPUUsage": 55.0,
+        "MemoryUsage": 60.0,
+        "DiskReadOpsPersec": 200.0,
+        "DiskWriteOpsPerSec": 180.0,
+        "NetworkInMBPS": 150.0,
+        "NetworkOutMBPS": 140.0,
+        "StandardSSDDisks": 4.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 2.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Refactor",
+        "treatment_option": "Containerize, Kubernetes",
+        "detected_COTS": ["Java 17", "Spring Boot", "Kubernetes"]
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": "Java",
+        "summary": {
+          "services_scanned": 12,
+          "spring_boot_apps": 12,
+          "microservices_detected": true,
+          "externalized_configuration": true,
+          "container_ready": true,
+          "ci_cd_present": true,
+          "gitops_enabled": true,
+          "infrastructure_as_code": true,
+          "automated_testing": true
+        },
+        "findings": [
+          {
+            "type": "Observability",
+            "severity": "Low",
+            "description": "Prometheus metrics already integrated, compatible with Azure Monitor."
+          },
+          {
+            "type": "Configuration",
+            "severity": "Low",
+            "description": "All configuration externalized via ConfigMaps and environment variables."
+          }
+        ],
+        "compatibility": {
+          "azure_kubernetes_service": "FullySupported",
+          "azure_container_apps": "Supported",
+          "azure_app_service": "Supported"
+        },
+        "recommended_targets": [
+          "Azure Kubernetes Service",
+          "Azure Container Apps"
+        ],
+        "blockers": []
+      }
+    ]
+  }
+]
