@@ -254,7 +254,8 @@ class TestCatalogSchema:
             name="Test",
             description="Test desc",
             source_repo_path="docs/test.md",
-            azure_services_used=["Azure App Service"],
+            core_services=["Azure App Service"],
+            supporting_services=["Azure Monitor"],
         )
 
         catalog = ArchitectureCatalog(
@@ -268,7 +269,8 @@ class TestCatalogSchema:
 
         assert data["total_architectures"] == 1
         assert data["architectures"][0]["architecture_id"] == "test-arch"
-        assert "Azure App Service" in data["architectures"][0]["azure_services_used"]
+        assert "Azure App Service" in data["architectures"][0]["core_services"]
+        assert "Azure Monitor" in data["architectures"][0]["supporting_services"]
 
     def test_catalog_count_update(self):
         """Test that total_architectures updates."""

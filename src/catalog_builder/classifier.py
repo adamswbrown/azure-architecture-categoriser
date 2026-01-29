@@ -81,8 +81,11 @@ class ArchitectureClassifier:
                 source=source
             )
 
+        # Combine services for classification (core + supporting)
+        all_services = entry.core_services + entry.supporting_services
+
         # Suggest architecture family
-        family = self._suggest_family(content, entry.azure_services_used, doc)
+        family = self._suggest_family(content, all_services, doc)
         if family:
             entry.family = family
             entry.family_confidence = ClassificationMeta(
@@ -90,14 +93,15 @@ class ArchitectureClassifier:
                 source="content_analysis"
             )
 
-        # Suggest runtime models
-        runtime_models = self._suggest_runtime_models(content)
-        if runtime_models:
-            entry.expected_runtime_models = runtime_models
-            entry.runtime_models_confidence = ClassificationMeta(
-                confidence=ExtractionConfidence.AI_SUGGESTED,
-                source="content_analysis"
-            )
+        # Suggest runtime models (improved - never returns unknown)
+        runtime_models, runtime_source = self._suggest_runtime_models(
+            content, entry.core_services, family
+        )
+        entry.expected_runtime_models = runtime_models
+        entry.runtime_models_confidence = ClassificationMeta(
+            confidence=ExtractionConfidence.AI_SUGGESTED,
+            source=runtime_source
+        )
 
         # Suggest availability models
         availability = self._suggest_availability(content)
@@ -222,27 +226,127 @@ class ArchitectureClassifier:
                 pass
         return None
 
-    def _suggest_runtime_models(self, content: str) -> list[RuntimeModel]:
-        """Suggest runtime models based on content."""
+    def _suggest_runtime_models(
+        self,
+        content: str,
+        core_services: list[str],
+        family: ArchitectureFamily | None = None
+    ) -> tuple[list[RuntimeModel], str]:
+        """Suggest runtime models with aggressive best-effort classification.
+
+        Never returns 'unknown' - always makes a best-effort guess based on
+        services, family, and content patterns.
+
+        Returns:
+            Tuple of (runtime_models, inference_source)
+        """
         config = self._get_config()
-        models = []
+        scores: dict[str, float] = {}
+        inference_source = "content_analysis"
 
+        # 1. Score based on content keywords (most reliable)
         for model, keywords in config.runtime_keywords.items():
-            if any(kw in content for kw in keywords):
-                try:
-                    models.append(RuntimeModel(model))
-                except ValueError:
-                    pass
+            score = sum(1.5 for kw in keywords if kw in content)
+            if score > 0:
+                scores[model] = score
 
-        # Default to unknown if nothing detected
-        if not models:
-            models = [RuntimeModel.UNKNOWN]
+        # 2. Strong inference from core Azure services
+        services_lower = ' '.join(s.lower() for s in core_services)
 
-        # Check for mixed if multiple detected
-        if len(models) > 2:
-            models = [RuntimeModel.MIXED]
+        # Kubernetes/Containers → microservices
+        if any(s in services_lower for s in ['kubernetes', 'aks', 'container apps']):
+            scores['microservices'] = scores.get('microservices', 0) + 3
+            inference_source = "service_inference"
 
-        return models
+        # Functions, Event Grid, Event Hub → event_driven
+        if any(s in services_lower for s in ['functions', 'event grid', 'event hub', 'service bus']):
+            scores['event_driven'] = scores.get('event_driven', 0) + 2.5
+            inference_source = "service_inference"
+
+        # API Management → api
+        if 'api management' in services_lower:
+            scores['api'] = scores.get('api', 0) + 2.5
+            inference_source = "service_inference"
+
+        # App Service (without containers) → n_tier or api
+        if 'app service' in services_lower and 'container' not in services_lower:
+            scores['n_tier'] = scores.get('n_tier', 0) + 1.5
+            scores['api'] = scores.get('api', 0) + 1
+
+        # Batch, Data Factory → batch
+        if any(s in services_lower for s in ['batch', 'data factory', 'synapse']):
+            scores['batch'] = scores.get('batch', 0) + 2
+
+        # Virtual Machines alone → monolith or n_tier
+        if 'virtual machine' in services_lower:
+            scores['monolith'] = scores.get('monolith', 0) + 1
+            scores['n_tier'] = scores.get('n_tier', 0) + 1.5
+
+        # Logic Apps → event_driven or api
+        if 'logic app' in services_lower:
+            scores['event_driven'] = scores.get('event_driven', 0) + 1
+            scores['api'] = scores.get('api', 0) + 1
+
+        # 3. Family-based inference (fallback boost)
+        if family:
+            if family == ArchitectureFamily.CLOUD_NATIVE:
+                scores['microservices'] = scores.get('microservices', 0) + 2
+            elif family == ArchitectureFamily.IAAS:
+                scores['n_tier'] = scores.get('n_tier', 0) + 1.5
+                scores['monolith'] = scores.get('monolith', 0) + 1
+            elif family == ArchitectureFamily.PAAS:
+                scores['n_tier'] = scores.get('n_tier', 0) + 1
+                scores['api'] = scores.get('api', 0) + 1
+            elif family == ArchitectureFamily.DATA:
+                scores['batch'] = scores.get('batch', 0) + 1.5
+            elif family == ArchitectureFamily.INTEGRATION:
+                scores['event_driven'] = scores.get('event_driven', 0) + 1
+                scores['api'] = scores.get('api', 0) + 1.5
+
+        # 4. Content pattern boosts
+        if 'rest api' in content or 'restful' in content or 'web api' in content:
+            scores['api'] = scores.get('api', 0) + 1.5
+
+        if 'frontend' in content and 'backend' in content:
+            scores['n_tier'] = scores.get('n_tier', 0) + 1
+
+        if 'cqrs' in content or 'saga' in content or 'choreography' in content:
+            scores['microservices'] = scores.get('microservices', 0) + 1.5
+
+        if 'etl' in content or 'pipeline' in content and 'data' in content:
+            scores['batch'] = scores.get('batch', 0) + 1
+
+        # 5. Select best matches (never return unknown)
+        if scores:
+            # Sort by score descending
+            sorted_scores = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+            models = []
+
+            # Take top scoring models above threshold
+            threshold = 1.0
+            for model, score in sorted_scores:
+                if score >= threshold and len(models) < 2:
+                    try:
+                        models.append(RuntimeModel(model))
+                    except ValueError:
+                        pass
+
+            if models:
+                # If more than 2 distinct patterns, it's mixed
+                if len(sorted_scores) > 3 and sorted_scores[2][1] >= threshold:
+                    return [RuntimeModel.MIXED], inference_source
+                return models, inference_source
+
+        # 6. Last resort: infer from generic patterns (never unknown)
+        # Default based on what's most common in Azure Architecture Center
+        if 'web' in content or 'website' in content or 'portal' in content:
+            return [RuntimeModel.N_TIER], "heuristic_fallback"
+
+        if 'data' in content or 'analytics' in content:
+            return [RuntimeModel.BATCH], "heuristic_fallback"
+
+        # Ultimate fallback: n_tier is the most common pattern
+        return [RuntimeModel.N_TIER], "heuristic_fallback"
 
     def _suggest_availability(self, content: str) -> list[AvailabilityModel]:
         """Suggest availability models based on content."""
@@ -271,13 +375,21 @@ class ArchitectureClassifier:
         impl_score = 0
         ops_score = 0
 
-        # More services = more complexity
-        service_count = len(entry.azure_services_used)
+        # More services = more complexity (count core + supporting)
+        service_count = len(entry.core_services) + len(entry.supporting_services)
         if service_count > 10:
             impl_score += 2
             ops_score += 2
         elif service_count > 5:
             impl_score += 1
+            ops_score += 1
+
+        # Core service count matters more for implementation
+        if len(entry.core_services) > 5:
+            impl_score += 1
+
+        # Supporting service count indicates operational maturity
+        if len(entry.supporting_services) > 3:
             ops_score += 1
 
         # More diagrams might indicate more complexity
@@ -429,7 +541,9 @@ class ArchitectureClassifier:
                 scores[treatment] = score
 
         # Boost based on Azure services (using configurable boost values)
-        services_lower = ' '.join(s.lower() for s in entry.azure_services_used)
+        # Use core services primarily - they represent the pattern
+        all_services = entry.core_services + entry.supporting_services
+        services_lower = ' '.join(s.lower() for s in all_services)
 
         # VM presence suggests rehost capability
         if 'virtual machine' in services_lower:
@@ -648,8 +762,9 @@ class ArchitectureClassifier:
             if score > 0:
                 scores[profile] = score
 
-        # Service-based inference
-        services_lower = ' '.join(s.lower() for s in entry.azure_services_used)
+        # Service-based inference (using all services)
+        all_services = entry.core_services + entry.supporting_services
+        services_lower = ' '.join(s.lower() for s in all_services)
 
         if 'premium' in services_lower:
             scores['scale_optimized'] = scores.get('scale_optimized', 0) + 1

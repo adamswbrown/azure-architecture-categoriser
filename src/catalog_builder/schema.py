@@ -157,7 +157,14 @@ class ArchitectureEntry(BaseModel):
 
     # Identity
     architecture_id: str = Field(..., description="Unique identifier derived from path")
-    name: str = Field(..., description="Architecture name/title")
+    name: str = Field(..., description="Architecture name/title from source")
+    pattern_name: str = Field(
+        default="",
+        description="Normalized pattern name representing architectural intent"
+    )
+    pattern_name_confidence: ClassificationMeta = Field(
+        default_factory=lambda: ClassificationMeta(confidence=ExtractionConfidence.MANUAL_REQUIRED)
+    )
     description: str = Field(..., description="Brief description of the architecture")
     source_repo_path: str = Field(..., description="Path in source repository")
     learn_url: Optional[str] = Field(None, description="Microsoft Learn URL")
@@ -191,14 +198,20 @@ class ArchitectureEntry(BaseModel):
         description="Expected architectural characteristics"
     )
 
-    # Supported Change Models (manual only)
+    # Supported Change Models
     supported_treatments: list[Treatment] = Field(
         default_factory=list,
         description="Supported migration/modernization treatments"
     )
+    treatments_confidence: ClassificationMeta = Field(
+        default_factory=lambda: ClassificationMeta(confidence=ExtractionConfidence.AI_SUGGESTED)
+    )
     supported_time_categories: list[TimeCategory] = Field(
         default_factory=list,
         description="Supported time investment categories"
+    )
+    time_categories_confidence: ClassificationMeta = Field(
+        default_factory=lambda: ClassificationMeta(confidence=ExtractionConfidence.AI_SUGGESTED)
     )
 
     # Operational Expectations
@@ -207,21 +220,30 @@ class ArchitectureEntry(BaseModel):
         description="Supported availability models"
     )
     availability_confidence: ClassificationMeta = Field(
-        default_factory=lambda: ClassificationMeta(confidence=ExtractionConfidence.MANUAL_REQUIRED)
+        default_factory=lambda: ClassificationMeta(confidence=ExtractionConfidence.AI_SUGGESTED)
     )
     security_level: SecurityLevel = Field(
         default=SecurityLevel.BASIC,
         description="Security level classification"
     )
+    security_level_confidence: ClassificationMeta = Field(
+        default_factory=lambda: ClassificationMeta(confidence=ExtractionConfidence.AI_SUGGESTED)
+    )
     operating_model_required: OperatingModel = Field(
         default=OperatingModel.TRADITIONAL_IT,
         description="Required operating model"
+    )
+    operating_model_confidence: ClassificationMeta = Field(
+        default_factory=lambda: ClassificationMeta(confidence=ExtractionConfidence.AI_SUGGESTED)
     )
 
     # Cost & Complexity
     cost_profile: CostProfile = Field(
         default=CostProfile.BALANCED,
         description="Cost optimization profile"
+    )
+    cost_profile_confidence: ClassificationMeta = Field(
+        default_factory=lambda: ClassificationMeta(confidence=ExtractionConfidence.AI_SUGGESTED)
     )
     complexity: Complexity = Field(
         default_factory=Complexity,
@@ -237,11 +259,20 @@ class ArchitectureEntry(BaseModel):
         description="Scenarios where this architecture is not suitable"
     )
 
-    # Metadata
-    azure_services_used: list[str] = Field(
+    # Azure Services (split by role)
+    core_services: list[str] = Field(
         default_factory=list,
-        description="Azure services referenced in the architecture"
+        description="Azure services required to realize the pattern (compute, data, networking)"
     )
+    supporting_services: list[str] = Field(
+        default_factory=list,
+        description="Supporting services for observability, security, and operations"
+    )
+    services_confidence: ClassificationMeta = Field(
+        default_factory=lambda: ClassificationMeta(confidence=ExtractionConfidence.AI_SUGGESTED)
+    )
+
+    # Metadata
     diagram_assets: list[str] = Field(
         default_factory=list,
         description="Paths to diagram assets"
@@ -256,6 +287,11 @@ class ArchitectureEntry(BaseModel):
         default_factory=list,
         description="Warnings generated during extraction"
     )
+
+    @property
+    def azure_services_used(self) -> list[str]:
+        """Backward-compatible property combining core and supporting services."""
+        return self.core_services + self.supporting_services
 
 
 class ArchitectureCatalog(BaseModel):
