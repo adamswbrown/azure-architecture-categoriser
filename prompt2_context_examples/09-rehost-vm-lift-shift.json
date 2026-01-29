@@ -1,0 +1,105 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "InventoryTracker",
+        "app_type": "Web Application",
+        "business_crtiticality": "Medium",
+        "treatment": "Rehost"
+      }
+    ],
+    "detected_technology_running": [
+      "ASP.NET Framework 4.5",
+      "Microsoft IIS",
+      "SQL Server 2016",
+      "Windows Server 2016"
+    ],
+    "app_approved_azure_services": [
+      {
+        "Microsoft IIS": "Azure Virtual Machines",
+        "SQL Server 2016": "SQL Server on Azure VM"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "INVSVC01",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2016",
+        "ip_address": ["10.40.0.15"],
+        "StorageGB": 200.0,
+        "MemoryGB": 16.0,
+        "Cores": 4.0,
+        "CPUUsage": 35.0,
+        "MemoryUsage": 50.0,
+        "DiskReadOpsPersec": 50.0,
+        "DiskWriteOpsPerSec": 40.0,
+        "NetworkInMBPS": 15.0,
+        "NetworkOutMBPS": 12.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 1.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Rehost",
+        "treatment_option": "Lift and Shift to Azure VM",
+        "detected_COTS": ["Microsoft IIS", "SQL Server 2016"]
+      },
+      {
+        "machine": "INVSVC02",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2016",
+        "ip_address": ["10.40.0.16"],
+        "StorageGB": 150.0,
+        "MemoryGB": 8.0,
+        "Cores": 2.0,
+        "CPUUsage": 25.0,
+        "MemoryUsage": 40.0,
+        "DiskReadOpsPersec": 30.0,
+        "DiskWriteOpsPerSec": 25.0,
+        "NetworkInMBPS": 10.0,
+        "NetworkOutMBPS": 8.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Rehost",
+        "treatment_option": "Lift and Shift to Azure VM",
+        "detected_COTS": ["Microsoft IIS"]
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": ".NET Framework",
+        "summary": {
+          "services_scanned": 3,
+          "legacy_framework": true,
+          "container_ready": false,
+          "modernization_effort": "High"
+        },
+        "findings": [
+          {
+            "type": "Framework",
+            "severity": "Medium",
+            "description": "ASP.NET Framework 4.5 is not compatible with containers without significant refactoring."
+          },
+          {
+            "type": "Database",
+            "severity": "Low",
+            "description": "SQL Server 2016 can run on Azure VMs with no changes."
+          }
+        ],
+        "compatibility": {
+          "azure_virtual_machines": "FullySupported",
+          "azure_app_service": "NotSupported",
+          "azure_kubernetes_service": "NotSupported"
+        },
+        "recommended_targets": [
+          "Azure Virtual Machines",
+          "SQL Server on Azure VM"
+        ],
+        "blockers": []
+      }
+    ]
+  }
+]

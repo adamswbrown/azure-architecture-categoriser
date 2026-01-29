@@ -1,0 +1,114 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "CustomerRelationshipManager",
+        "app_type": "CRM Application",
+        "business_crtiticality": "High",
+        "treatment": "Replace"
+      }
+    ],
+    "detected_technology_running": [
+      "PHP 5.6",
+      "MySQL 5.5",
+      "Apache httpd",
+      "CentOS 6"
+    ],
+    "app_approved_azure_services": [
+      {
+        "CRM Application": "Microsoft Dynamics 365"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "CRM-WEB01",
+        "environment": "Production",
+        "OperatingSystem": "CentOS 6",
+        "ip_address": ["10.60.0.20"],
+        "StorageGB": 100.0,
+        "MemoryGB": 8.0,
+        "Cores": 4.0,
+        "CPUUsage": 45.0,
+        "MemoryUsage": 60.0,
+        "DiskReadOpsPersec": 60.0,
+        "DiskWriteOpsPerSec": 50.0,
+        "NetworkInMBPS": 20.0,
+        "NetworkOutMBPS": 18.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "NotReady",
+        "AzureReadinessIssues": "End of life OS (CentOS 6)",
+        "migration_strategy": "Replace",
+        "treatment_option": "Replace with SaaS (Dynamics 365)",
+        "detected_COTS": ["Custom PHP CRM"]
+      },
+      {
+        "machine": "CRM-DB01",
+        "environment": "Production",
+        "OperatingSystem": "CentOS 6",
+        "ip_address": ["10.60.0.21"],
+        "StorageGB": 250.0,
+        "MemoryGB": 16.0,
+        "Cores": 4.0,
+        "CPUUsage": 30.0,
+        "MemoryUsage": 55.0,
+        "DiskReadOpsPersec": 80.0,
+        "DiskWriteOpsPerSec": 60.0,
+        "NetworkInMBPS": 15.0,
+        "NetworkOutMBPS": 12.0,
+        "StandardSSDDisks": 2.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "NotReady",
+        "AzureReadinessIssues": "End of life OS (CentOS 6)",
+        "migration_strategy": "Replace",
+        "treatment_option": "Data migration to SaaS",
+        "detected_COTS": ["MySQL 5.5"]
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": "PHP",
+        "summary": {
+          "services_scanned": 2,
+          "legacy_framework": true,
+          "modernization_feasible": false,
+          "saas_replacement_recommended": true
+        },
+        "findings": [
+          {
+            "type": "Technology",
+            "severity": "Critical",
+            "description": "PHP 5.6 is end-of-life. Upgrading requires significant code changes."
+          },
+          {
+            "type": "Architecture",
+            "severity": "High",
+            "description": "Custom CRM with tightly coupled architecture. SaaS replacement recommended."
+          },
+          {
+            "type": "Database",
+            "severity": "Medium",
+            "description": "MySQL 5.5 data can be migrated to Dynamics 365 Dataverse."
+          }
+        ],
+        "compatibility": {
+          "azure_virtual_machines": "NotSupported",
+          "azure_app_service": "NotSupported",
+          "azure_kubernetes_service": "NotSupported",
+          "dynamics_365": "ReplacementRecommended"
+        },
+        "recommended_targets": [
+          "Microsoft Dynamics 365 Sales",
+          "Microsoft Dynamics 365 Customer Service"
+        ],
+        "blockers": [
+          "End-of-life PHP version",
+          "End-of-life operating system",
+          "Custom code not cost-effective to modernize"
+        ]
+      }
+    ]
+  }
+]

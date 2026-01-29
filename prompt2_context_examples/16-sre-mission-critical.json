@@ -1,0 +1,113 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "CoreBankingPlatform",
+        "app_type": "Mission Critical Banking System",
+        "business_crtiticality": "Critical",
+        "treatment": "Refactor",
+        "operating_model": "sre",
+        "slo_availability": "99.99",
+        "error_budget_policy": true
+      }
+    ],
+    "detected_technology_running": [
+      "Java 21",
+      "Quarkus",
+      "Apache Kafka",
+      "PostgreSQL 16",
+      "Redis",
+      "Prometheus",
+      "Grafana",
+      "Jaeger",
+      "ArgoCD",
+      "Terraform"
+    ],
+    "app_approved_azure_services": [
+      {
+        "Quarkus": "Azure Kubernetes Service",
+        "Kafka": "Azure Event Hubs",
+        "PostgreSQL": "Azure Database for PostgreSQL",
+        "Redis": "Azure Cache for Redis",
+        "Observability": "Azure Monitor + Application Insights"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "BANK-K8S-PROD-01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": ["10.130.0.10"],
+        "StorageGB": 2000.0,
+        "MemoryGB": 256.0,
+        "Cores": 64.0,
+        "CPUUsage": 50.0,
+        "MemoryUsage": 55.0,
+        "DiskReadOpsPersec": 800.0,
+        "DiskWriteOpsPerSec": 700.0,
+        "NetworkInMBPS": 800.0,
+        "NetworkOutMBPS": 750.0,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 16.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Refactor",
+        "treatment_option": "Cloud-native with SRE practices",
+        "detected_COTS": ["Prometheus", "Grafana", "Jaeger", "ArgoCD"]
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": "Java",
+        "summary": {
+          "services_scanned": 25,
+          "quarkus_apps": 25,
+          "microservices_detected": true,
+          "container_ready": true,
+          "externalized_configuration": true,
+          "ci_cd_present": true,
+          "gitops_enabled": true,
+          "infrastructure_as_code": true,
+          "comprehensive_observability": true,
+          "slo_defined": true,
+          "error_budgets": true
+        },
+        "findings": [
+          {
+            "type": "Observability",
+            "severity": "Low",
+            "description": "Full observability stack (metrics, logs, traces) ready for Azure Monitor integration."
+          },
+          {
+            "type": "Deployment",
+            "severity": "Low",
+            "description": "GitOps with ArgoCD. Progressive delivery supported."
+          },
+          {
+            "type": "Reliability",
+            "severity": "Low",
+            "description": "SLOs defined with error budget policies. Chaos engineering practiced."
+          },
+          {
+            "type": "Security",
+            "severity": "Low",
+            "description": "Zero-trust networking, mTLS between services."
+          }
+        ],
+        "compatibility": {
+          "azure_kubernetes_service": "FullySupported",
+          "azure_container_apps": "Supported"
+        },
+        "recommended_targets": [
+          "Azure Kubernetes Service",
+          "Azure Event Hubs",
+          "Azure Database for PostgreSQL (Hyperscale)",
+          "Azure Monitor + Application Insights",
+          "Azure Managed Grafana"
+        ],
+        "blockers": []
+      }
+    ]
+  }
+]

@@ -1,0 +1,101 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "ManufacturingControlSystem",
+        "app_type": "Industrial Control System",
+        "business_crtiticality": "Critical",
+        "treatment": "Retain"
+      }
+    ],
+    "detected_technology_running": [
+      ".NET Framework 4.8",
+      "SQL Server 2019",
+      "Windows Server 2022",
+      "OPC-UA Protocol",
+      "SCADA Integration"
+    ],
+    "app_approved_azure_services": [
+      {
+        "Data Analytics": "Azure IoT Hub",
+        "Monitoring": "Azure Monitor",
+        "Hybrid Connectivity": "Azure ExpressRoute"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "MFG-CTRL01",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2022",
+        "ip_address": ["192.168.1.10"],
+        "StorageGB": 500.0,
+        "MemoryGB": 32.0,
+        "Cores": 8.0,
+        "CPUUsage": 70.0,
+        "MemoryUsage": 75.0,
+        "DiskReadOpsPersec": 200.0,
+        "DiskWriteOpsPerSec": 180.0,
+        "NetworkInMBPS": 50.0,
+        "NetworkOutMBPS": 45.0,
+        "StandardSSDDisks": 2.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 2.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Retain",
+        "treatment_option": "Hybrid with Azure Arc",
+        "detected_COTS": ["SCADA", "OPC-UA", "Siemens PLC Integration"]
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": ".NET",
+        "summary": {
+          "services_scanned": 5,
+          "real_time_requirements": true,
+          "latency_sensitive": true,
+          "on_premises_required": true
+        },
+        "findings": [
+          {
+            "type": "Latency",
+            "severity": "Critical",
+            "description": "Real-time control loops require sub-millisecond latency. Cloud migration not feasible for control plane."
+          },
+          {
+            "type": "Integration",
+            "severity": "High",
+            "description": "Direct hardware integration with PLCs and SCADA systems requires on-premises presence."
+          },
+          {
+            "type": "Compliance",
+            "severity": "High",
+            "description": "Industrial safety regulations require local control system availability."
+          },
+          {
+            "type": "Opportunity",
+            "severity": "Low",
+            "description": "Analytics and monitoring data can be sent to Azure IoT Hub for insights."
+          }
+        ],
+        "compatibility": {
+          "azure_virtual_machines": "NotRecommended",
+          "azure_arc": "Supported",
+          "azure_iot_hub": "Supported",
+          "azure_stack_hci": "Supported"
+        },
+        "recommended_targets": [
+          "Azure Arc-enabled servers",
+          "Azure IoT Hub (telemetry)",
+          "Azure ExpressRoute",
+          "Azure Stack HCI"
+        ],
+        "blockers": [
+          "Real-time latency requirements",
+          "Direct hardware integration required",
+          "Industrial safety compliance"
+        ]
+      }
+    ]
+  }
+]

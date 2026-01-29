@@ -1,0 +1,93 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "StartupMVP",
+        "app_type": "Web Application",
+        "business_crtiticality": "Medium",
+        "treatment": "Replatform",
+        "cost_priority": "cost_minimized",
+        "budget_constraint": "minimal"
+      }
+    ],
+    "detected_technology_running": [
+      "Node.js 20",
+      "Express.js",
+      "MongoDB",
+      "React"
+    ],
+    "app_approved_azure_services": [
+      {
+        "Node.js": "Azure App Service (Free/Basic)",
+        "MongoDB": "Azure Cosmos DB (Serverless)"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "STARTUP-WEB01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": ["10.140.0.5"],
+        "StorageGB": 20.0,
+        "MemoryGB": 2.0,
+        "Cores": 1.0,
+        "CPUUsage": 15.0,
+        "MemoryUsage": 30.0,
+        "DiskReadOpsPersec": 20.0,
+        "DiskWriteOpsPerSec": 15.0,
+        "NetworkInMBPS": 5.0,
+        "NetworkOutMBPS": 4.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform",
+        "treatment_option": "Serverless/consumption pricing",
+        "detected_COTS": ["Node.js", "MongoDB"]
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": "Node.js",
+        "summary": {
+          "services_scanned": 1,
+          "stateless": true,
+          "container_ready": true,
+          "low_traffic": true,
+          "variable_load": true
+        },
+        "findings": [
+          {
+            "type": "Cost",
+            "severity": "Low",
+            "description": "Low traffic patterns ideal for consumption-based pricing."
+          },
+          {
+            "type": "Architecture",
+            "severity": "Low",
+            "description": "Stateless application suitable for serverless deployment."
+          },
+          {
+            "type": "Database",
+            "severity": "Low",
+            "description": "MongoDB workload suitable for Cosmos DB serverless tier."
+          }
+        ],
+        "compatibility": {
+          "azure_app_service_free": "Supported",
+          "azure_functions": "Supported",
+          "azure_container_apps_consumption": "Supported",
+          "azure_static_web_apps": "Supported"
+        },
+        "recommended_targets": [
+          "Azure App Service (Basic tier)",
+          "Azure Functions (Consumption)",
+          "Azure Cosmos DB (Serverless)",
+          "Azure Static Web Apps (Free)"
+        ],
+        "blockers": []
+      }
+    ]
+  }
+]

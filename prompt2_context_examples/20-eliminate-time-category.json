@@ -1,0 +1,99 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "DeprecatedPayrollCalculator",
+        "app_type": "Payroll System",
+        "business_crtiticality": "Low",
+        "treatment": "Retire",
+        "time_category": "Eliminate"
+      }
+    ],
+    "detected_technology_running": [
+      "Visual Basic 6",
+      "Microsoft Access 97",
+      "Crystal Reports 8",
+      "Windows XP"
+    ],
+    "app_approved_azure_services": [
+      {}
+    ],
+    "server_details": [
+      {
+        "machine": "PAYROLL-LEGACY",
+        "environment": "Production",
+        "OperatingSystem": "Windows XP",
+        "ip_address": ["10.170.0.5"],
+        "StorageGB": 40.0,
+        "MemoryGB": 2.0,
+        "Cores": 1.0,
+        "CPUUsage": 5.0,
+        "MemoryUsage": 15.0,
+        "DiskReadOpsPersec": 5.0,
+        "DiskWriteOpsPerSec": 2.0,
+        "NetworkInMBPS": 0.5,
+        "NetworkOutMBPS": 0.2,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 1.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "NotReady",
+        "AzureReadinessIssues": "Unsupported OS (Windows XP), security risk",
+        "migration_strategy": "Retire",
+        "treatment_option": "Eliminate - replace with new payroll SaaS",
+        "detected_COTS": ["Visual Basic 6", "Crystal Reports"]
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": "Legacy",
+        "summary": {
+          "services_scanned": 1,
+          "modernization_feasible": false,
+          "technical_debt_critical": true,
+          "security_vulnerabilities": true,
+          "replacement_in_progress": true
+        },
+        "findings": [
+          {
+            "type": "Security",
+            "severity": "Critical",
+            "description": "Windows XP end-of-support since 2014. Significant security risk."
+          },
+          {
+            "type": "Technology",
+            "severity": "Critical",
+            "description": "Visual Basic 6 runtime end-of-support. No modern equivalent."
+          },
+          {
+            "type": "Data",
+            "severity": "Critical",
+            "description": "Access 97 database format outdated. Data extraction required."
+          },
+          {
+            "type": "Compliance",
+            "severity": "Critical",
+            "description": "System does not meet current data protection regulations."
+          },
+          {
+            "type": "Business",
+            "severity": "High",
+            "description": "New Workday SaaS implementation scheduled. This system to be decommissioned."
+          }
+        ],
+        "compatibility": {
+          "azure_virtual_machines": "NotSupported",
+          "azure_app_service": "NotSupported",
+          "azure_kubernetes_service": "NotSupported"
+        },
+        "recommended_targets": [],
+        "blockers": [
+          "End-of-life operating system (Windows XP)",
+          "Deprecated runtime (Visual Basic 6)",
+          "Security compliance failure",
+          "Replacement system (Workday) already selected",
+          "No cloud migration path - elimination recommended"
+        ]
+      }
+    ]
+  }
+]

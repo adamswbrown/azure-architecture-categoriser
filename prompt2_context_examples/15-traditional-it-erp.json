@@ -1,0 +1,98 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "ERPFinanceModule",
+        "app_type": "Enterprise Resource Planning",
+        "business_crtiticality": "High",
+        "treatment": "Replatform",
+        "operating_model": "traditional_it"
+      }
+    ],
+    "detected_technology_running": [
+      ".NET Framework 4.7.2",
+      "SQL Server 2019",
+      "Windows Server 2019",
+      "IIS 10",
+      "SSRS Reporting"
+    ],
+    "app_approved_azure_services": [
+      {
+        "IIS": "Azure App Service",
+        "SQL Server": "Azure SQL Managed Instance",
+        "SSRS": "Power BI"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "ERP-FIN01",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2019",
+        "ip_address": ["10.120.0.20"],
+        "StorageGB": 300.0,
+        "MemoryGB": 32.0,
+        "Cores": 8.0,
+        "CPUUsage": 40.0,
+        "MemoryUsage": 55.0,
+        "DiskReadOpsPersec": 100.0,
+        "DiskWriteOpsPerSec": 80.0,
+        "NetworkInMBPS": 30.0,
+        "NetworkOutMBPS": 25.0,
+        "StandardSSDDisks": 2.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 1.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform",
+        "treatment_option": "Managed PaaS",
+        "detected_COTS": ["SQL Server 2019", "SSRS"]
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": ".NET Framework",
+        "summary": {
+          "services_scanned": 4,
+          "legacy_framework": true,
+          "container_ready": false,
+          "ci_cd_present": false,
+          "manual_deployments": true,
+          "change_advisory_board": true
+        },
+        "findings": [
+          {
+            "type": "Operations",
+            "severity": "Medium",
+            "description": "Manual deployment process via ITIL change management. No CI/CD pipeline."
+          },
+          {
+            "type": "Framework",
+            "severity": "Medium",
+            "description": ".NET Framework 4.7.2 compatible with App Service but not containers."
+          },
+          {
+            "type": "Database",
+            "severity": "Low",
+            "description": "SQL Server 2019 compatible with Azure SQL Managed Instance."
+          },
+          {
+            "type": "Reporting",
+            "severity": "Medium",
+            "description": "SSRS reports require migration to Power BI or Paginated Reports."
+          }
+        ],
+        "compatibility": {
+          "azure_app_service": "Supported",
+          "azure_sql_managed_instance": "FullySupported",
+          "azure_kubernetes_service": "NotSupported"
+        },
+        "recommended_targets": [
+          "Azure App Service",
+          "Azure SQL Managed Instance",
+          "Power BI (Paginated Reports)"
+        ],
+        "blockers": []
+      }
+    ]
+  }
+]

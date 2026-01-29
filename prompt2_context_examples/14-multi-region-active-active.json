@@ -1,0 +1,128 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "GlobalTradingPlatform",
+        "app_type": "Financial Trading Platform",
+        "business_crtiticality": "Critical",
+        "treatment": "Refactor",
+        "availability_requirement": "multi_region_active_active",
+        "rto_minutes": 0,
+        "rpo_minutes": 0
+      }
+    ],
+    "detected_technology_running": [
+      "Java 21",
+      "Spring Boot",
+      "Apache Kafka",
+      "Redis",
+      "PostgreSQL 15",
+      "Prometheus",
+      "Grafana"
+    ],
+    "app_approved_azure_services": [
+      {
+        "Kafka": "Azure Event Hubs",
+        "Redis": "Azure Cache for Redis",
+        "PostgreSQL": "Azure Cosmos DB for PostgreSQL",
+        "Monitoring": "Azure Monitor"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "TRADE-K8S-EAST-01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": ["10.110.0.10"],
+        "StorageGB": 1000.0,
+        "MemoryGB": 128.0,
+        "Cores": 32.0,
+        "CPUUsage": 60.0,
+        "MemoryUsage": 65.0,
+        "DiskReadOpsPersec": 500.0,
+        "DiskWriteOpsPerSec": 450.0,
+        "NetworkInMBPS": 500.0,
+        "NetworkOutMBPS": 480.0,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 8.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Refactor",
+        "treatment_option": "Multi-region active-active",
+        "detected_COTS": ["Apache Kafka", "Redis", "PostgreSQL"]
+      },
+      {
+        "machine": "TRADE-K8S-WEST-01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": ["10.111.0.10"],
+        "StorageGB": 1000.0,
+        "MemoryGB": 128.0,
+        "Cores": 32.0,
+        "CPUUsage": 55.0,
+        "MemoryUsage": 60.0,
+        "DiskReadOpsPersec": 480.0,
+        "DiskWriteOpsPerSec": 430.0,
+        "NetworkInMBPS": 490.0,
+        "NetworkOutMBPS": 470.0,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 8.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Refactor",
+        "treatment_option": "Multi-region active-active",
+        "detected_COTS": ["Apache Kafka", "Redis", "PostgreSQL"]
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": "Java",
+        "summary": {
+          "services_scanned": 15,
+          "spring_boot_apps": 15,
+          "microservices_detected": true,
+          "container_ready": true,
+          "stateless_services": true,
+          "event_driven": true
+        },
+        "findings": [
+          {
+            "type": "Availability",
+            "severity": "Critical",
+            "description": "Zero downtime required. Multi-region active-active deployment mandatory."
+          },
+          {
+            "type": "Data",
+            "severity": "Critical",
+            "description": "Requires globally distributed database with multi-master writes."
+          },
+          {
+            "type": "Networking",
+            "severity": "High",
+            "description": "Global load balancing with health-based routing required."
+          },
+          {
+            "type": "Caching",
+            "severity": "High",
+            "description": "Geo-replicated Redis for session and market data caching."
+          }
+        ],
+        "compatibility": {
+          "azure_kubernetes_service": "FullySupported",
+          "azure_cosmos_db": "FullySupported",
+          "azure_front_door": "FullySupported"
+        },
+        "recommended_targets": [
+          "Azure Kubernetes Service (Multi-region)",
+          "Azure Cosmos DB for PostgreSQL",
+          "Azure Front Door",
+          "Azure Cache for Redis (Geo-replication)",
+          "Azure Event Hubs"
+        ],
+        "blockers": []
+      }
+    ]
+  }
+]

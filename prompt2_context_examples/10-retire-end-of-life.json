@@ -1,0 +1,85 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "LegacyReportingPortal",
+        "app_type": "Reporting Tool",
+        "business_crtiticality": "Low",
+        "treatment": "Retire"
+      }
+    ],
+    "detected_technology_running": [
+      "Classic ASP",
+      "VBScript",
+      "Microsoft Access 2003",
+      "Windows Server 2008"
+    ],
+    "app_approved_azure_services": [
+      {}
+    ],
+    "server_details": [
+      {
+        "machine": "LEGACY-RPT01",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2008",
+        "ip_address": ["10.50.0.5"],
+        "StorageGB": 80.0,
+        "MemoryGB": 4.0,
+        "Cores": 2.0,
+        "CPUUsage": 5.0,
+        "MemoryUsage": 20.0,
+        "DiskReadOpsPersec": 5.0,
+        "DiskWriteOpsPerSec": 2.0,
+        "NetworkInMBPS": 1.0,
+        "NetworkOutMBPS": 0.5,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 1.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "NotReady",
+        "AzureReadinessIssues": "Unsupported OS (Windows Server 2008 EOL)",
+        "migration_strategy": "Retire",
+        "treatment_option": "Decommission",
+        "detected_COTS": ["Classic ASP", "Microsoft Access"]
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": "Legacy",
+        "summary": {
+          "services_scanned": 1,
+          "modernization_feasible": false,
+          "end_of_support": true
+        },
+        "findings": [
+          {
+            "type": "UnsupportedTechnology",
+            "severity": "Critical",
+            "description": "Classic ASP and VBScript are deprecated technologies with no cloud migration path."
+          },
+          {
+            "type": "Security",
+            "severity": "Critical",
+            "description": "Windows Server 2008 is end-of-life and no longer receives security updates."
+          },
+          {
+            "type": "Database",
+            "severity": "Critical",
+            "description": "Access 2003 database is not supported for cloud migration."
+          }
+        ],
+        "compatibility": {
+          "azure_virtual_machines": "NotSupported",
+          "azure_app_service": "NotSupported",
+          "azure_kubernetes_service": "NotSupported"
+        },
+        "recommended_targets": [],
+        "blockers": [
+          "End-of-life operating system",
+          "Deprecated technology stack (Classic ASP)",
+          "No cloud migration path available",
+          "Scheduled for decommission Q2 2026"
+        ]
+      }
+    ]
+  }
+]

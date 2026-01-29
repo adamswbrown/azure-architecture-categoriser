@@ -1,0 +1,103 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "IntelligentDocumentProcessor",
+        "app_type": "AI/ML Application",
+        "business_crtiticality": "High",
+        "treatment": "Rebuild",
+        "cost_priority": "innovation_first"
+      }
+    ],
+    "detected_technology_running": [
+      "Python 3.11",
+      "FastAPI",
+      "PyTorch",
+      "LangChain",
+      "PostgreSQL",
+      "Redis"
+    ],
+    "app_approved_azure_services": [
+      {
+        "AI Models": "Azure OpenAI Service",
+        "Document Intelligence": "Azure AI Document Intelligence",
+        "Vector Store": "Azure AI Search",
+        "PostgreSQL": "Azure Database for PostgreSQL"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "AI-GPU-01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": ["10.150.0.10"],
+        "StorageGB": 500.0,
+        "MemoryGB": 64.0,
+        "Cores": 16.0,
+        "CPUUsage": 70.0,
+        "MemoryUsage": 80.0,
+        "DiskReadOpsPersec": 300.0,
+        "DiskWriteOpsPerSec": 250.0,
+        "NetworkInMBPS": 200.0,
+        "NetworkOutMBPS": 180.0,
+        "StandardSSDDisks": 2.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 2.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Rebuild",
+        "treatment_option": "Cloud-native AI platform",
+        "detected_COTS": ["PyTorch", "LangChain"]
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": "Python",
+        "summary": {
+          "services_scanned": 3,
+          "ai_ml_workload": true,
+          "llm_integration": true,
+          "gpu_required": false,
+          "container_ready": true,
+          "rag_architecture": true
+        },
+        "findings": [
+          {
+            "type": "AI",
+            "severity": "Low",
+            "description": "LLM integration can leverage Azure OpenAI for GPT-4, reducing infrastructure needs."
+          },
+          {
+            "type": "Architecture",
+            "severity": "Low",
+            "description": "RAG pattern compatible with Azure AI Search as vector store."
+          },
+          {
+            "type": "Document",
+            "severity": "Low",
+            "description": "Document processing can use Azure AI Document Intelligence for OCR and extraction."
+          },
+          {
+            "type": "Cost",
+            "severity": "Medium",
+            "description": "AI services are usage-based. Expect higher costs during development and scaling."
+          }
+        ],
+        "compatibility": {
+          "azure_openai_service": "FullySupported",
+          "azure_ai_search": "FullySupported",
+          "azure_container_apps": "FullySupported",
+          "azure_machine_learning": "FullySupported"
+        },
+        "recommended_targets": [
+          "Azure OpenAI Service",
+          "Azure AI Document Intelligence",
+          "Azure AI Search",
+          "Azure Container Apps",
+          "Azure Database for PostgreSQL"
+        ],
+        "blockers": []
+      }
+    ]
+  }
+]
