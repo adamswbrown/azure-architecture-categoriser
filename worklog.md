@@ -1,6 +1,63 @@
-# Azure Architecture Catalog Builder - Work Log
+# Azure Architecture Recommender - Work Log
 
 ## 2026-01-29
+
+### Session: Documentation & GitHub Issues
+
+**Goal:** Separate documentation, create GitHub issues for roadmap, update project state.
+
+**Documentation Created:**
+- `docs/catalog-builder.md` - Full catalog builder documentation
+- `docs/recommendations-app.md` - Customer app documentation
+- `docs/architecture-scorer.md` - Scoring engine documentation
+- `README.md` - Refactored as high-level overview with navigation
+
+**GitHub Issues Created:**
+1. **#1 - Integrate Catalog Builder into Recommendations App**
+   - Allow catalog generation from customer app
+   - Single application for end users
+
+2. **#2 - Containerize the Application**
+   - Docker container for easy deployment
+   - CI/CD pipeline for image publishing
+
+3. **#3 - Add CodeQL Security Scanning**
+   - Automated security analysis on PRs
+   - Python vulnerability detection
+
+---
+
+### Session: Recommendations App UX Improvements
+
+**Goal:** Improve app flow based on user feedback - make it a stepped wizard process.
+
+**Changes Made:**
+
+1. **3-Step Wizard Flow**
+   - Step 1: Upload & Review (file upload, application summary)
+   - Step 2: Answer Questions (clarification questions)
+   - Step 3: Results (recommendations, export buttons)
+
+2. **Step Indicator**
+   - Visual progress indicator (✅ 🔵 ⚪)
+   - Back/forward navigation between steps
+
+3. **Light Theme**
+   - Added `.streamlit/config.toml` with forced light mode
+   - Azure-branded colors (#0078D4 primary)
+
+4. **Bug Fixes**
+   - Fixed PDF generation error: "Style 'Title' already defined"
+   - Renamed custom styles to avoid conflicts with built-in reportlab styles
+
+5. **Image Sizing**
+   - Primary recommendation: 450px width
+   - Alternative recommendations: 200px width
+   - PDF images: 4x2 inches
+
+**Note:** Only 35/171 catalog entries have diagram images. This is a catalog extraction issue, not an app bug.
+
+---
 
 ### Session: Customer-Facing Recommendations App
 
@@ -253,6 +310,12 @@ catalog-builder stats --catalog catalog.json
 # Inspect architectures
 catalog-builder inspect --catalog catalog.json --family cloud_native
 catalog-builder inspect --catalog catalog.json --id <arch-id>
+
+# Run recommendations app
+streamlit run src/architecture_recommendations_app/app.py
+
+# Score via CLI
+architecture-scorer score -c catalog.json -x context.json
 ```
 
 ---

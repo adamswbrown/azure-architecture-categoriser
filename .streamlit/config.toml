@@ -1,0 +1,13 @@
+[theme]
+# Force light mode with Azure-inspired colors
+base = "light"
+primaryColor = "#0078D4"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F5F5F5"
+textColor = "#333333"
+
+[server]
+headless = true
+
+[browser]
+gatherUsageStats = false

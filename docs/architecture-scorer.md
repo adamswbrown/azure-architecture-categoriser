@@ -1,0 +1,231 @@
+# Architecture Scorer
+
+The Architecture Scorer is the runtime engine that evaluates application contexts against the architecture catalog and returns ranked recommendations with explanations.
+
+## Overview
+
+The scorer:
+- Takes application context data as input
+- Evaluates against all catalog architectures
+- Filters ineligible architectures
+- Scores and ranks eligible architectures
+- Generates clarification questions for low-confidence signals
+- Returns explained recommendations
+
+## Installation
+
+The scorer is included with the main package:
+
+```bash
+pip install -e .
+```
+
+## CLI Usage
+
+### Score Command
+
+Score an application context against the catalog:
+
+```bash
+# Basic usage
+architecture-scorer score \
+  --catalog architecture-catalog.json \
+  --context app-context.json
+
+# Interactive mode (default) - prompts for question answers
+architecture-scorer score -c catalog.json -x context.json
+
+# Non-interactive mode
+architecture-scorer score -c catalog.json -x context.json --no-interactive
+
+# Provide answers directly
+architecture-scorer score -c catalog.json -x context.json \
+  -a treatment=replatform \
+  -a security_level=enterprise \
+  -a operating_model=devops
+
+# Output as JSON
+architecture-scorer score -c catalog.json -x context.json --output json
+```
+
+### Questions Command
+
+Show only clarification questions without scoring:
+
+```bash
+architecture-scorer questions -c catalog.json -x context.json
+```
+
+### Validate Command
+
+Validate catalog and context files:
+
+```bash
+architecture-scorer validate -c catalog.json -x context.json
+```
+
+## Programmatic Usage
+
+```python
+from architecture_scorer.engine import ScoringEngine
+
+# Initialize engine
+engine = ScoringEngine()
+engine.load_catalog("architecture-catalog.json")
+
+# Get clarification questions
+questions = engine.get_questions("context.json")
+
+# Score with user answers
+result = engine.score(
+    "context.json",
+    user_answers={"treatment": "replatform", "security_level": "enterprise"},
+    max_recommendations=5
+)
+
+# Access results
+print(f"Application: {result.application_name}")
+print(f"Confidence: {result.summary.confidence_level}")
+
+for rec in result.recommendations:
+    print(f"{rec.name}: {rec.likelihood_score}%")
+```
+
+## Scoring Dimensions
+
+| Dimension | Weight | Description |
+|-----------|--------|-------------|
+| treatment_alignment | 20% | Gartner 8R treatment match |
+| platform_compatibility | 15% | App Mod platform status |
+| app_mod_recommended | 10% | Boost for App Mod recommended targets |
+| runtime_model_compatibility | 10% | Runtime model match |
+| service_overlap | 10% | Approved Azure services match |
+| availability_alignment | 10% | Availability model match |
+| operating_model_fit | 8% | Operational maturity fit |
+| complexity_tolerance | 7% | Complexity vs business criticality |
+| browse_tag_overlap | 5% | Relevant browse tags match |
+| cost_posture_alignment | 5% | Cost profile match |
+
+## Catalog Quality Weights
+
+| Quality | Weight | Description |
+|---------|--------|-------------|
+| curated | 100% | From authoritative YamlMime:Architecture |
+| ai_enriched | 95% | Partial authoritative data |
+| ai_suggested | 85% | AI-extracted metadata |
+| example_only | 70% | Example scenarios, not prescriptive |
+
+## Confidence Levels
+
+Each recommendation includes a confidence assessment:
+
+| Level | Requirements |
+|-------|--------------|
+| **High** | Score ≥75% AND Penalty <10% AND Low Signals ≤1 AND Assumptions ≤2 |
+| **Medium** | Score ≥50% AND Penalty <20% AND Low Signals ≤3 |
+| **Low** | Does not meet Medium criteria |
+
+### Confidence Penalties
+
+| Signal Confidence | Penalty |
+|-------------------|---------|
+| HIGH | 0% |
+| MEDIUM | 5% per signal |
+| LOW | 15% per signal |
+| UNKNOWN | 25% per signal |
+
+## Clarification Questions
+
+Questions are dynamically generated based on signal confidence:
+
+| Question | Dimension | When Asked |
+|----------|-----------|------------|
+| Migration strategy | `treatment` | No declared treatment, low confidence |
+| Strategic investment posture | `time_category` | UNKNOWN confidence only |
+| Availability requirements | `availability` | Low confidence |
+| Security/compliance level | `security_level` | No compliance requirements specified |
+| Operational maturity | `operating_model` | Low confidence |
+| Cost optimization priority | `cost_posture` | Low confidence |
+
+### Signals Without Questions
+
+Three signals cannot be addressed via questions:
+
+| Signal | Source |
+|--------|--------|
+| `likely_runtime_model` | Derived from App Mod or technology |
+| `modernization_depth_feasible` | Derived from App Mod results |
+| `cloud_native_feasibility` | Derived from App Mod results |
+
+To achieve higher confidence, provide App Mod results in your context file.
+
+## Eligibility Filtering
+
+Architectures are excluded when:
+
+1. **Treatment mismatch** - Architecture doesn't support the application's treatment
+2. **TIME category mismatch** - Architecture doesn't fit the strategic posture
+3. **Not suitable for** rules - Application triggers exclusion rules (e.g., `low_devops_maturity`, `stateful_apps`)
+4. **Platform incompatibility** - App Mod indicates platform not ready
+
+## Output Schema
+
+```python
+class ScoringResult:
+    application_name: str
+    derived_intent: DerivedIntent
+    recommendations: list[ArchitectureRecommendation]
+    summary: SummaryResult
+    catalog_architecture_count: int
+
+class ArchitectureRecommendation:
+    architecture_id: str
+    name: str
+    pattern_name: str
+    description: str
+    likelihood_score: float  # 0-100
+    catalog_quality: CatalogQuality
+    matched_dimensions: list[MatchedDimension]
+    mismatched_dimensions: list[MismatchedDimension]
+    assumptions: list[AssumptionMade]
+    fit_summary: list[str]
+    struggle_summary: list[str]
+    core_services: list[str]
+    supporting_services: list[str]
+    learn_url: str
+    diagram_url: str
+```
+
+## Example Output
+
+```
+╭─────────────────────────────────────────────────────────────────────────────╮
+│  Architecture Scoring Results                                               │
+╰─────────────────────────────────────────────────────────────────────────────╯
+
+Application: PaymentGateway
+Treatment: refactor | TIME Category: invest
+Eligible Architectures: 12 | Excluded: 159
+
+Your Answers Applied:
+  • security_level: regulated
+  • operating_model: devops
+
+╭─────────────────────────────────────────────────────────────────────────────╮
+│  Top 5 Recommendations                                                      │
+╰─────────────────────────────────────────────────────────────────────────────╯
+
+1. AKS Baseline Cluster Architecture
+   Score: 74% | Confidence: MEDIUM | Quality: curated
+   URL: https://learn.microsoft.com/en-us/azure/architecture/...
+
+   ✓ Matched: treatment_alignment, platform_compatibility, service_overlap
+   ✗ Gaps: availability_alignment (partial)
+   ⚠ Assumptions: runtime_model inferred from app type
+```
+
+## Related Documentation
+
+- [Catalog Builder](./catalog-builder.md) - Generate architecture catalogs
+- [Recommendations App](./recommendations-app.md) - Customer-facing web application
+- [Scorer Prompt](../prompts/architecture-scorer-prompt-v1.md) - Full specification

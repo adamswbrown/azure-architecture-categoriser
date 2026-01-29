@@ -1,0 +1,248 @@
+# Architecture Recommendations App
+
+A customer-facing web application that provides Azure architecture recommendations based on application context data.
+
+## Overview
+
+This Streamlit-based application allows customers to:
+1. Upload their Dr. Migrate context file (JSON)
+2. Review application summary information
+3. Answer optional clarification questions
+4. Receive tailored architecture recommendations
+5. Export results as PDF or JSON
+
+## Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/adamswbrown/azure-architecture-categoriser-.git
+cd azure-architecture-categoriser-
+
+# Install with recommendations app dependencies
+pip install -e ".[recommendations-app]"
+```
+
+## Quick Start
+
+```bash
+# Ensure you have a catalog file (or generate one first)
+# See: docs/catalog-builder.md
+
+# Run the application
+streamlit run src/architecture_recommendations_app/app.py
+```
+
+The app will open in your browser at `http://localhost:8501`.
+
+## User Flow
+
+The application follows a simple 3-step wizard:
+
+### Step 1: Upload & Review
+
+1. Upload your Dr. Migrate context file (JSON format)
+2. Review the **Application Summary**:
+   - Application name, type, criticality, treatment
+   - Detected technologies
+   - Server count and environments
+   - Operating system breakdown
+   - App Modernization assessment results
+
+### Step 2: Answer Questions
+
+1. Review clarification questions (all optional)
+2. Each question shows the current inference and confidence level
+3. Providing answers improves recommendation accuracy
+4. Questions cover:
+   - Migration treatment strategy
+   - Availability requirements
+   - Security/compliance level
+   - Operational maturity
+   - Cost optimization priority
+
+### Step 3: Results
+
+1. View **Analysis Summary** with key metrics
+2. See the **Primary Recommendation** with:
+   - Architecture name and pattern
+   - Match score (percentage)
+   - Quality badge (Curated, AI Enriched, AI Suggested, Example)
+   - Architecture diagram (when available)
+   - Description
+   - Why it fits / Potential challenges
+   - Core Azure services
+   - Link to Microsoft Docs
+3. Review **Alternative Recommendations**
+4. **Export** results:
+   - Download PDF Report
+   - Download JSON
+   - Start New Analysis
+
+## Context File Format
+
+The context file should be a JSON array containing application assessment data:
+
+```json
+[
+  {
+    "app_overview": [
+      {
+        "application": "MyApplication",
+        "app_type": "Web Application",
+        "business_criticality": "High",
+        "treatment": "replatform"
+      }
+    ],
+    "detected_technology_running": [
+      "Java",
+      "Spring Boot",
+      "PostgreSQL",
+      "Redis"
+    ],
+    "server_details": [
+      {
+        "ServerName": "app-server-01",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2019"
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": "Java",
+        "summary": {
+          "container_ready": true,
+          "modernization_feasible": true
+        },
+        "recommended_targets": ["Azure App Service", "Azure Kubernetes Service"]
+      }
+    ]
+  }
+]
+```
+
+### Required Fields
+
+| Field | Description |
+|-------|-------------|
+| `app_overview` | Array with application metadata |
+| `app_overview[].application` | Application name |
+
+### Optional Fields
+
+| Field | Description |
+|-------|-------------|
+| `app_overview[].app_type` | Application type (Web, API, Batch, etc.) |
+| `app_overview[].business_criticality` | Business criticality level |
+| `app_overview[].treatment` | Migration treatment (rehost, replatform, refactor, etc.) |
+| `detected_technology_running` | Array of detected technologies |
+| `server_details` | Array of server information |
+| `App Mod results` | App Modernization assessment results |
+
+## Configuration
+
+### Catalog Location
+
+The app looks for the architecture catalog in this order:
+
+1. **Environment variable**: `ARCHITECTURE_CATALOG_PATH`
+2. **Current directory**: `./architecture-catalog.json`
+3. **Project root**: `<project>/architecture-catalog.json`
+
+```bash
+# Use a custom catalog
+export ARCHITECTURE_CATALOG_PATH=/path/to/my-catalog.json
+streamlit run src/architecture_recommendations_app/app.py
+```
+
+### Theme Configuration
+
+The app uses a light theme by default. Configuration is in `.streamlit/config.toml`:
+
+```toml
+[theme]
+base = "light"
+primaryColor = "#0078D4"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F5F5F5"
+textColor = "#333333"
+```
+
+## PDF Report
+
+The generated PDF report includes:
+
+1. **Header** - Title, application name, generation date
+2. **Executive Summary** - Key metrics in a table
+3. **Key Drivers** - Factors driving the recommendations
+4. **Key Considerations** - Potential risks or challenges
+5. **Recommendations** - Each recommendation with:
+   - Architecture diagram (when available)
+   - Match score and quality level
+   - Description
+   - Why it fits / Potential challenges
+   - Core Azure services
+   - Learn URL
+
+## File Structure
+
+```
+src/architecture_recommendations_app/
+├── app.py                      # Main Streamlit application
+├── components/
+│   ├── upload_section.py       # File upload component
+│   ├── results_display.py      # Recommendation cards
+│   ├── questions_section.py    # Q&A component
+│   └── pdf_generator.py        # PDF report generation
+├── state/
+│   └── session_state.py        # Session state management
+├── utils/
+│   └── validation.py           # Context file validation
+└── .streamlit/
+    └── config.toml             # Streamlit configuration
+```
+
+## Development
+
+```bash
+# Install development dependencies
+pip install -e ".[dev,recommendations-app]"
+
+# Run with auto-reload
+streamlit run src/architecture_recommendations_app/app.py --server.runOnSave true
+
+# Run tests
+pytest tests/
+```
+
+## Troubleshooting
+
+### "Architecture catalog not found"
+
+Ensure you have a catalog file. Generate one using:
+```bash
+catalog-builder build-catalog --repo-path ./architecture-center --out architecture-catalog.json
+```
+
+### "Validation Error" on upload
+
+Check that your context file:
+- Is valid JSON
+- Is an array with at least one object
+- Contains `app_overview` with an `application` name
+
+### No images in recommendations
+
+Only ~20% of catalog entries have architecture diagrams. The app gracefully handles missing images.
+
+### PDF generation fails
+
+Ensure `reportlab` is installed:
+```bash
+pip install reportlab>=4.0.0
+```
+
+## Related Documentation
+
+- [Catalog Builder](./catalog-builder.md) - Generate architecture catalogs
+- [Architecture Scorer](./architecture-scorer.md) - Scoring engine details
+- [Main README](../README.md) - Project overview
