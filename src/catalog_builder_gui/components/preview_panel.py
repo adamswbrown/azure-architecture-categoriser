@@ -78,6 +78,9 @@ def _run_preview_scan(repo_path: Path, max_files: int) -> None:
     from catalog_builder.parser import MarkdownParser
     from catalog_builder.detector import ArchitectureDetector
 
+    # Resolve symlinks (e.g., /tmp -> /private/tmp on macOS)
+    repo_path = repo_path.resolve()
+
     config = get_state('config')
 
     # Apply config to global state temporarily
