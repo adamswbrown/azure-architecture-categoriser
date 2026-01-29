@@ -218,6 +218,8 @@ class MarkdownParser:
     FRONTMATTER_PATTERN = re.compile(r'^---\s*\n(.*?)\n---\s*\n', re.DOTALL)
     HEADING_PATTERN = re.compile(r'^(#{1,6})\s+(.+?)(?:\s*{#[\w-]+})?\s*$', re.MULTILINE)
     IMAGE_PATTERN = re.compile(r'!\[([^\]]*)\]\(([^)]+)\)')
+    # Azure Docs extended image syntax: :::image type="..." source="path":::
+    DOCFX_IMAGE_PATTERN = re.compile(r':::image[^:]*source="([^"]+)"[^:]*:::', re.IGNORECASE)
     LINK_PATTERN = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
     INCLUDE_PATTERN = re.compile(r'\[!INCLUDE\s*\[([^\]]*)\]\(([^)]+)\)\]')
 
@@ -363,7 +365,9 @@ class MarkdownParser:
             if content_file.exists():
                 try:
                     content_body = content_file.read_text(encoding='utf-8')
+                    # Extract images from both standard markdown and Azure Docs :::image::: syntax
                     images = [m.group(2) for m in self.IMAGE_PATTERN.finditer(content_body)]
+                    images.extend([m.group(1) for m in self.DOCFX_IMAGE_PATTERN.finditer(content_body)])
                 except Exception:
                     pass
 
@@ -417,8 +421,9 @@ class MarkdownParser:
         # Extract sections (content under each heading)
         sections = self._extract_sections(body)
 
-        # Extract images
+        # Extract images from both standard markdown and Azure Docs :::image::: syntax
         images = [m.group(2) for m in self.IMAGE_PATTERN.finditer(body)]
+        images.extend([m.group(1) for m in self.DOCFX_IMAGE_PATTERN.finditer(body)])
 
         # Extract links
         links = [m.group(2) for m in self.LINK_PATTERN.finditer(body)]

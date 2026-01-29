@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generated_at": "2026-01-29T20:48:58.376905",
+  "generated_at": "2026-01-29T20:52:05.387106",
   "source_repo": "/private/tmp/architecture-center",
   "source_commit": "06e0d0868e6f59645fdfac6a64048cb0dc57ce5e",
   "total_architectures": 171,
@@ -115,12 +115,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/ai-ml/architecture/_images/analyze-video-content.svg",
+        "docs/ai-ml/architecture/_images/analyze-video-content-video-retrieval-api.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "ai-ml-architecture-automate-document-classificatio-d5d429a8",
@@ -240,12 +241,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/ai-ml/architecture/_images/automate-document-classification-durable-functions.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "ai-ml-architecture-automate-pdf-forms-processing-content",
@@ -358,12 +359,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/ai-ml/architecture/_images/automate-pdf-forms-processing.png"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "ai-ml-architecture-baseline-microsoft-foundry-chat-content",
@@ -386,8 +387,8 @@
         "Architecture",
         "Reference",
         "Security",
-        "Web",
         "AI + Machine Learning",
+        "Web",
         "Networking"
       ],
       "family": "paas",
@@ -500,12 +501,15 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/ai-ml/architecture/../../_images/github.svg",
+        "docs/ai-ml/architecture/_images/baseline-microsoft-foundry.svg",
+        "docs/ai-ml/architecture/_images/baseline-microsoft-foundry-network-flow.svg",
+        "docs/ai-ml/architecture/_images/baseline-microsoft-foundry-portal-access.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "ai-ml-architecture-baseline-microsoft-foundry-land-c0dcc0da",
@@ -529,8 +533,8 @@
         "Architecture",
         "Reference",
         "Security",
-        "Web",
         "AI + Machine Learning",
+        "Web",
         "Networking"
       ],
       "family": "paas",
@@ -636,12 +640,15 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/ai-ml/architecture/../../_images/github.svg",
+        "docs/ai-ml/architecture/_images/baseline-microsoft-foundry-landing-zone.svg",
+        "docs/ai-ml/architecture/_images/baseline-landing-zone-networking.svg",
+        "docs/ai-ml/architecture/_images/baseline-landing-zone-networking-egress.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "ai-ml-architecture-basic-microsoft-foundry-chat-content",
@@ -662,16 +669,16 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Web",
+        "Security",
         "AI + Machine Learning",
-        "Security"
+        "Web"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "web",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -754,12 +761,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/ai-ml/architecture/../../_images/github.svg",
+        "docs/ai-ml/architecture/_images/openai-end-to-end-basic.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "ai-ml-architecture-build-deploy-custom-models-content",
@@ -872,12 +880,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/ai-ml/architecture/_images/build-deploy-custom-models.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "ai-ml-architecture-secure-compute-for-research-content",
@@ -897,16 +905,16 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Compute",
         "AI + Machine Learning",
-        "Security"
+        "Security",
+        "Compute"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "ai",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -993,12 +1001,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/ai-ml/architecture/_images/secure-compute-for-research.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "ai-ml-idea-generate-documents-from-your-data-content",
@@ -1106,12 +1114,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/ai-ml/idea/_images/generate-documents.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "ai-ml-idea-intelligent-apps-image-processing-content",
@@ -1253,15 +1261,15 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Analytics",
-        "AI + Machine Learning"
+        "AI + Machine Learning",
+        "Analytics"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "ai",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -1345,12 +1353,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/ai-ml/idea/_images/many-models-machine-learning-azure.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "ai-ml-idea-multi-modal-content-processing-content",
@@ -1464,12 +1472,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/ai-ml/idea/_images/multi-modal-content-processing.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "ai-ml-idea-multiple-agent-workflow-automation-content",
@@ -1585,12 +1593,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/ai-ml/idea/_images/multiple-agent-workflow-automation.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "ai-ml-idea-next-order-forecasting-content",
@@ -1611,15 +1619,15 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "Analytics",
-        "AI + Machine Learning"
+        "AI + Machine Learning",
+        "Analytics"
       ],
       "family": "data",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "ai",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -1703,12 +1711,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/ai-ml/idea/_images/next-order-forecasting.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "ai-ml-idea-orchestrate-machine-learning-azure-data-bf850979",
@@ -1816,12 +1824,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/ai-ml/idea/_images/orchestrate-machine-learning-azure-databricks.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "ai-ml-idea-unlock-insights-from-conversational-data-content",
@@ -1934,12 +1942,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/ai-ml/idea/_images/unlock-insights-from-conversational-data.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "databases-architecture-azure-data-factory-on-azure-5bf88d2a",
@@ -1962,17 +1970,17 @@
       "browse_categories": [
         "Architecture",
         "Reference",
+        "Storage",
         "Security",
         "Databases",
-        "Networking",
-        "Storage"
+        "Networking"
       ],
       "family": "foundation",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "security",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -2065,7 +2073,9 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/databases/architecture/_images/github.svg"
+        "docs/databases/architecture/_images/github.svg",
+        "docs/databases/architecture/_images/azure-data-factory-baseline.png",
+        "docs/databases/architecture/_images/azure-data-factory-hardened-network.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
@@ -2179,12 +2189,15 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/databases/architecture/_images/azure-synapse-analytics-integrate-mongodb-atlas-architecture.svg",
+        "docs/databases/architecture/_images/azure-synapse-analytics-mongodb-connectors.svg",
+        "docs/databases/architecture/_images/product-bundling-use-case-visualization.png",
+        "docs/databases/architecture/_images/product-promotion-use-case-visualization.png"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "databases-architecture-dataops-mdw-content",
@@ -2299,7 +2312,9 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/databases/architecture/_images/street-parking-availability.png"
+        "docs/databases/architecture/_images/street-parking-availability.png",
+        "docs/databases/architecture/_images/architecture-diagram-demonstrating-dataops-for-the-modern-data-warehouse.svg",
+        "docs/databases/architecture/_images/ci-cd-process-diagram-new.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -2418,12 +2433,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/databases/guide/_images/delphix-continuous-compliance-architecture.svg",
+        "docs/databases/guide/_images/example-architecture.png"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "databases-guide-data-scrambling-for-sap-using-delp-b9549e26",
@@ -2532,12 +2548,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/databases/guide/_images/data-scrambling-for-sap-using-delphix-and-azure-data-factory-architecture.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "databases-idea-minimal-storage-change-feed-replica-2ac210d5",
@@ -2560,17 +2576,17 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "Migration",
+        "Storage",
         "Web",
         "Databases",
-        "Storage"
+        "Migration"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -3022,12 +3038,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/aks-front-door/media/aks-front-door.svg",
+        "docs/example-scenario/aks-front-door/media/flow.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-analytics-enterprise-bi-microsoft-a48b4d26",
@@ -3047,8 +3064,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Analytics",
         "Integration",
+        "Analytics",
         "Databases"
       ],
       "family": "data",
@@ -3056,7 +3073,7 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "integration",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -3146,12 +3163,15 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/analytics/media/enterprise-bi-scoped-architecture.svg",
+        "docs/example-scenario/analytics/media/metadata-copy.png",
+        "docs/example-scenario/analytics/media/metadata-ingestion-pipeline.png",
+        "docs/example-scenario/analytics/media/adventure-works-dashboard.png"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-analytics-sync-mongodb-atlas-azur-f5708453",
@@ -3263,7 +3283,11 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/example-scenario/analytics/media/microsoft-fabric.png"
+        "docs/example-scenario/analytics/media/microsoft-fabric.png",
+        "docs/example-scenario/analytics/media/azure-synapse-analytics-mongodb.svg",
+        "docs/example-scenario/analytics/media/azure-synapse-analytics-pipelines.svg",
+        "docs/example-scenario/analytics/media/create-atlas-trigger.png",
+        "docs/example-scenario/analytics/media/javascript-atlas-function.png"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -3290,8 +3314,8 @@
         "Architecture",
         "Example Scenario",
         "Integration",
-        "Migration",
-        "Web"
+        "Web",
+        "Migration"
       ],
       "family": "paas",
       "family_confidence": {
@@ -3510,12 +3534,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/apps/media/fully-managed-secure-apps.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-apps-measure-azure-app-sustainabi-f6c110eb",
@@ -3536,9 +3560,9 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Databases",
+        "Storage",
         "AI + Machine Learning",
-        "Storage"
+        "Databases"
       ],
       "family": "paas",
       "family_confidence": {
@@ -3632,12 +3656,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/apps/media/measure-app-sci-score.png",
+        "docs/example-scenario/apps/media/carbon-optimization-blade.png"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-apps-sap-production-content",
@@ -3781,15 +3806,15 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Web",
-        "Developer Tools"
+        "Developer Tools",
+        "Web"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "web",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -3878,12 +3903,15 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/apps/media/scalable-apps-performance-modeling-site-reliability.png",
+        "docs/example-scenario/apps/media/scalable-apps-performance-modeling-site-reliability-slo.png",
+        "docs/example-scenario/apps/media/scalable-apps-performance-modeling-site-reliability-lifecycle.png"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
       "extraction_warnings": [
-        "Junk pattern name detected: 'Zone-redundant Potential Use Cases With Ingress'",
-        "No architecture diagrams found"
+        "Junk pattern name detected: 'Zone-redundant Potential Use Cases With Ingress'"
       ]
     },
     {
@@ -4105,12 +4133,14 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/certificate-lifecycle/media/certlc-arch.svg",
+        "docs/example-scenario/certificate-lifecycle/media/workflow.png",
+        "docs/example-scenario/certificate-lifecycle/media/workbook.png"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-data-data-warehouse-content",
@@ -4246,10 +4276,10 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
+        "Databases",
         "Analytics",
         "Azure Virtual Desktop",
-        "Identity",
-        "Databases"
+        "Identity"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -4341,12 +4371,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/data/media/virtual-desktop-gis-azure-network.png"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-data-greenfield-lakehouse-fabric-content",
@@ -4365,9 +4395,9 @@
       "browse_categories": [
         "Architecture",
         "Reference",
+        "Storage",
         "Analytics",
-        "Databases",
-        "Storage"
+        "Databases"
       ],
       "family": "data",
       "family_confidence": {
@@ -4457,12 +4487,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/data/media/greenfield-lakehouse-fabric/greenfield-lakehouse-fabric.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-data-real-time-lakehouse-data-pro-d76eb95f",
@@ -4577,12 +4607,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/data/media/real-time-lakehouse-data-processing/azure-near-realtime-data-processing.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-data-small-medium-data-warehouse-content",
@@ -4602,9 +4632,9 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
+        "Storage",
         "Analytics",
-        "Databases",
-        "Storage"
+        "Databases"
       ],
       "family": "paas",
       "family_confidence": {
@@ -4701,12 +4731,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/data/media/small-medium-data-warehouse/simplified-architecture.svg",
+        "docs/example-scenario/data/media/small-medium-data-warehouse/small-medium-data-warehouse.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-dataplate2e-data-platform-end-to--89502332",
@@ -4824,12 +4855,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/dataplate2e/media/azure-analytics-end-to-end.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-devops-automated-api-deployments--e572117d",
@@ -4849,9 +4880,9 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Management",
+        "Developer Tools",
         "DevOps",
-        "Developer Tools"
+        "Management"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -4918,7 +4949,7 @@
         "source": null
       },
       "complexity": {
-        "implementation": "medium",
+        "implementation": "high",
         "operations": "high"
       },
       "complexity_confidence": {
@@ -4941,12 +4972,18 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/devops/media/automated-api-deployments-apiops-architecture-diagram.svg",
+        "docs/example-scenario/devops/media/automated-api-deployments-run-pipeline.png",
+        "docs/example-scenario/devops/media/automated-api-deployment-api-management-automation-instances.png",
+        "docs/example-scenario/devops/media/automated-api-deployment-subsequent-extraction-pr.png",
+        "docs/example-scenario/devops/media/automated-api-deployment-merging-artifacts-pr.png",
+        "docs/example-scenario/devops/media/automated-api-deployment-stages-of-api-management-publish.png",
+        "docs/example-scenario/devops/media/automated-api-deployment-jobs-in-api-management-publish.png"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-devops-manage-microsoft-365-tenan-273a32c7",
@@ -5078,15 +5115,15 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Networking",
-        "Storage"
+        "Storage",
+        "Networking"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -5163,13 +5200,14 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/file-storage/media/enterprise-file-shares-disaster-recovery.png"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
       "extraction_warnings": [
         "Junk pattern name detected: 'Enterprise-grade Potential Use Cases'",
-        "No core Azure services detected",
-        "No architecture diagrams found"
+        "No core Azure services detected"
       ]
     },
     {
@@ -5190,9 +5228,9 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
+        "Storage",
         "Databases",
-        "Networking",
-        "Storage"
+        "Networking"
       ],
       "family": "iaas",
       "family_confidence": {
@@ -5281,12 +5319,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/file-storage/media/azure-netapp-files-moodle-zonal.svg",
+        "docs/example-scenario/file-storage/media/azure-netapp-files-moodle-architecture.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-file-storage-oracle-azure-netapp--88bd5e48",
@@ -5307,18 +5346,18 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Hybrid",
-        "Storage",
-        "Migration",
         "Databases",
-        "Networking"
+        "Hybrid",
+        "Networking",
+        "Migration",
+        "Storage"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -5399,12 +5438,17 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/file-storage/media/capacity-pool-architecture.png",
+        "docs/example-scenario/file-storage/media/small-oracle-deployment.png",
+        "docs/example-scenario/file-storage/media/oracle-replication-diagram.png",
+        "docs/example-scenario/file-storage/media/application-volume-group-deployment.png",
+        "docs/example-scenario/file-storage/media/oracle-azure-netapp-files-key-values.png",
+        "docs/example-scenario/file-storage/media/oracle-azure-netapp-files-availability.png"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-file-storage-sql-server-azure-net-cdd2ca17",
@@ -5425,18 +5469,18 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Hybrid",
-        "Storage",
-        "Migration",
         "Databases",
-        "Networking"
+        "Hybrid",
+        "Networking",
+        "Migration",
+        "Storage"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -5515,12 +5559,14 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/file-storage/media/continuous-availability.svg",
+        "docs/example-scenario/file-storage/media/high-availability.svg",
+        "docs/example-scenario/file-storage/media/value-proposition.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-forensics-index-content",
@@ -5631,12 +5677,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/forensics/media/chain-of-custody.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-gateway-firewall-application-gate-5badaa77",
@@ -5786,8 +5832,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Containers",
-        "DevOps"
+        "DevOps",
+        "Containers"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -5881,12 +5927,15 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/gitops-aks/media/gitops-flux.svg",
+        "docs/example-scenario/gitops-aks/media/gitops-ci-cd-flux.svg",
+        "docs/example-scenario/gitops-aks/media/gitops-argo-cd.svg",
+        "docs/example-scenario/gitops-aks/media/gitops-ci-cd-argo-cd.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-hybrid-aks-baseline-content",
@@ -5906,8 +5955,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Compute",
-        "Hybrid"
+        "Hybrid",
+        "Compute"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -6005,12 +6054,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/hybrid/media/aks-azure-local-baseline-v9.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-hybrid-aks-hybrid-azure-local-content",
@@ -6030,8 +6079,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Containers",
-        "Hybrid"
+        "Hybrid",
+        "Containers"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -6123,12 +6172,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/hybrid/media/aks-on-hci-architecture-v2.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-hybrid-aks-network-content",
@@ -6236,11 +6285,12 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/hybrid/media/aks-network.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "ai_suggested",
       "extraction_warnings": [
-        "No architecture diagrams found",
         "No browse tags from YML metadata"
       ]
     },
@@ -6262,16 +6312,16 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Hybrid",
+        "Storage",
         "Security",
-        "Storage"
+        "Hybrid"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -6357,12 +6407,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/hybrid/media/azure-files-on-premises-authentication.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-hybrid-secure-hybrid-messaging-cl-f6040b4f",
@@ -6383,8 +6433,8 @@
         "Architecture",
         "Example Scenario",
         "Identity",
-        "Hybrid",
-        "Security"
+        "Security",
+        "Hybrid"
       ],
       "family": "paas",
       "family_confidence": {
@@ -6469,12 +6519,19 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/hybrid/media/desktop-online-option-1.svg",
+        "docs/example-scenario/hybrid/media/desktop-online-option-2.svg",
+        "docs/example-scenario/hybrid/media/access-control-policy.png",
+        "docs/example-scenario/hybrid/media/desktop-on-premises-option-1.svg",
+        "docs/example-scenario/hybrid/media/desktop-on-premises-option-2.svg",
+        "docs/example-scenario/hybrid/media/access-control-policy.png",
+        "docs/example-scenario/hybrid/media/client-apps-desktop.png",
+        "docs/example-scenario/hybrid/media/grant-control-desktop.png"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-hybrid-secure-hybrid-messaging-mo-b86bc301",
@@ -6495,8 +6552,8 @@
         "Architecture",
         "Example Scenario",
         "Identity",
-        "Hybrid",
         "Security",
+        "Hybrid",
         "Mobile"
       ],
       "family": "paas",
@@ -6582,12 +6639,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/hybrid/media/mobile-online.svg",
+        "docs/example-scenario/hybrid/media/mobile-on-premises.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-hybrid-secure-hybrid-messaging-web-content",
@@ -6609,8 +6667,8 @@
         "Example Scenario",
         "Identity",
         "Web",
-        "Hybrid",
-        "Security"
+        "Security",
+        "Hybrid"
       ],
       "family": "integration",
       "family_confidence": {
@@ -6646,7 +6704,6 @@
         "source": null
       },
       "supported_time_categories": [
-        "migrate",
         "tolerate"
       ],
       "time_categories_confidence": {
@@ -6676,7 +6733,7 @@
         "source": null
       },
       "complexity": {
-        "implementation": "low",
+        "implementation": "medium",
         "operations": "low"
       },
       "complexity_confidence": {
@@ -6696,12 +6753,16 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/hybrid/media/hybrid-messaging-web.svg",
+        "docs/example-scenario/hybrid/media/access-control-policy.png",
+        "docs/example-scenario/hybrid/media/set-as-cloud-app.png",
+        "docs/example-scenario/hybrid/media/apply-policy-to-browser.png",
+        "docs/example-scenario/hybrid/media/apply-multifactor-authentication.png"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-identity-adds-extend-domain-content",
@@ -6721,15 +6782,15 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Hybrid",
-        "Identity"
+        "Identity",
+        "Hybrid"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -6813,12 +6874,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/identity/media/ad-ds-extend-domain.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-infrastructure-multi-tier-app-dis-d17a9e89",
@@ -6837,8 +6898,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Web",
-        "Featured"
+        "Featured",
+        "Web"
       ],
       "family": "iaas",
       "family_confidence": {
@@ -7046,12 +7107,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/infrastructure/media/wordpress-app-service.png"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-infrastructure-wordpress-container-content",
@@ -7072,15 +7133,15 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Containers",
-        "Web"
+        "Web",
+        "Containers"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "web",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -7166,12 +7227,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/infrastructure/media/wordpress-aks-azure-netapp-files.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-integration-app-gateway-internal--f986708d",
@@ -7193,15 +7254,15 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Integration",
-        "Developer Tools"
+        "Developer Tools",
+        "Integration"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "integration",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -7295,12 +7356,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/integration/media/app-gateway-internal-api-management-function.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-integration-sma-opcon-azure-content",
@@ -7323,8 +7384,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Containers",
-        "Hybrid"
+        "Hybrid",
+        "Containers"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -7424,12 +7485,14 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/integration/media/opcon-cloud-architecture.svg",
+        "docs/example-scenario/integration/media/opcon-datacenter-architecture.svg",
+        "docs/example-scenario/integration/media/opcon-kubernetes.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-iot-iot-private-file-upload-content",
@@ -7545,12 +7608,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/iot/media/azure-iot-file-upload-private-network.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-iot-measure-control-loop-content",
@@ -7781,12 +7844,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/mainframe/media/cloudframe-refactor.svg",
+        "docs/example-scenario/mainframe/media/cloudframe-refactor-after.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-mainframe-extend-mainframes-rest--cb558bf1",
@@ -7902,12 +7966,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/mainframe/media/extend-mainframes.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-mainframe-general-mainframe-refac-6fa6cafa",
@@ -8037,12 +8101,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/mainframe/media/general-mainframe.svg",
+        "docs/example-scenario/mainframe/media/general-mainframe-refactor.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-mainframe-hp-ux-stromasys-charon--669beeb0",
@@ -8156,7 +8221,8 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/example-scenario/mainframe/media/comparison.png"
+        "docs/example-scenario/mainframe/media/comparison.png",
+        "docs/example-scenario/mainframe/media/charon-par-hp-ux.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -8288,12 +8354,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/mainframe/media/ibm-zos-online-transaction-processing-on-zos.svg",
+        "docs/example-scenario/mainframe/media/ibm-zos-online-transaction-processing-on-azure.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-mainframe-imsql-rehost-ims-content",
@@ -8403,12 +8470,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/mainframe/media/mainframe-architecture.svg",
+        "docs/example-scenario/mainframe/media/imsql-virtual-machines.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-mainframe-integrate-ibm-message-q-fbc5c740",
@@ -8523,12 +8591,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/mainframe/media/integrate-ibm-message-queues-azure-01.svg",
+        "docs/example-scenario/mainframe/media/integrate-ibm-message-queues-azure-02.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-mainframe-mainframe-data-replicat-3d9b8f51",
@@ -8549,17 +8618,17 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Migration",
+        "Storage",
         "DevOps",
-        "Databases",
-        "Storage"
+        "Migration",
+        "Databases"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -8657,12 +8726,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/mainframe/media/mlogica-mainframe-data-migration-architecture.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-mainframe-mainframe-data-replicat-11f32732",
@@ -8685,16 +8754,16 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
+        "Databases",
         "Migration",
-        "Integration",
-        "Databases"
+        "Integration"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -8792,12 +8861,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/mainframe/media/mainframe-realtime-batch-data-replication-azure-rdrs.svg",
+        "docs/example-scenario/mainframe/media/change-data-capture-mainframe-data-with-azure.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-mainframe-mainframe-midrange-data-994088db",
@@ -8915,12 +8985,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/mainframe/media/mainframe-midrange-data-replication-azure-qlik.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-mainframe-mainframe-modernization-2bb473f8",
@@ -9037,12 +9107,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/mainframe/media/bmc-ami-cloud-mainframe-midrange-data-archive-azure.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-mainframe-mainframe-rehost-archit-a4f433e4",
@@ -9164,12 +9234,14 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/mainframe/media/azure-mainframe-rehost-premigration-diagram.svg",
+        "docs/example-scenario/mainframe/media/azure-mainframe-rehost-postmigration-diagram.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
       "extraction_warnings": [
-        "Junk pattern name detected: 'Mission-critical Potential Use Cases With Geo-redundancy And Caching'",
-        "No architecture diagrams found"
+        "Junk pattern name detected: 'Mission-critical Potential Use Cases With Geo-redundancy And Caching'"
       ]
     },
     {
@@ -9292,12 +9364,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/mainframe/media/mainframe-midrange-data-replication-azure-precisely.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-mainframe-micro-focus-server-content",
@@ -9318,8 +9390,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Compute",
-        "Hybrid"
+        "Hybrid",
+        "Compute"
       ],
       "family": "iaas",
       "family_confidence": {
@@ -9414,12 +9486,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/mainframe/media/micro-focus-enterprise-server.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-mainframe-migrate-aix-workloads-t-e68d3696",
@@ -9533,12 +9605,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/mainframe/media/migrate-aix-workloads-to-azure-with-skytap.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-mainframe-migrate-ibm-i-series-to-c2b6b61d",
@@ -9652,12 +9724,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/mainframe/media/migrate-ibm-i-series-to-azure-with-skytap.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-mainframe-migrate-unisys-dorado-m-c2919ae8",
@@ -9782,12 +9854,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/mainframe/media/migrate-unisys-dorado-mainframe-apps-original-architecture.svg",
+        "docs/example-scenario/mainframe/media/migrate-unisys-dorado-mainframe-apps-architecture-diagram.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-mainframe-modernize-mainframe-dat-6fdc3478",
@@ -9903,12 +9976,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/mainframe/media/modernize-mainframe-data-azure.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-mainframe-move-archive-data-mainf-67af9893",
@@ -10017,12 +10090,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/mainframe/media/mainframe-export-archive-data.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-mainframe-process-batch-transacti-2686a5be",
@@ -10044,9 +10117,9 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Compute",
         "Migration",
-        "Hybrid"
+        "Hybrid",
+        "Compute"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -10153,12 +10226,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/mainframe/media/process-batch-transactions.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-mainframe-reengineer-mainframe-ba-f575cd6c",
@@ -10182,8 +10255,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Migration",
-        "Developer Tools"
+        "Developer Tools",
+        "Migration"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -10297,12 +10370,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/mainframe/media/mainframe-batch-application-diagram.svg",
+        "docs/example-scenario/mainframe/media/azure-reengineered-mainframe-batch-application-architecture.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-mainframe-refactor-adabas-aks-content",
@@ -10322,9 +10396,9 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Containers",
         "Migration",
-        "Databases"
+        "Databases",
+        "Containers"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -10425,12 +10499,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/mainframe/media/mainframe-pre-migration.svg",
+        "docs/example-scenario/mainframe/media/mainframe-software-ag-azure-refactor.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-mainframe-rehost-adabas-software-ag-content",
@@ -10545,12 +10620,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/mainframe/media/mainframe-software-ag-rehost-before.svg",
+        "docs/example-scenario/mainframe/media/mainframe-software-ag-azure-rehost-after.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-mainframe-rehost-ims-raincode-imsql-content",
@@ -10668,12 +10744,14 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/mainframe/media/pre-migration.svg",
+        "docs/example-scenario/mainframe/media/rehost-ims-raincode-imsql.svg",
+        "docs/example-scenario/mainframe/media/data-migration.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-mainframe-unisys-clearpath-forwar-4fa25a85",
@@ -10695,9 +10773,9 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Compute",
         "Migration",
-        "Hybrid"
+        "Hybrid",
+        "Compute"
       ],
       "family": "iaas",
       "family_confidence": {
@@ -10793,12 +10871,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/mainframe/media/unisys-clearpath-forward-mainframe-rehost-diagram-premigration.svg",
+        "docs/example-scenario/mainframe/media/unisys-clearpath-forward-mainframe-rehost-diagram-postmigration.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-monitoring-monitoring-observable--7dd9296c",
@@ -10820,8 +10899,8 @@
         "Architecture",
         "Example Scenario",
         "Media",
-        "Analytics",
-        "AI + Machine Learning"
+        "AI + Machine Learning",
+        "Analytics"
       ],
       "family": "data",
       "family_confidence": {
@@ -10914,12 +10993,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/monitoring/media/monitor-media.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-networking-split-brain-dns-content",
@@ -10939,9 +11018,9 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
+        "Web",
         "Security",
         "Hybrid",
-        "Web",
         "Networking"
       ],
       "family": "paas",
@@ -10949,7 +11028,7 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "security",
+      "workload_domain": "web",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -11037,12 +11116,15 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/networking/media/split-brain-dns.svg",
+        "docs/example-scenario/networking/media/split-brain-dns-host-public.svg",
+        "docs/example-scenario/networking/media/split-brain-dns-host-private.svg",
+        "docs/example-scenario/networking/media/split-brain-dns-host-public-alt.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-quantum-quantum-computing-integra-e592997e",
@@ -11063,8 +11145,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Compute",
-        "Hybrid"
+        "Hybrid",
+        "Compute"
       ],
       "family": "integration",
       "family_confidence": {
@@ -11154,12 +11236,14 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/quantum/media/tightly-coupled-quantum-computing-job-architecture.svg",
+        "docs/example-scenario/quantum/media/loosely-coupled-quantum-computing-job-architecture.svg",
+        "docs/example-scenario/quantum/media/cicd-for-quantum-computing-jobs.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-security-virtual-machine-compliance-content",
@@ -11179,9 +11263,9 @@
         "Architecture",
         "Example Scenario",
         "Management",
-        "Compute",
         "DevOps",
-        "Security"
+        "Security",
+        "Compute"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -11266,12 +11350,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/security/media/virtual-machine-compliance-golden-image-publishing-architecture.svg",
+        "docs/example-scenario/security/media/virtual-machine-compliance-track-compliance-architecture.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-serverless-microservices-with-con-812ef234",
@@ -11293,8 +11378,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Containers",
-        "Developer Tools"
+        "Developer Tools",
+        "Containers"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -11393,12 +11478,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/serverless/../../_images/github.png",
+        "docs/example-scenario/serverless/media/microservices-with-container-apps.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-serverless-microservices-with-con-4d32811f",
@@ -11419,15 +11505,15 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Containers",
-        "Web"
+        "Web",
+        "Containers"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "web",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -11519,12 +11605,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/serverless/media/microservices-with-container-apps-dapr.svg",
+        "docs/example-scenario/serverless/media/microservices-with-container-apps-dapr-appmap.png"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-startups-core-startup-stack-content",
@@ -11545,10 +11632,10 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Management",
+        "Developer Tools",
         "DevOps",
         "Web",
-        "Developer Tools"
+        "Management"
       ],
       "family": "paas",
       "family_confidence": {
@@ -11769,12 +11856,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/unix-migration/media/aix-on-premises-system.svg",
+        "docs/example-scenario/unix-migration/media/rhel-azure-system.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-web-design-api-developer-experien-67bb5fbf",
@@ -11882,12 +11970,15 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/example-scenario/web/media/design-api-developer-experiences-management-github-architecture.png",
+        "docs/example-scenario/web/media/design-api-developer-experiences-management-github-value-chain.png",
+        "docs/example-scenario/web/media/design-api-developer-experiences-management-github-basic-features.png",
+        "docs/example-scenario/web/media/design-api-developer-experiences-management-github-functional-requirements.png"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "example-scenario-wsus-index-content",
@@ -12121,12 +12212,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/high-availability/images/high-availability-multi-region-web-v-10.png",
+        "docs/high-availability/images/high-availability-multi-region-nonweb-v-10.png"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "hybrid-arc-hybrid-kubernetes-content",
@@ -12243,12 +12335,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/hybrid/images/arc-hybrid-kubernetes.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "hybrid-azure-arc-sql-server-content",
@@ -12268,15 +12360,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Hybrid",
-        "Databases"
+        "Databases",
+        "Hybrid"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -12389,15 +12481,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Hybrid",
-        "Storage"
+        "Storage",
+        "Hybrid"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -12501,15 +12593,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Hybrid",
-        "Storage"
+        "Storage",
+        "Hybrid"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -12734,7 +12826,11 @@
       },
       "diagram_assets": [
         "docs/hybrid/../_images/github.svg",
-        "docs/hybrid/../_images/github.svg"
+        "docs/hybrid/../_images/github.svg",
+        "docs/hybrid/images/azure-local-baseline.png",
+        "docs/hybrid/images/azure-local-baseline-storage-architecture.png",
+        "docs/hybrid/images/azure-local-baseline-physical-network.png",
+        "docs/hybrid/images/azure-local-baseline-logical-network.png"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
@@ -12855,7 +12951,10 @@
       },
       "diagram_assets": [
         "docs/hybrid/../_images/github.svg",
-        "docs/hybrid/../_images/github.svg"
+        "docs/hybrid/../_images/github.svg",
+        "docs/hybrid/images/azure-local-switchless.png",
+        "docs/hybrid/images/azure-local-3-node-physical-network.png",
+        "docs/hybrid/images/azure-local-3-node-logical-network.png"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
@@ -12969,12 +13068,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/hybrid/images/azure-local-workload-virtual-desktop.svg",
+        "docs/hybrid/images/azure-local-workload-virtual-desktop-logical-separation.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "hybrid-hybrid-dns-infra-content",
@@ -13086,12 +13186,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/hybrid/images/hybrid-dns-infra.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "hybrid-hybrid-file-services-content",
@@ -13111,15 +13211,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Hybrid",
-        "Storage"
+        "Storage",
+        "Hybrid"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -13348,15 +13448,15 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Analytics",
-        "IoT"
+        "IoT",
+        "Analytics"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -13445,12 +13545,14 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/industries/automotive/images/analytics-dataflow.svg",
+        "docs/industries/automotive/images/data-explorer-schema.svg",
+        "docs/industries/automotive/images/batch-workflow.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "mainframe-virtualization-of-unisys-clearpath-forwa-d4cefaee",
@@ -13566,12 +13668,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/mainframe/images/unisys-clearpath-forward-os-2200-mainframe-rehost-premigration.svg",
+        "docs/mainframe/images/unisys-clearpath-forward-os-2200-mainframe-rehost-diagram-postmigration.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "networking-architecture-azure-dns-private-resolver-content",
@@ -13690,12 +13793,17 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/networking/architecture/_images/dns-forwarder-architecture.svg",
+        "docs/networking/architecture/_images/azure-dns-private-resolver-architecture.svg",
+        "docs/networking/architecture/_images/azure-dns-private-resolver-on-premises-query-traffic.svg",
+        "docs/networking/architecture/_images/azure-dns-private-resolver-spoke-query-traffic.svg",
+        "docs/networking/architecture/_images/azure-dns-private-resolver-spoke-query-traffic-uc2.svg",
+        "docs/networking/architecture/_images/azure-dns-private-resolver-spoke-query-traffic-uc3.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "networking-architecture-hub-spoke-content",
@@ -13939,12 +14047,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/networking/architecture/_images/hub-spoke-virtual-wan-architecture-1.svg",
+        "docs/networking/architecture/_images/hub-spoke-virtual-wan-architecture-2.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "networking-architecture-performance-security-optim-0e7d34ce",
@@ -14055,7 +14164,8 @@
       },
       "diagram_assets": [
         "docs/networking/architecture/_images/performance-security-optimized-vwan-azure.png",
-        "docs/networking/architecture/_images/performance-security-optimized-vwan-architecture-regions.png"
+        "docs/networking/architecture/_images/performance-security-optimized-vwan-architecture-regions.png",
+        "docs/networking/architecture/_images/performance-security-optimized-vwan-architecture-azure-main.png"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -14082,15 +14192,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Integration",
-        "Databases"
+        "Databases",
+        "Integration"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "integration",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -14183,12 +14293,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/reference-architectures/app-modernization/media/raincode-reference-architecture-01.svg",
+        "docs/reference-architectures/app-modernization/media/raincode-reference-architecture-02.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "reference-architectures-aws-aws-azure-ad-security-content",
@@ -14296,7 +14407,15 @@
         "docs/reference-architectures/aws/media/aws-multiple-accounts.png",
         "docs/reference-architectures/aws/media/azure-aws-integration.png",
         "docs/reference-architectures/aws/media/role-mapping.png",
-        "docs/reference-architectures/aws/media/diagram-example.png"
+        "docs/reference-architectures/aws/media/diagram-example.png",
+        "docs/reference-architectures/aws/media/see-roles.png",
+        "docs/reference-architectures/aws/media/select-role.png",
+        "docs/reference-architectures/aws/media/group-role-mapping.png",
+        "docs/reference-architectures/aws/media/restart-provisioning.png",
+        "docs/reference-architectures/aws/media/aws-logo.png",
+        "docs/reference-architectures/aws/media/sign-in-session.png",
+        "docs/reference-architectures/aws/media/aws-policy.png",
+        "docs/reference-architectures/aws/media/test-policy.png"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
@@ -14324,8 +14443,8 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Containers",
         "Kubernetes",
+        "Containers",
         "Aks"
       ],
       "family": "cloud_native",
@@ -14438,12 +14557,17 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/reference-architectures/containers/aks/images/aks-baseline-architecture.svg",
+        "docs/reference-architectures/containers/aks/images/aks-baseline-network-topology.svg",
+        "docs/reference-architectures/containers/aks/images/traffic-flow.svg",
+        "docs/reference-architectures/containers/aks/images/tls-termination.svg",
+        "docs/reference-architectures/containers/aks/images/workload-ci-cd.svg",
+        "docs/reference-architectures/containers/aks/images/gitops-flow.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "reference-architectures-containers-aks-microservic-f8f7cf73",
@@ -14565,12 +14689,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/reference-architectures/containers/aks-microservices/images/aks-microservices-advanced-production-deployment.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "reference-architectures-containers-aks-microservic-0f171143",
@@ -14693,12 +14817,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/reference-architectures/containers/aks-microservices/images/microservices-architecture.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "reference-architectures-containers-aks-mission-cri-25ec0bb5",
@@ -14916,11 +15040,13 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/reference-architectures/containers/aks-mission-critical/images/mission-critical-ref-flowchart.png",
+        "docs/reference-architectures/containers/aks-mission-critical/images/deployment-pipeline-prod.png"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "ai_suggested",
       "extraction_warnings": [
-        "No architecture diagrams found",
         "No browse tags from YML metadata"
       ]
     },
@@ -15118,7 +15244,7 @@
         "source": null
       },
       "complexity": {
-        "implementation": "low",
+        "implementation": "medium",
         "operations": "low"
       },
       "complexity_confidence": {
@@ -15139,11 +15265,16 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/reference-architectures/containers/aks-mission-critical/images/network-diagram-all-standard.png",
+        "docs/reference-architectures/containers/aks-mission-critical/images/network-diagram-ingress-standard.png",
+        "docs/reference-architectures/containers/aks-mission-critical/images/network-diagram-vnet-paas-dependencies-standard.png",
+        "docs/reference-architectures/containers/aks-mission-critical/images/network-diagram-ingress.png",
+        "docs/reference-architectures/containers/aks-mission-critical/images/network-diagram-vnet-paas-dependencies.png"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "ai_suggested",
       "extraction_warnings": [
-        "No architecture diagrams found",
         "No browse tags from YML metadata"
       ]
     },
@@ -15251,11 +15382,12 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/reference-architectures/containers/aks-mission-critical/images/mission-critical-operations-dependabot.png"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "ai_suggested",
       "extraction_warnings": [
-        "No architecture diagrams found",
         "No browse tags from YML metadata"
       ]
     },
@@ -15279,8 +15411,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Containers",
         "Kubernetes",
+        "Containers",
         "Aks"
       ],
       "family": "cloud_native",
@@ -15383,7 +15515,8 @@
       },
       "diagram_assets": [
         "docs/reference-architectures/containers/aks-multi-region/images/aks-ingress-flow.svg",
-        "docs/reference-architectures/containers/aks-multi-region/images/acr-replicas.png"
+        "docs/reference-architectures/containers/aks-multi-region/images/acr-replicas.png",
+        "docs/reference-architectures/containers/aks-multi-region/images/aks-multi-cluster.svg#lightbox"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -15406,16 +15539,16 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Containers",
+        "Security",
         "Hybrid",
-        "Security"
+        "Containers"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -15506,12 +15639,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/reference-architectures/containers/aro/images/financial-services-industry-architecture.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "reference-architectures-data-stream-processing-dat-dbaced7b",
@@ -15622,12 +15755,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/reference-architectures/data/images/stream-processing-databricks.svg",
+        "docs/reference-architectures/data/images/stream-processing-databricks-event-hubs.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "reference-architectures-data-stream-processing-str-202ae784",
@@ -15743,7 +15877,8 @@
         "docs/reference-architectures/data/images/stream-processing-asa/stream-processing-eh.png",
         "docs/reference-architectures/data/images/stream-processing-asa/asa-dashboard.png",
         "docs/reference-architectures/data/images/stream-processing-asa/stream-processing-eh-autoscale.png",
-        "docs/reference-architectures/data/images/stream-processing-asa/job-diagram.png"
+        "docs/reference-architectures/data/images/stream-processing-asa/job-diagram.png",
+        "docs/reference-architectures/data/images/stream-processing-asa/stream-processing-stream-analytics.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
@@ -15893,9 +16028,9 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Management",
+        "Developer Tools",
         "Integration",
-        "Developer Tools"
+        "Management"
       ],
       "family": "paas",
       "family_confidence": {
@@ -16210,12 +16345,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/reference-architectures/hybrid-networking/images/vpn-gateway-multisite-connection-diagram.svg",
+        "docs/reference-architectures/hybrid-networking/images/expressroute-connection-overview.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "reference-architectures-hybrid-networking-virtual--478ab4e4",
@@ -16300,7 +16436,7 @@
         "source": null
       },
       "complexity": {
-        "implementation": "medium",
+        "implementation": "high",
         "operations": "high"
       },
       "complexity_confidence": {
@@ -16324,12 +16460,23 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/reference-architectures/hybrid-networking/images/virtual-network-manager-connectivity-options.svg",
+        "docs/reference-architectures/hybrid-networking/images/spoke-to-spoke-through-peerings.svg",
+        "docs/reference-architectures/hybrid-networking/images/spoke-to-spoke-through-peerings-2-hubs-full-mesh.svg",
+        "docs/reference-architectures/hybrid-networking/images/peering-number-chart.svg",
+        "docs/reference-architectures/hybrid-networking/images/spoke-to-spoke-via-nva.svg",
+        "docs/reference-architectures/hybrid-networking/images/spoke-to-spoke-via-nva-north-south.svg",
+        "docs/reference-architectures/hybrid-networking/images/spoke-to-spoke-via-nva-2-hubs.svg",
+        "docs/reference-architectures/hybrid-networking/images/spoke-to-spoke-via-nva-2-hubs-north-south.svg",
+        "docs/reference-architectures/hybrid-networking/images/spoke-to-spoke-through-virtual-wan.svg",
+        "docs/reference-architectures/hybrid-networking/images/spoke-to-spoke-through-selective-peerings-2-hubs.svg",
+        "docs/reference-architectures/hybrid-networking/images/spoke-to-spoke-through-peerings-2-hubs.svg",
+        "docs/reference-architectures/hybrid-networking/images/spoke-to-spoke-through-peerings-virtual-wan.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "reference-architectures-identity-adds-forest-content",
@@ -16350,15 +16497,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Hybrid",
-        "Identity"
+        "Identity",
+        "Hybrid"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -16438,12 +16585,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/reference-architectures/identity/images/adds-forest.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "reference-architectures-identity-adfs-content",
@@ -16550,12 +16697,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/reference-architectures/identity/images/active-directory-federation-services.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "reference-architectures-identity-azure-ad-content",
@@ -16668,12 +16815,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/reference-architectures/identity/images/azure-active-directory.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "reference-architectures-migration-sync-mainframe-d-a7d26b25",
@@ -16793,12 +16940,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/reference-architectures/migration/images/sync-mainframe-data-with-azure.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "reference-architectures-migration-unisys-mainframe-13490b70",
@@ -16916,12 +17063,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/reference-architectures/migration/media/unisys-components.svg",
+        "docs/reference-architectures/migration/media/avanade-unisys-migration.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "ai_enriched",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "reference-architectures-n-tier-linux-vm-content",
@@ -17033,12 +17181,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/reference-architectures/n-tier/images/single-vm-diagram.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "reference-architectures-sap-run-sap-bw4hana-with-l-918e37ac",
@@ -17059,15 +17207,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Compute",
-        "Databases"
+        "Databases",
+        "Compute"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -17183,15 +17331,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Compute",
-        "Databases"
+        "Databases",
+        "Compute"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -17394,12 +17542,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/solution-ideas/articles/../media/ai-search-skillsets.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "solution-ideas-articles-azure-databricks-modern-an-107579ce",
@@ -17419,15 +17567,15 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "Analytics",
-        "AI + Machine Learning"
+        "AI + Machine Learning",
+        "Analytics"
       ],
       "family": "data",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "ai",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -17510,12 +17658,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/solution-ideas/articles/../media/azure-databricks-modern-analytics-architecture.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "solution-ideas-articles-azure-security-build-first-8c10144b",
@@ -17535,15 +17683,15 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "Integration",
-        "Security"
+        "Security",
+        "Integration"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "integration",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -17637,12 +17785,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/solution-ideas/articles/../media/azure-security-build-first-layer-defense-architecture.png"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
       "extraction_warnings": [
-        "Junk pattern name detected: 'Highly Available Potential Use Cases With Private Networking'",
-        "No architecture diagrams found"
+        "Junk pattern name detected: 'Highly Available Potential Use Cases With Private Networking'"
       ]
     },
     {
@@ -17870,12 +18019,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/solution-ideas/articles/../media/devsecops-for-iac.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "solution-ideas-articles-highly-available-sharepoin-9ff9f8ec",
@@ -18012,8 +18161,8 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "Analytics",
         "IoT",
+        "Analytics",
         "Databases"
       ],
       "family": "data",
@@ -18021,7 +18170,7 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -18100,12 +18249,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/solution-ideas/articles/../media/ingest-etl-and-stream-processing-with-azure-databricks.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "solution-ideas-articles-iot-azure-data-explorer-content",
@@ -18125,15 +18274,15 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "Analytics",
-        "IoT"
+        "IoT",
+        "Analytics"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -18219,12 +18368,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/solution-ideas/articles/../media/iot-azure-data-explorer-new.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "solution-ideas-articles-mainframe-azure-file-repli-e8a16d8c",
@@ -18365,15 +18514,15 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "Integration",
-        "Security"
+        "Security",
+        "Integration"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "integration",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -18462,12 +18611,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/solution-ideas/articles/../media/map-threats-it-environment-architecture.png"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
       "extraction_warnings": [
-        "Junk pattern name detected: 'Enterprise-grade Potential Use Cases With Private Networking'",
-        "No architecture diagrams found"
+        "Junk pattern name detected: 'Enterprise-grade Potential Use Cases With Private Networking'"
       ]
     },
     {
@@ -18487,15 +18637,15 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "Integration",
-        "Security"
+        "Security",
+        "Integration"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "integration",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -18584,12 +18734,16 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/solution-ideas/articles/../media/microsoft-365-defender-build-second-layer-defense-services-diagram.png",
+        "docs/solution-ideas/articles/../media/microsoft-365-defender-build-second-layer-defense-attack-order.png",
+        "docs/solution-ideas/articles/../media/microsoft-365-defender-build-second-layer-defense-architecture.png",
+        "docs/solution-ideas/articles/../media/microsoft-365-defender-build-second-layer-defense-portals.png"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
       "extraction_warnings": [
-        "Junk pattern name detected: 'Highly Available Potential Use Case'",
-        "No architecture diagrams found"
+        "Junk pattern name detected: 'Highly Available Potential Use Case'"
       ]
     },
     {
@@ -18610,15 +18764,15 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "Integration",
-        "Security"
+        "Security",
+        "Integration"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "integration",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -18710,12 +18864,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/solution-ideas/articles/../media/microsoft-365-defender-security-integrate-azure-architecture.png"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "solution-ideas-articles-microsoft-sentinel-automat-4e4bd67f",
@@ -18736,16 +18890,16 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "Migration",
         "Identity",
-        "Security"
+        "Security",
+        "Migration"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -18825,12 +18979,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/solution-ideas/articles/../media/microsoft-sentinel-automated-response-architecture.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
       "extraction_warnings": [
-        "Junk pattern name detected: 'Potential Use Case'",
-        "No architecture diagrams found"
+        "Junk pattern name detected: 'Potential Use Case'"
       ]
     },
     {
@@ -18852,8 +19007,8 @@
         "Architecture",
         "Solution Idea",
         "Management",
-        "Migration",
-        "Security"
+        "Security",
+        "Migration"
       ],
       "family": "paas",
       "family_confidence": {
@@ -18952,12 +19107,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/solution-ideas/articles/../media/cross-tenant-migration-strategy.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "solution-ideas-articles-multilayered-protection-az-581da623",
@@ -19070,12 +19225,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/solution-ideas/articles/../media/multilayered-protection-azure-vm-architecture-diagram.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
       "extraction_warnings": [
-        "Junk pattern name detected: 'Baseline Potential Use Cases With Zero Trust'",
-        "No architecture diagrams found"
+        "Junk pattern name detected: 'Baseline Potential Use Cases With Zero Trust'"
       ]
     },
     {
@@ -19192,12 +19348,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/solution-ideas/articles/../media/project-15-reference-architecture.svg",
+        "docs/solution-ideas/articles/../media/project-15-open-platform-overview.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "solution-ideas-articles-sap-s4-hana-on-hli-with-ha-c057fab6",
@@ -19217,16 +19374,16 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "Compute",
         "Web",
-        "Storage"
+        "Storage",
+        "Compute"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "web",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -19332,8 +19489,8 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "Migration",
-        "Developer Tools"
+        "Developer Tools",
+        "Migration"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -19421,12 +19578,15 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/solution-ideas/articles/../media/sap-workload-automation-suse-sles4sap-benefits.png",
+        "docs/solution-ideas/articles/../media/sap-workload-automation-suse.svg",
+        "docs/solution-ideas/articles/../media/sap-workload-automation-suse-flow.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
       "extraction_warnings": [
-        "Junk pattern name detected: 'Highly Available Potential Use Cases'",
-        "No architecture diagrams found"
+        "Junk pattern name detected: 'Highly Available Potential Use Cases'"
       ]
     },
     {
@@ -19447,15 +19607,15 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "Databases",
-        "Security"
+        "Security",
+        "Databases"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -19537,12 +19697,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/solution-ideas/articles/../media/azure-sql-managed-instance-architecture.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "solution-ideas-articles-small-medium-modern-data-p-1a8c8e57",
@@ -19563,9 +19723,9 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
+        "Storage",
         "Analytics",
-        "Databases",
-        "Storage"
+        "Databases"
       ],
       "family": "data",
       "family_confidence": {
@@ -19663,12 +19823,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/solution-ideas/articles/../media/small-medium-businesses-simplified-architecture.svg",
+        "docs/solution-ideas/articles/../media/small-medium-businesses-architecture.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "solution-ideas-articles-solaris-azure-content",
@@ -19776,12 +19937,13 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/solution-ideas/articles/../media/solaris.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
       "extraction_warnings": [
-        "Junk pattern name detected: 'Potential Use Cases'",
-        "No architecture diagrams found"
+        "Junk pattern name detected: 'Potential Use Cases'"
       ]
     },
     {
@@ -19804,9 +19966,9 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Compute",
         "Migration",
-        "Networking"
+        "Networking",
+        "Compute"
       ],
       "family": "iaas",
       "family_confidence": {
@@ -19908,7 +20070,13 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/virtual-machines/../_images/github.svg"
+        "docs/virtual-machines/../_images/github.svg",
+        "docs/virtual-machines/media/baseline-architecture.svg",
+        "docs/virtual-machines/media/baseline-network.svg",
+        "docs/virtual-machines/media/baseline-network-ingress.svg",
+        "docs/virtual-machines/media/baseline-network-egress.svg",
+        "docs/virtual-machines/media/baseline-monitoring.svg",
+        "docs/virtual-machines/media/baseline-certificates.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
@@ -19933,15 +20101,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Web",
-        "Security"
+        "Security",
+        "Web"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "web",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -20034,12 +20202,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/web-apps/api-management/architectures/../_images/protect-apis.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "web-apps-app-service-architectures-baseline-zone-r-7b0d3d60",
@@ -20167,12 +20335,16 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/web-apps/app-service/architectures/../../../_images/github.svg",
+        "docs/web-apps/app-service/architectures/../_images/baseline-app-service-architecture.svg",
+        "docs/web-apps/app-service/architectures/../_images/baseline-app-service-network-architecture.svg",
+        "docs/web-apps/app-service/architectures/../_images/baseline-app-service-encryption-flow.svg",
+        "docs/web-apps/app-service/architectures/../_images/baseline-app-service-deployments.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "web-apps-app-service-architectures-basic-web-app-content",
@@ -20288,12 +20460,12 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/web-apps/app-service/architectures/../_images/basic-app-service-architecture-flow.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "web-apps-app-service-environment-architectures-app-4df47325",
@@ -20413,7 +20585,8 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/web-apps/app-service-environment/architectures/../../../_images/github.png"
+        "docs/web-apps/app-service-environment/architectures/../../../_images/github.png",
+        "docs/web-apps/app-service-environment/architectures/../_images/app-service-environment-high-availability.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
@@ -20540,12 +20713,14 @@
         "confidence": "curated",
         "source": "yml_products"
       },
-      "diagram_assets": [],
+      "diagram_assets": [
+        "docs/web-apps/app-service-environment/architectures/../_images/app-service-environment.svg",
+        "docs/web-apps/app-service-environment/architectures/../../../_images/github.png",
+        "docs/web-apps/app-service-environment/architectures/../_images/app-service-environment-multisite.svg"
+      ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
-      "extraction_warnings": [
-        "No architecture diagrams found"
-      ]
+      "extraction_warnings": []
     },
     {
       "architecture_id": "web-apps-guides-networking-access-multitenant-web--11f96720",
