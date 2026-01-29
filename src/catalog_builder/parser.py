@@ -356,8 +356,8 @@ class MarkdownParser:
         content_body = ""
         images = []
 
-        # Try to load the included content file
-        include_match = re.search(r'\[!INCLUDE\[.*?\]\((.*?)\)\]', content_ref)
+        # Try to load the included content file (case-insensitive for [!include] or [!INCLUDE])
+        include_match = re.search(r'\[!INCLUDE\[.*?\]\((.*?)\)\]', content_ref, re.IGNORECASE)
         if include_match:
             content_file = yml_path.parent / include_match.group(1)
             if content_file.exists():
