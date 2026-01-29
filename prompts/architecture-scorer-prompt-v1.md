@@ -262,14 +262,21 @@ Each signal dimension has a confidence level that contributes to an overall pena
 | LOW | 15% |
 | UNKNOWN | 25% |
 
-**Tracked Signals:**
-- treatment
-- time_category
-- availability_requirement
-- security_requirement
-- operating_model
-- runtime_model
-- cost_posture
+**Tracked Signals (9 total):**
+
+| Signal | Has Question? | Source When No Answer |
+|--------|---------------|----------------------|
+| treatment | ✅ Yes | App Mod or inference |
+| time_category | ✅ Yes | Treatment inference |
+| availability_requirement | ✅ Yes | Business criticality |
+| security_requirement | ✅ Yes | Compliance detection |
+| operational_maturity_estimate | ✅ Yes | Technology detection |
+| cost_posture | ✅ Yes | Criticality heuristics |
+| likely_runtime_model | ❌ No | App Mod or app type |
+| modernization_depth_feasible | ❌ No | App Mod results only |
+| cloud_native_feasibility | ❌ No | App Mod container_ready |
+
+**Important**: Only 6 of 9 signals can be addressed via clarification questions. The remaining 3 (`likely_runtime_model`, `modernization_depth_feasible`, `cloud_native_feasibility`) are derived from App Mod results or technology detection. Without App Mod data, these signals may remain at LOW/UNKNOWN confidence.
 
 **Example Calculation:**
 ```
@@ -280,13 +287,13 @@ Final score: base_score × (1 - 0.25)
 
 ### Overall Confidence Level
 
-The recommendation's overall confidence level is determined by:
+The recommendation's overall confidence level is determined by **all four conditions**:
 
 | Level | Score | Penalty | Low Signals | Assumptions |
 |-------|-------|---------|-------------|-------------|
 | **HIGH** | ≥75% | <10% | ≤1 | ≤2 |
 | **MEDIUM** | ≥50% | <20% | ≤3 | Any |
-| **LOW** | <50% | ≥20% | >3 | Any |
+| **LOW** | Does not meet MEDIUM requirements | | |
 
 **Algorithm:**
 ```python
@@ -298,6 +305,45 @@ def calculate_confidence_level(score, penalty, low_signals, assumptions):
     else:
         return "LOW"
 ```
+
+**Why Confidence Can Remain "Low" Even With All Questions Answered:**
+
+Since only 6 of 9 signals have clarification questions, applications without App Mod results will have at least 3 signals at LOW/UNKNOWN confidence. This means:
+
+1. **Low Signal Count**: Even with all 6 questions answered at HIGH confidence, the 3 remaining signals (`likely_runtime_model`, `modernization_depth_feasible`, `cloud_native_feasibility`) may push `low_signals` count to 3 (borderline for MEDIUM)
+
+2. **Score Threshold**: The score must also meet the threshold (≥50% for MEDIUM). If the best-matching architectures are `example_only` quality (70% weight), effective scores are reduced
+
+3. **Penalty Accumulation**: LOW confidence signals contribute 15% penalty each, UNKNOWN contributes 25%
+
+**Example:**
+```
+Application: GlobalTradingPlatform (no App Mod data)
+
+User answers (all 6): HIGH confidence
+  • treatment, time_category, availability, security, operating_model, cost_posture
+
+Derived signals (no App Mod): LOW/UNKNOWN confidence
+  • likely_runtime_model: LOW (inferred from app type)
+  • modernization_depth_feasible: UNKNOWN
+  • cloud_native_feasibility: UNKNOWN
+
+Calculation:
+  • low_signals = 3 (exactly at MEDIUM threshold)
+  • penalty = 0.15 + 0.25 + 0.25 = 0.65 (capped at 0.25)
+  • score = 50% (top recommendation)
+  • catalog_quality = example_only (0.70 weight)
+
+Result: "Low" confidence
+  - Score is borderline at 50%
+  - 3 low-confidence signals at threshold
+  - Penalty exceeds 20% threshold
+```
+
+**To Improve Confidence:**
+- Provide App Mod results (derives 3 signals at HIGH confidence)
+- Use contexts with better-matching curated architectures
+- Ensure declared treatment in app_overview (avoids treatment inference)
 
 ### Catalog Quality Weights
 | Quality | Weight |

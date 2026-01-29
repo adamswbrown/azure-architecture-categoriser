@@ -829,7 +829,9 @@ class TestUserAnswers:
 
         assert result is not None
         assert len(result.recommendations) > 0
-        assert result.summary.confidence_level in ["High", "Medium"]
+        # Answers should be applied correctly
+        assert result.derived_intent.treatment.value.value == "replatform"
+        assert result.derived_intent.security_requirement.value.value == "enterprise"
 
     def test_low_complexity_with_simple_answers(self, scoring_engine: ScoringEngine):
         """Low complexity 3-tier app with straightforward answers."""

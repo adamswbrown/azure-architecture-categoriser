@@ -1,0 +1,65 @@
+
+Architecture Scoring Engine
+Catalog: architecture-catalog.json (171 architectures)
+Context: prompt2_context_examples/22-medium-complexity-java-multi-env.json
+Answers provided: 6
+
+Your Answers Applied:
+  • treatment: replatform
+  • time_category: migrate
+  • availability: zone_redundant
+  • security_level: enterprise
+  • operating_model: transitional
+  • cost_posture: balanced
+
+╭────────────────────────────── Scoring Summary ───────────────────────────────╮
+│ CustomerPortal                                                               │
+│                                                                              │
+│ Primary Recommendation: App Service Web Application                          │
+│ Confidence: Low                                                              │
+│ Eligible: 5 | Excluded: 162                                                  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+Key Drivers:
+  • Treatment: replatform (confirmed)
+  • Treatment: replatform
+  • Platform Compatibility: Azure App Service
+  • App Mod Recommended: azure app service
+  • Possible match - review assumptions carefully
+
+Key Risks:
+  • Availability: May need architecture modifications for required availability
+  • Complexity: Architecture may be over-engineered for the use case
+  • Close alternative: Mission-critical Serverless Application With Private 
+Networking (37%)
+  • Catalog quality: example_only (review recommended)
+
+Top Recommendations:
+
+  1. App Service Web Application 38% example_only
+     URL: 
+https://learn.microsoft.com/en-us/azure/architecture/example-scenario/analytics/
+sync-mongodb-atlas-azure-synapse-analytics-content
+
+  2. Mission-critical Serverless Application With Private Networking 37% 
+example_only
+     URL: 
+https://learn.microsoft.com/en-us/azure/architecture/mainframe/virtualization-of
+-unisys-clearpath-forward-os-2200-enterprise-server-on-azure-content
+
+  3. Mission-critical Serverless Application With Private Networking 36% 
+example_only
+     URL: 
+https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/
+unisys-clearpath-forward-mainframe-rehost-content
+
+  4. Serverless Application With Private Networking 35% example_only
+     URL: 
+https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/
+integrate-ibm-message-queues-azure-content
+
+  5. Highly Available Vm-based Workload With Private Networking 35% example_only
+     URL: 
+https://learn.microsoft.com/en-us/azure/architecture/networking/architecture/azu
+re-dns-private-resolver-content
+

@@ -1,0 +1,64 @@
+
+Architecture Scoring Engine
+Catalog: architecture-catalog.json (171 architectures)
+Context: prompt2_context_examples/18-innovation-first-ai-ml.json
+Answers provided: 6
+
+Your Answers Applied:
+  • treatment: replatform
+  • time_category: migrate
+  • availability: zone_redundant
+  • security_level: enterprise
+  • operating_model: transitional
+  • cost_posture: balanced
+
+╭────────────────────────────── Scoring Summary ───────────────────────────────╮
+│ IntelligentDocumentProcessor                                                 │
+│                                                                              │
+│ Primary Recommendation: Mission-critical Serverless Application With Private │
+│ Networking                                                                   │
+│ Confidence: Low                                                              │
+│ Eligible: 5 | Excluded: 162                                                  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+Key Drivers:
+  • Treatment: replatform (confirmed)
+  • Treatment: replatform
+  • Runtime Model: n_tier
+  • Operating Model: transitional
+  • Possible match - review assumptions carefully
+
+Key Risks:
+  • Close alternative: Mission-critical Serverless Application With Private 
+Networking (48%)
+  • Catalog quality: example_only (review recommended)
+
+Top Recommendations:
+
+  1. Mission-critical Serverless Application With Private Networking 48% 
+example_only
+     URL: 
+https://learn.microsoft.com/en-us/azure/architecture/mainframe/virtualization-of
+-unisys-clearpath-forward-os-2200-enterprise-server-on-azure-content
+
+  2. Mission-critical Serverless Application With Private Networking 48% 
+example_only
+     URL: 
+https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/
+unisys-clearpath-forward-mainframe-rehost-content
+
+  3. Serverless Application With Private Networking 47% example_only
+     URL: 
+https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/
+integrate-ibm-message-queues-azure-content
+
+  4. Highly Available Vm-based Workload With Private Networking 47% example_only
+     URL: 
+https://learn.microsoft.com/en-us/azure/architecture/networking/architecture/azu
+re-dns-private-resolver-content
+
+  5. Highly Available Vm-based Workload With Private Networking 45% example_only
+     URL: 
+https://learn.microsoft.com/en-us/azure/architecture/example-scenario/iot/iot-pr
+ivate-file-upload-content
+

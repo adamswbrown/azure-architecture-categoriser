@@ -1,0 +1,66 @@
+
+Architecture Scoring Engine
+Catalog: architecture-catalog.json (171 architectures)
+Context: 
+prompt2_context_examples/06-dotnet-conflicting-signals-appmod-overrides.json
+Answers provided: 6
+
+Your Answers Applied:
+  • treatment: replatform
+  • time_category: migrate
+  • availability: zone_redundant
+  • security_level: enterprise
+  • operating_model: transitional
+  • cost_posture: balanced
+
+╭────────────────────────────── Scoring Summary ───────────────────────────────╮
+│ ClaimsIntake                                                                 │
+│                                                                              │
+│ Primary Recommendation: App Service Web Application                          │
+│ Confidence: Low                                                              │
+│ Eligible: 5 | Excluded: 162                                                  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+Key Drivers:
+  • Treatment: replatform (confirmed)
+  • Treatment: replatform
+  • App Mod Recommended: azure app service
+  • Operating Model: transitional
+  • Possible match - review assumptions carefully
+
+Key Risks:
+  • Availability: May need architecture modifications for required availability
+  • Cost Profile: Cost characteristics may not align with expectations
+  • Close alternative: Highly Available Vm-based Workload With Private 
+Networking (35%)
+  • Catalog quality: example_only (review recommended)
+
+Top Recommendations:
+
+  1. App Service Web Application 35% example_only
+     URL: 
+https://learn.microsoft.com/en-us/azure/architecture/example-scenario/analytics/
+sync-mongodb-atlas-azure-synapse-analytics-content
+
+  2. Highly Available Vm-based Workload With Private Networking 35% example_only
+     URL: 
+https://learn.microsoft.com/en-us/azure/architecture/example-scenario/iot/iot-pr
+ivate-file-upload-content
+
+  3. Mission-critical Serverless Application With Private Networking 33% 
+example_only
+     URL: 
+https://learn.microsoft.com/en-us/azure/architecture/mainframe/virtualization-of
+-unisys-clearpath-forward-os-2200-enterprise-server-on-azure-content
+
+  4. Mission-critical Serverless Application With Private Networking 33% 
+example_only
+     URL: 
+https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/
+unisys-clearpath-forward-mainframe-rehost-content
+
+  5. Highly Available Vm-based Workload With Private Networking 32% example_only
+     URL: 
+https://learn.microsoft.com/en-us/azure/architecture/networking/architecture/azu
+re-dns-private-resolver-content
+

@@ -343,19 +343,69 @@ Questions are **dynamically generated** based on signal confidence levels. The s
 
 ### Confidence Levels
 
-Each recommendation includes a confidence assessment:
+Each recommendation includes a confidence assessment based on **four factors**:
 
-| Level | Score Threshold | Penalty | Low Signals | Description |
-|-------|-----------------|---------|-------------|-------------|
-| **High** | ≥75% | <10% | ≤1 | Strong match, minimal assumptions |
-| **Medium** | ≥50% | <20% | ≤3 | Reasonable match with some assumptions |
-| **Low** | <50% | ≥20% | >3 | Weak match, many assumptions |
+| Level | Requirements | Description |
+|-------|--------------|-------------|
+| **High** | Score ≥75% AND Penalty <10% AND Low Signals ≤1 AND Assumptions ≤2 | Strong match, minimal uncertainty |
+| **Medium** | Score ≥50% AND Penalty <20% AND Low Signals ≤3 | Reasonable match with some uncertainty |
+| **Low** | Does not meet Medium criteria | Weak match or many assumptions |
 
 **Confidence Penalties by Signal:**
 - HIGH confidence: 0% penalty
 - MEDIUM confidence: 5% penalty per signal
 - LOW confidence: 15% penalty per signal
 - UNKNOWN confidence: 25% penalty per signal
+
+### Why Confidence Can Remain "Low" Even After Answering All Questions
+
+The confidence calculation checks **9 intent signals**, but only **6 are addressable via clarification questions**:
+
+| Signal | Question Available? | Source When No Question |
+|--------|---------------------|------------------------|
+| `treatment` | ✅ Yes | User answer or App Mod |
+| `time_category` | ✅ Yes | User answer or treatment inference |
+| `availability_requirement` | ✅ Yes | User answer or business criticality |
+| `security_requirement` | ✅ Yes | User answer or compliance detection |
+| `operational_maturity_estimate` | ✅ Yes | User answer or technology detection |
+| `cost_posture` | ✅ Yes | User answer or heuristics |
+| `likely_runtime_model` | ❌ No | Derived from App Mod or technology |
+| `modernization_depth_feasible` | ❌ No | Derived from App Mod results |
+| `cloud_native_feasibility` | ❌ No | Derived from App Mod results |
+
+**Example: Why a scenario might show "Low" confidence with all questions answered:**
+
+```
+Application: GlobalTradingPlatform
+Answers Provided: 6 (all questions answered)
+
+Signals at HIGH confidence (from answers):
+  • treatment: replatform ✅
+  • time_category: migrate ✅
+  • availability: zone_redundant ✅
+  • security_level: enterprise ✅
+  • operating_model: transitional ✅
+  • cost_posture: balanced ✅
+
+Signals at LOW/UNKNOWN confidence (no App Mod data):
+  • likely_runtime_model: event_driven (LOW) ❌
+  • modernization_depth_feasible: unknown (UNKNOWN) ❌
+  • cloud_native_feasibility: unknown (UNKNOWN) ❌
+
+Low confidence count: 3 (exactly at threshold)
+Top recommendation score: 50% (at threshold)
+Catalog quality: example_only (70% weight applied)
+
+Result: "Low" confidence
+  - 3 low-confidence signals is borderline
+  - 50% score barely meets threshold
+  - example_only quality reduces effective scores
+```
+
+**To achieve "Medium" or "High" confidence:**
+1. **Provide App Mod results** - These derive the 3 non-questionable signals (runtime model, modernization depth, cloud-native feasibility) at HIGH confidence
+2. **Better catalog coverage** - Higher-quality (`curated`) architectures with better score matches
+3. **Higher base scores** - Better alignment between application characteristics and available architectures
 
 ### Output Example
 

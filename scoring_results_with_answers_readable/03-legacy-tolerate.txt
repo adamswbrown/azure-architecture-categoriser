@@ -1,0 +1,30 @@
+
+Architecture Scoring Engine
+Catalog: architecture-catalog.json (171 architectures)
+Context: prompt2_context_examples/03-legacy-tolerate.json
+Answers provided: 6
+
+Your Answers Applied:
+  • treatment: tolerate
+  • time_category: tolerate
+  • availability: single_region
+  • security_level: basic
+  • operating_model: traditional_it
+  • cost_posture: cost_minimized
+
+╭────────────────────────────── Scoring Summary ───────────────────────────────╮
+│ HRArchiveTool                                                                │
+│                                                                              │
+│ Primary Recommendation: None                                                 │
+│ Confidence: Low                                                              │
+│ Eligible: 0 | Excluded: 171                                                  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+Key Drivers:
+  • No eligible architectures found
+
+Key Risks:
+  • All architectures were excluded based on application characteristics
+
+Warnings:
+  • No eligible architectures found after filtering
