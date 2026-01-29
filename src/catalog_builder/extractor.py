@@ -775,21 +775,23 @@ class MetadataExtractor:
 
     def _extract_diagrams(self, doc: ParsedDocument, rel_path: str) -> list[str]:
         """Extract diagram asset paths."""
+        import os
         diagrams = []
         doc_dir = Path(rel_path).parent
 
         for image in doc.images:
+            # Skip external URLs
+            if image.startswith('http'):
+                continue
+
             # Normalize path
             if image.startswith('./'):
                 image = image[2:]
-            if image.startswith('../'):
-                # Resolve relative path
-                image_path = (doc_dir / image).as_posix()
-            elif not image.startswith('http'):
-                image_path = (doc_dir / image).as_posix()
-            else:
-                # Skip external URLs
-                continue
+
+            # Build relative path and normalize (resolve .. segments)
+            image_path = os.path.normpath((doc_dir / image).as_posix())
+            # Ensure forward slashes on all platforms
+            image_path = image_path.replace('\\', '/')
 
             # Check if it looks like a diagram
             lower = image.lower()

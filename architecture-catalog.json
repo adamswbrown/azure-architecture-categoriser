@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generated_at": "2026-01-29T20:52:05.387106",
+  "generated_at": "2026-01-29T20:53:20.449957",
   "source_repo": "/private/tmp/architecture-center",
   "source_commit": "06e0d0868e6f59645fdfac6a64048cb0dc57ce5e",
   "total_architectures": 171,
@@ -387,9 +387,9 @@
         "Architecture",
         "Reference",
         "Security",
-        "AI + Machine Learning",
         "Web",
-        "Networking"
+        "Networking",
+        "AI + Machine Learning"
       ],
       "family": "paas",
       "family_confidence": {
@@ -502,7 +502,7 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/ai-ml/architecture/../../_images/github.svg",
+        "docs/_images/github.svg",
         "docs/ai-ml/architecture/_images/baseline-microsoft-foundry.svg",
         "docs/ai-ml/architecture/_images/baseline-microsoft-foundry-network-flow.svg",
         "docs/ai-ml/architecture/_images/baseline-microsoft-foundry-portal-access.svg"
@@ -533,9 +533,9 @@
         "Architecture",
         "Reference",
         "Security",
-        "AI + Machine Learning",
         "Web",
-        "Networking"
+        "Networking",
+        "AI + Machine Learning"
       ],
       "family": "paas",
       "family_confidence": {
@@ -641,7 +641,7 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/ai-ml/architecture/../../_images/github.svg",
+        "docs/_images/github.svg",
         "docs/ai-ml/architecture/_images/baseline-microsoft-foundry-landing-zone.svg",
         "docs/ai-ml/architecture/_images/baseline-landing-zone-networking.svg",
         "docs/ai-ml/architecture/_images/baseline-landing-zone-networking-egress.svg"
@@ -669,16 +669,16 @@
       "browse_categories": [
         "Architecture",
         "Reference",
+        "Web",
         "Security",
-        "AI + Machine Learning",
-        "Web"
+        "AI + Machine Learning"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "security",
+      "workload_domain": "web",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -762,7 +762,7 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/ai-ml/architecture/../../_images/github.svg",
+        "docs/_images/github.svg",
         "docs/ai-ml/architecture/_images/openai-end-to-end-basic.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
@@ -905,8 +905,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "AI + Machine Learning",
         "Security",
+        "AI + Machine Learning",
         "Compute"
       ],
       "family": "cloud_native",
@@ -914,7 +914,7 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "ai",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -1261,15 +1261,15 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "AI + Machine Learning",
-        "Analytics"
+        "Analytics",
+        "AI + Machine Learning"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "ai",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -1619,15 +1619,15 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "AI + Machine Learning",
-        "Analytics"
+        "Analytics",
+        "AI + Machine Learning"
       ],
       "family": "data",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "ai",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -1970,9 +1970,9 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Storage",
         "Security",
         "Databases",
+        "Storage",
         "Networking"
       ],
       "family": "foundation",
@@ -1980,7 +1980,7 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -2576,17 +2576,17 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "Storage",
+        "Migration",
         "Web",
         "Databases",
-        "Migration"
+        "Storage"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -3064,16 +3064,16 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Integration",
+        "Databases",
         "Analytics",
-        "Databases"
+        "Integration"
       ],
       "family": "data",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "integration",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -3313,16 +3313,16 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Integration",
+        "Migration",
         "Web",
-        "Migration"
+        "Integration"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "integration",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -3560,9 +3560,9 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Storage",
+        "Databases",
         "AI + Machine Learning",
-        "Databases"
+        "Storage"
       ],
       "family": "paas",
       "family_confidence": {
@@ -3806,15 +3806,15 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Developer Tools",
-        "Web"
+        "Web",
+        "Developer Tools"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "web",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -4161,8 +4161,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Analytics",
-        "Databases"
+        "Databases",
+        "Analytics"
       ],
       "family": "data",
       "family_confidence": {
@@ -4276,17 +4276,17 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Databases",
-        "Analytics",
+        "Identity",
         "Azure Virtual Desktop",
-        "Identity"
+        "Databases",
+        "Analytics"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -4395,9 +4395,9 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Storage",
+        "Databases",
         "Analytics",
-        "Databases"
+        "Storage"
       ],
       "family": "data",
       "family_confidence": {
@@ -4632,9 +4632,9 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Storage",
+        "Databases",
         "Analytics",
-        "Databases"
+        "Storage"
       ],
       "family": "paas",
       "family_confidence": {
@@ -4759,8 +4759,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Analytics",
-        "Databases"
+        "Databases",
+        "Analytics"
       ],
       "family": "data",
       "family_confidence": {
@@ -4880,8 +4880,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Developer Tools",
         "DevOps",
+        "Developer Tools",
         "Management"
       ],
       "family": "cloud_native",
@@ -5003,8 +5003,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Management",
-        "DevOps"
+        "DevOps",
+        "Management"
       ],
       "family": "iaas",
       "family_confidence": {
@@ -5115,15 +5115,15 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Storage",
-        "Networking"
+        "Networking",
+        "Storage"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -5228,8 +5228,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Storage",
         "Databases",
+        "Storage",
         "Networking"
       ],
       "family": "iaas",
@@ -5346,18 +5346,18 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
+        "Migration",
+        "Storage",
         "Databases",
         "Hybrid",
-        "Networking",
-        "Migration",
-        "Storage"
+        "Networking"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -5469,18 +5469,18 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
+        "Migration",
+        "Storage",
         "Databases",
         "Hybrid",
-        "Networking",
-        "Migration",
-        "Storage"
+        "Networking"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -6312,16 +6312,16 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Storage",
+        "Hybrid",
         "Security",
-        "Hybrid"
+        "Storage"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -6432,16 +6432,16 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
+        "Hybrid",
         "Identity",
-        "Security",
-        "Hybrid"
+        "Security"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "security",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -6551,9 +6551,9 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
+        "Hybrid",
         "Identity",
         "Security",
-        "Hybrid",
         "Mobile"
       ],
       "family": "paas",
@@ -6561,7 +6561,7 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "security",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -6665,17 +6665,17 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
+        "Hybrid",
         "Identity",
         "Web",
-        "Security",
-        "Hybrid"
+        "Security"
       ],
       "family": "integration",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "security",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -6782,15 +6782,15 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Identity",
-        "Hybrid"
+        "Hybrid",
+        "Identity"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "security",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -7133,15 +7133,15 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Web",
-        "Containers"
+        "Containers",
+        "Web"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "web",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -7254,15 +7254,15 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Developer Tools",
-        "Integration"
+        "Integration",
+        "Developer Tools"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "integration",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -7993,8 +7993,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Migration",
-        "Hybrid"
+        "Hybrid",
+        "Migration"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -8497,15 +8497,15 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Integration",
-        "Hybrid"
+        "Hybrid",
+        "Integration"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "integration",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -8618,17 +8618,17 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Storage",
         "DevOps",
-        "Migration",
-        "Databases"
+        "Databases",
+        "Storage",
+        "Migration"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -8754,8 +8754,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Databases",
         "Migration",
+        "Databases",
         "Integration"
       ],
       "family": "paas",
@@ -8763,7 +8763,7 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -9512,8 +9512,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Migration",
-        "Hybrid"
+        "Hybrid",
+        "Migration"
       ],
       "family": "iaas",
       "family_confidence": {
@@ -9631,8 +9631,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Migration",
-        "Hybrid"
+        "Hybrid",
+        "Migration"
       ],
       "family": "iaas",
       "family_confidence": {
@@ -9752,8 +9752,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Migration",
-        "Hybrid"
+        "Hybrid",
+        "Migration"
       ],
       "family": "iaas",
       "family_confidence": {
@@ -10117,8 +10117,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Migration",
         "Hybrid",
+        "Migration",
         "Compute"
       ],
       "family": "cloud_native",
@@ -10255,8 +10255,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Developer Tools",
-        "Migration"
+        "Migration",
+        "Developer Tools"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -10397,8 +10397,8 @@
         "Architecture",
         "Example Scenario",
         "Migration",
-        "Databases",
-        "Containers"
+        "Containers",
+        "Databases"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -10773,8 +10773,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Migration",
         "Hybrid",
+        "Migration",
         "Compute"
       ],
       "family": "iaas",
@@ -10898,16 +10898,16 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
+        "Analytics",
         "Media",
-        "AI + Machine Learning",
-        "Analytics"
+        "AI + Machine Learning"
       ],
       "family": "data",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "web",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -11018,9 +11018,9 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Web",
         "Security",
         "Hybrid",
+        "Web",
         "Networking"
       ],
       "family": "paas",
@@ -11028,7 +11028,7 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "web",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -11262,10 +11262,10 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Management",
         "DevOps",
         "Security",
-        "Compute"
+        "Compute",
+        "Management"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -11378,8 +11378,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Developer Tools",
-        "Containers"
+        "Containers",
+        "Developer Tools"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -11479,7 +11479,7 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/example-scenario/serverless/../../_images/github.png",
+        "docs/_images/github.png",
         "docs/example-scenario/serverless/media/microservices-with-container-apps.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
@@ -11505,15 +11505,15 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Web",
-        "Containers"
+        "Containers",
+        "Web"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "web",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -11632,9 +11632,9 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Developer Tools",
         "DevOps",
         "Web",
+        "Developer Tools",
         "Management"
       ],
       "family": "paas",
@@ -12239,8 +12239,8 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Management",
-        "Hybrid"
+        "Hybrid",
+        "Management"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -12360,15 +12360,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Databases",
-        "Hybrid"
+        "Hybrid",
+        "Databases"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -12481,15 +12481,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Storage",
-        "Hybrid"
+        "Hybrid",
+        "Storage"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -12593,15 +12593,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Storage",
-        "Hybrid"
+        "Hybrid",
+        "Storage"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -12718,8 +12718,8 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Management",
-        "Hybrid"
+        "Hybrid",
+        "Management"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -12825,8 +12825,8 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/hybrid/../_images/github.svg",
-        "docs/hybrid/../_images/github.svg",
+        "docs/_images/github.svg",
+        "docs/_images/github.svg",
         "docs/hybrid/images/azure-local-baseline.png",
         "docs/hybrid/images/azure-local-baseline-storage-architecture.png",
         "docs/hybrid/images/azure-local-baseline-physical-network.png",
@@ -12855,8 +12855,8 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Management",
-        "Hybrid"
+        "Hybrid",
+        "Management"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -12950,8 +12950,8 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/hybrid/../_images/github.svg",
-        "docs/hybrid/../_images/github.svg",
+        "docs/_images/github.svg",
+        "docs/_images/github.svg",
         "docs/hybrid/images/azure-local-switchless.png",
         "docs/hybrid/images/azure-local-3-node-physical-network.png",
         "docs/hybrid/images/azure-local-3-node-logical-network.png"
@@ -12978,8 +12978,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Management",
-        "Hybrid"
+        "Hybrid",
+        "Management"
       ],
       "family": "foundation",
       "family_confidence": {
@@ -13211,15 +13211,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Storage",
-        "Hybrid"
+        "Hybrid",
+        "Storage"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -13324,9 +13324,9 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Management",
+        "Hybrid",
         "Monitoring",
-        "Hybrid"
+        "Management"
       ],
       "family": "iaas",
       "family_confidence": {
@@ -13448,15 +13448,15 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "IoT",
-        "Analytics"
+        "Analytics",
+        "IoT"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -13824,9 +13824,9 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Management",
         "Hybrid",
-        "Networking"
+        "Networking",
+        "Management"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -14443,9 +14443,9 @@
       "browse_categories": [
         "Architecture",
         "Reference",
+        "Aks",
         "Kubernetes",
-        "Containers",
-        "Aks"
+        "Containers"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -15411,9 +15411,9 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
+        "Aks",
         "Kubernetes",
-        "Containers",
-        "Aks"
+        "Containers"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -15539,16 +15539,16 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Security",
         "Hybrid",
-        "Containers"
+        "Containers",
+        "Security"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "security",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -15667,8 +15667,8 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Analytics",
-        "Databases"
+        "Databases",
+        "Analytics"
       ],
       "family": "iaas",
       "family_confidence": {
@@ -15783,8 +15783,8 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Analytics",
-        "Databases"
+        "Databases",
+        "Analytics"
       ],
       "family": "paas",
       "family_confidence": {
@@ -16001,7 +16001,7 @@
       },
       "diagram_assets": [
         "docs/reference-architectures/dmz/images/dmz-private.png",
-        "docs/reference-architectures/dmz/../../_images/deploy-to-azure.svg",
+        "docs/_images/deploy-to-azure.svg",
         "docs/reference-architectures/dmz/images/portal-connections.png"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
@@ -16236,10 +16236,10 @@
       },
       "diagram_assets": [
         "docs/reference-architectures/hybrid-networking/images/expressroute-vpn-failover.svg",
-        "docs/reference-architectures/hybrid-networking/../_images/guidance-hybrid-network-expressroute/figure2.png",
-        "docs/reference-architectures/hybrid-networking/../_images/guidance-hybrid-network-expressroute/figure3.png",
-        "docs/reference-architectures/hybrid-networking/../_images/guidance-hybrid-network-expressroute/figure4.png",
-        "docs/reference-architectures/hybrid-networking/../../_images/deploy-to-azure.svg"
+        "docs/reference-architectures/_images/guidance-hybrid-network-expressroute/figure2.png",
+        "docs/reference-architectures/_images/guidance-hybrid-network-expressroute/figure3.png",
+        "docs/reference-architectures/_images/guidance-hybrid-network-expressroute/figure4.png",
+        "docs/_images/deploy-to-azure.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
@@ -16372,15 +16372,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Integration",
-        "Networking"
+        "Networking",
+        "Integration"
       ],
       "family": "foundation",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "integration",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -16497,15 +16497,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Identity",
-        "Hybrid"
+        "Hybrid",
+        "Identity"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "security",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -16610,15 +16610,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Identity",
-        "Hybrid"
+        "Hybrid",
+        "Identity"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "security",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -16724,15 +16724,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Identity",
-        "Hybrid"
+        "Hybrid",
+        "Identity"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "security",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -17543,7 +17543,7 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/solution-ideas/articles/../media/ai-search-skillsets.svg"
+        "docs/solution-ideas/media/ai-search-skillsets.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -17567,15 +17567,15 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "AI + Machine Learning",
-        "Analytics"
+        "Analytics",
+        "AI + Machine Learning"
       ],
       "family": "data",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "ai",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -17659,7 +17659,7 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/solution-ideas/articles/../media/azure-databricks-modern-analytics-architecture.svg"
+        "docs/solution-ideas/media/azure-databricks-modern-analytics-architecture.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -17786,7 +17786,7 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/solution-ideas/articles/../media/azure-security-build-first-layer-defense-architecture.png"
+        "docs/solution-ideas/media/azure-security-build-first-layer-defense-architecture.png"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -17907,7 +17907,7 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/solution-ideas/articles/../media/data-streaming-scenario.svg"
+        "docs/solution-ideas/media/data-streaming-scenario.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -18020,7 +18020,7 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/solution-ideas/articles/../media/devsecops-for-iac.svg"
+        "docs/solution-ideas/media/devsecops-for-iac.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -18044,15 +18044,15 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "Management",
-        "Web"
+        "Web",
+        "Management"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "web",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -18133,7 +18133,7 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/solution-ideas/articles/../media/highly-available-sharepoint-farm.png"
+        "docs/solution-ideas/media/highly-available-sharepoint-farm.png"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -18161,16 +18161,16 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "IoT",
+        "Databases",
         "Analytics",
-        "Databases"
+        "IoT"
       ],
       "family": "data",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -18250,7 +18250,7 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/solution-ideas/articles/../media/ingest-etl-and-stream-processing-with-azure-databricks.svg"
+        "docs/solution-ideas/media/ingest-etl-and-stream-processing-with-azure-databricks.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -18274,15 +18274,15 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "IoT",
-        "Analytics"
+        "Analytics",
+        "IoT"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -18369,7 +18369,7 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/solution-ideas/articles/../media/iot-azure-data-explorer-new.svg"
+        "docs/solution-ideas/media/iot-azure-data-explorer-new.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -18612,7 +18612,7 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/solution-ideas/articles/../media/map-threats-it-environment-architecture.png"
+        "docs/solution-ideas/media/map-threats-it-environment-architecture.png"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -18735,10 +18735,10 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/solution-ideas/articles/../media/microsoft-365-defender-build-second-layer-defense-services-diagram.png",
-        "docs/solution-ideas/articles/../media/microsoft-365-defender-build-second-layer-defense-attack-order.png",
-        "docs/solution-ideas/articles/../media/microsoft-365-defender-build-second-layer-defense-architecture.png",
-        "docs/solution-ideas/articles/../media/microsoft-365-defender-build-second-layer-defense-portals.png"
+        "docs/solution-ideas/media/microsoft-365-defender-build-second-layer-defense-services-diagram.png",
+        "docs/solution-ideas/media/microsoft-365-defender-build-second-layer-defense-attack-order.png",
+        "docs/solution-ideas/media/microsoft-365-defender-build-second-layer-defense-architecture.png",
+        "docs/solution-ideas/media/microsoft-365-defender-build-second-layer-defense-portals.png"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -18865,7 +18865,7 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/solution-ideas/articles/../media/microsoft-365-defender-security-integrate-azure-architecture.png"
+        "docs/solution-ideas/media/microsoft-365-defender-security-integrate-azure-architecture.png"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -18891,8 +18891,8 @@
         "Architecture",
         "Solution Idea",
         "Identity",
-        "Security",
-        "Migration"
+        "Migration",
+        "Security"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -18980,7 +18980,7 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/solution-ideas/articles/../media/microsoft-sentinel-automated-response-architecture.svg"
+        "docs/solution-ideas/media/microsoft-sentinel-automated-response-architecture.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -19006,9 +19006,9 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "Management",
+        "Migration",
         "Security",
-        "Migration"
+        "Management"
       ],
       "family": "paas",
       "family_confidence": {
@@ -19108,7 +19108,7 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/solution-ideas/articles/../media/cross-tenant-migration-strategy.svg"
+        "docs/solution-ideas/media/cross-tenant-migration-strategy.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -19133,16 +19133,16 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "Management",
         "Identity",
-        "Security"
+        "Security",
+        "Management"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -19226,7 +19226,7 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/solution-ideas/articles/../media/multilayered-protection-azure-vm-architecture-diagram.svg"
+        "docs/solution-ideas/media/multilayered-protection-azure-vm-architecture-diagram.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -19349,8 +19349,8 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/solution-ideas/articles/../media/project-15-reference-architecture.svg",
-        "docs/solution-ideas/articles/../media/project-15-open-platform-overview.svg"
+        "docs/solution-ideas/media/project-15-reference-architecture.svg",
+        "docs/solution-ideas/media/project-15-open-platform-overview.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -19463,7 +19463,7 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/solution-ideas/articles/../media/sap-s4-hana-on-hli-with-ha-and-dr.svg"
+        "docs/solution-ideas/media/sap-s4-hana-on-hli-with-ha-and-dr.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -19489,8 +19489,8 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "Developer Tools",
-        "Migration"
+        "Migration",
+        "Developer Tools"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -19579,9 +19579,9 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/solution-ideas/articles/../media/sap-workload-automation-suse-sles4sap-benefits.png",
-        "docs/solution-ideas/articles/../media/sap-workload-automation-suse.svg",
-        "docs/solution-ideas/articles/../media/sap-workload-automation-suse-flow.svg"
+        "docs/solution-ideas/media/sap-workload-automation-suse-sles4sap-benefits.png",
+        "docs/solution-ideas/media/sap-workload-automation-suse.svg",
+        "docs/solution-ideas/media/sap-workload-automation-suse-flow.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -19698,7 +19698,7 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/solution-ideas/articles/../media/azure-sql-managed-instance-architecture.svg"
+        "docs/solution-ideas/media/azure-sql-managed-instance-architecture.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -19723,9 +19723,9 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "Storage",
+        "Databases",
         "Analytics",
-        "Databases"
+        "Storage"
       ],
       "family": "data",
       "family_confidence": {
@@ -19824,8 +19824,8 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/solution-ideas/articles/../media/small-medium-businesses-simplified-architecture.svg",
-        "docs/solution-ideas/articles/../media/small-medium-businesses-architecture.svg"
+        "docs/solution-ideas/media/small-medium-businesses-simplified-architecture.svg",
+        "docs/solution-ideas/media/small-medium-businesses-architecture.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -19938,7 +19938,7 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/solution-ideas/articles/../media/solaris.svg"
+        "docs/solution-ideas/media/solaris.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
@@ -20070,7 +20070,7 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/virtual-machines/../_images/github.svg",
+        "docs/_images/github.svg",
         "docs/virtual-machines/media/baseline-architecture.svg",
         "docs/virtual-machines/media/baseline-network.svg",
         "docs/virtual-machines/media/baseline-network-ingress.svg",
@@ -20101,15 +20101,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Security",
-        "Web"
+        "Web",
+        "Security"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "security",
+      "workload_domain": "web",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -20203,7 +20203,7 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/web-apps/api-management/architectures/../_images/protect-apis.svg"
+        "docs/web-apps/api-management/_images/protect-apis.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
@@ -20231,15 +20231,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Management",
-        "Web"
+        "Web",
+        "Management"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "web",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -20336,11 +20336,11 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/web-apps/app-service/architectures/../../../_images/github.svg",
-        "docs/web-apps/app-service/architectures/../_images/baseline-app-service-architecture.svg",
-        "docs/web-apps/app-service/architectures/../_images/baseline-app-service-network-architecture.svg",
-        "docs/web-apps/app-service/architectures/../_images/baseline-app-service-encryption-flow.svg",
-        "docs/web-apps/app-service/architectures/../_images/baseline-app-service-deployments.svg"
+        "docs/_images/github.svg",
+        "docs/web-apps/app-service/_images/baseline-app-service-architecture.svg",
+        "docs/web-apps/app-service/_images/baseline-app-service-network-architecture.svg",
+        "docs/web-apps/app-service/_images/baseline-app-service-encryption-flow.svg",
+        "docs/web-apps/app-service/_images/baseline-app-service-deployments.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
@@ -20461,7 +20461,7 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/web-apps/app-service/architectures/../_images/basic-app-service-architecture-flow.svg"
+        "docs/web-apps/app-service/_images/basic-app-service-architecture-flow.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
@@ -20488,8 +20488,8 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Management",
-        "Featured"
+        "Featured",
+        "Management"
       ],
       "family": "paas",
       "family_confidence": {
@@ -20585,8 +20585,8 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/web-apps/app-service-environment/architectures/../../../_images/github.png",
-        "docs/web-apps/app-service-environment/architectures/../_images/app-service-environment-high-availability.svg"
+        "docs/_images/github.png",
+        "docs/web-apps/app-service-environment/_images/app-service-environment-high-availability.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
@@ -20613,8 +20613,8 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Management",
-        "Featured"
+        "Featured",
+        "Management"
       ],
       "family": "paas",
       "family_confidence": {
@@ -20714,9 +20714,9 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/web-apps/app-service-environment/architectures/../_images/app-service-environment.svg",
-        "docs/web-apps/app-service-environment/architectures/../../../_images/github.png",
-        "docs/web-apps/app-service-environment/architectures/../_images/app-service-environment-multisite.svg"
+        "docs/web-apps/app-service-environment/_images/app-service-environment.svg",
+        "docs/_images/github.png",
+        "docs/web-apps/app-service-environment/_images/app-service-environment-multisite.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "curated",
@@ -20842,7 +20842,7 @@
         "source": "yml_products"
       },
       "diagram_assets": [
-        "docs/web-apps/guides/networking/../_images/multitenant-web-apps.svg"
+        "docs/web-apps/guides/_images/multitenant-web-apps.svg"
       ],
       "last_repo_update": "2026-01-29T06:02:45",
       "catalog_quality": "example_only",
