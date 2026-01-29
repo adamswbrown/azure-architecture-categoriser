@@ -469,6 +469,23 @@ def _render_sidebar() -> None:
             ```
             """)
 
+        # Footer with credits and GitHub link
+        st.markdown("---")
+        st.markdown(
+            """
+            <div style="text-align: center; padding: 1rem 0; color: #666; font-size: 0.85rem;">
+                <p style="margin-bottom: 0.5rem;">
+                    Built by <strong>Adam Brown</strong><br/>
+                    with help from Claude & Copilot 😉
+                </p>
+                <a href="https://github.com/adamswbrown/azure-architecture-categoriser" target="_blank">
+                    <img src="https://img.shields.io/badge/View_on-GitHub-181717?style=for-the-badge&logo=github" alt="View on GitHub"/>
+                </a>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
 
 def _refresh_catalog() -> None:
     """Refresh the catalog by cloning/updating repo and rebuilding."""
