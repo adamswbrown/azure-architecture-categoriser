@@ -1,5 +1,58 @@
 # Azure Architecture Catalog Builder - Work Log
 
+## 2026-01-29
+
+### Session: GUI, Network Exposure & URL Fixes - COMPLETE
+
+**Goals Achieved:**
+1. Built Streamlit GUI for catalog builder configuration
+2. Added network exposure question to architecture scorer (always asked)
+3. Fixed Learn URLs - now properly link to Microsoft Learn pages
+4. All 173 tests passing
+
+#### Streamlit GUI (`catalog_builder_gui/`)
+
+| Component | Purpose | Status |
+|-----------|---------|--------|
+| `app.py` | Main Streamlit app with clone/pull repo functionality | Complete |
+| `state/session_state.py` | Session state management with auto-detect repo | Complete |
+| `components/keywords_editor.py` | Edit 9 keyword dictionaries | Complete |
+| `components/filter_presets.py` | Product/category filter presets | Complete |
+| `components/preview_panel.py` | Preview catalog build with metrics | Complete |
+| `components/config_editor.py` | Visual YAML config editor | Complete |
+
+**Run with:** `streamlit run src/catalog_builder_gui/app.py`
+
+#### Network Exposure Question (Architecture Scorer)
+
+Added always-asked clarification question for Public vs Private Link architecture selection:
+- **External (Internet-facing)**: Needs WAF, DDoS protection, public endpoints
+- **Internal Only**: Can use private endpoints, simpler security
+- **Mixed (Both)**: Needs both patterns
+
+Files modified:
+- `schema.py`: Added `NetworkExposure` enum and `network_exposure` to `DerivedIntent`
+- `question_generator.py`: Added `_check_network_exposure()` method
+- `intent_deriver.py`: Added `_derive_network_exposure()` method
+
+#### Learn URL Fix
+
+URLs now correctly link to Microsoft Learn pages:
+- Remove `docs/` prefix
+- Remove `.md` suffix
+- Remove `-content` suffix (repo convention, not in Learn URLs)
+
+Example:
+- Repo path: `docs/networking/architecture/azure-dns-private-resolver-content.md`
+- Learn URL: `https://learn.microsoft.com/en-us/azure/architecture/networking/architecture/azure-dns-private-resolver`
+
+#### Test Results
+```
+173 passed in 1.03s
+```
+
+---
+
 ## 2026-01-28
 
 ### Session: Initial Implementation - COMPLETE
