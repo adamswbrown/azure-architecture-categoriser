@@ -112,7 +112,9 @@ class ExclusionReason(str, Enum):
     REHOST_ONLY = "rehost_only"
     TOLERATE_ONLY = "tolerate_only"
     LOW_MATURITY_TEAMS = "low_maturity_teams"
+    LOW_DEVOPS_MATURITY = "low_devops_maturity"  # Team lacks DevOps skills
     VM_ONLY_APPS = "vm_only_apps"
+    SINGLE_VM_WORKLOADS = "single_vm_workloads"  # Over-engineered for single VM
     REGULATED_WORKLOADS = "regulated_workloads"
     LOW_BUDGET = "low_budget"
     SKILL_CONSTRAINED = "skill_constrained"
@@ -122,13 +124,26 @@ class ExclusionReason(str, Enum):
     LINUX_ONLY = "linux_only"  # Windows incompatibility
     HIGH_LATENCY_TOLERANCE = "high_latency_tolerance"  # Requires low latency
     LEGACY_SYSTEMS = "legacy_systems"  # Not suitable for legacy modernization
+    NO_CONTAINER_EXPERIENCE = "no_container_experience"  # Requires container skills
+    STATEFUL_APPS = "stateful_apps"  # Not suitable for stateful workloads
 
 
 class ExtractionConfidence(str, Enum):
     """Confidence level for extracted/suggested values."""
+    CURATED = "curated"  # From authoritative source (browse metadata, YML)
+    HIGH = "high"  # High confidence from content analysis
     AUTOMATIC = "automatic"  # Extracted automatically with high confidence
+    MEDIUM = "medium"  # Medium confidence, reasonable inference
     AI_SUGGESTED = "ai_suggested"  # AI-assisted suggestion, needs human review
+    LOW = "low"  # Low confidence, heuristic fallback
     MANUAL_REQUIRED = "manual_required"  # Cannot be determined automatically
+
+
+class CatalogQuality(str, Enum):
+    """Quality level of the catalog entry."""
+    CURATED = "curated"  # From authoritative browse metadata
+    AI_ENRICHED = "ai_enriched"  # AI-enhanced with confidence
+    AI_SUGGESTED = "ai_suggested"  # Primarily AI-generated, needs review
 
 
 class ExpectedCharacteristics(BaseModel):
@@ -157,7 +172,7 @@ class ArchitectureEntry(BaseModel):
 
     # Identity
     architecture_id: str = Field(..., description="Unique identifier derived from path")
-    name: str = Field(..., description="Architecture name/title from source")
+    name: str = Field(..., description="Human-readable architecture name (use pattern_name)")
     pattern_name: str = Field(
         default="",
         description="Normalized pattern name representing architectural intent"
@@ -168,6 +183,16 @@ class ArchitectureEntry(BaseModel):
     description: str = Field(..., description="Brief description of the architecture")
     source_repo_path: str = Field(..., description="Path in source repository")
     learn_url: Optional[str] = Field(None, description="Microsoft Learn URL")
+
+    # Browse Metadata (from YamlMime:Architecture)
+    browse_tags: list[str] = Field(
+        default_factory=list,
+        description="Browse tags from YML (e.g., 'Azure', 'Containers')"
+    )
+    browse_categories: list[str] = Field(
+        default_factory=list,
+        description="Browse categories from YML (e.g., 'Architecture', 'Baseline')"
+    )
 
     # Classification
     family: ArchitectureFamily = Field(
@@ -280,6 +305,12 @@ class ArchitectureEntry(BaseModel):
     last_repo_update: Optional[datetime] = Field(
         None,
         description="Last update time from repository"
+    )
+
+    # Catalog quality
+    catalog_quality: CatalogQuality = Field(
+        default=CatalogQuality.AI_SUGGESTED,
+        description="Quality level of this catalog entry"
     )
 
     # Extraction metadata

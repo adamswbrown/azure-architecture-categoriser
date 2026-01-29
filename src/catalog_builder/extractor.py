@@ -9,7 +9,14 @@ from urllib.parse import quote
 
 from .config import get_config
 from .parser import MarkdownParser, ParsedDocument
-from .schema import ArchitectureEntry, ClassificationMeta, ExtractionConfidence
+from .schema import (
+    ArchitectureEntry,
+    CatalogQuality,
+    ClassificationMeta,
+    ExpectedCharacteristics,
+    ExtractionConfidence,
+    TrinaryOption,
+)
 
 # Services that are typically supporting (observability, security, operations)
 SUPPORTING_SERVICE_PATTERNS = [
@@ -57,7 +64,7 @@ class MetadataExtractor:
         arch_id = self._generate_id(rel_path)
 
         # Extract title and description
-        title = self._extract_title(doc)
+        raw_title = self._extract_title(doc)
         description = self._extract_description(doc)
 
         # Build Learn URL
@@ -68,44 +75,262 @@ class MetadataExtractor:
         core_services, supporting_services = self._classify_services(all_services)
 
         # Infer pattern name from title and services
-        pattern_name = self._infer_pattern_name(title, core_services, doc)
+        pattern_name = self._infer_pattern_name(raw_title, core_services, doc)
+
+        # Name should use pattern_name (never raw "Architecture" titles)
+        name = self._derive_display_name(pattern_name, raw_title)
 
         # Extract diagram assets
         diagrams = self._extract_diagrams(doc, rel_path)
 
+        # Extract browse metadata from YML (authoritative source)
+        browse_tags = self._extract_browse_tags(doc)
+        browse_categories = self._extract_browse_categories(doc)
+
+        # Determine catalog quality based on metadata source
+        catalog_quality = self._determine_catalog_quality(doc)
+
+        # Determine pattern_name confidence based on source
+        has_yml = doc.arch_metadata.is_architecture_yml
+        pattern_confidence = ClassificationMeta(
+            confidence=ExtractionConfidence.CURATED if has_yml else ExtractionConfidence.AI_SUGGESTED,
+            source="yml_metadata" if has_yml else "title_and_services"
+        )
+
+        # Infer expected characteristics
+        expected_characteristics = self._infer_expected_characteristics(
+            core_services, doc
+        )
+
         # Create entry with extracted values
         entry = ArchitectureEntry(
             architecture_id=arch_id,
-            name=title,
+            name=name,
             pattern_name=pattern_name,
-            pattern_name_confidence=ClassificationMeta(
-                confidence=ExtractionConfidence.AI_SUGGESTED,
-                source="title_and_services"
-            ),
+            pattern_name_confidence=pattern_confidence,
             description=description,
             source_repo_path=rel_path,
             learn_url=learn_url,
+            browse_tags=browse_tags,
+            browse_categories=browse_categories,
+            catalog_quality=catalog_quality,
             core_services=core_services,
             supporting_services=supporting_services,
             services_confidence=ClassificationMeta(
-                confidence=ExtractionConfidence.AI_SUGGESTED,
-                source="content_analysis"
+                confidence=ExtractionConfidence.CURATED if has_yml else ExtractionConfidence.AI_SUGGESTED,
+                source="yml_products" if has_yml else "content_analysis"
             ),
+            expected_characteristics=expected_characteristics,
             diagram_assets=diagrams,
             last_repo_update=last_modified,
         )
 
         # Add extraction warnings
-        if not title:
-            entry.extraction_warnings.append("Could not extract title")
+        if not name or name == "Architecture":
+            entry.extraction_warnings.append("Could not extract meaningful name")
         if not description:
             entry.extraction_warnings.append("Could not extract description")
         if not core_services:
             entry.extraction_warnings.append("No core Azure services detected")
         if not diagrams:
             entry.extraction_warnings.append("No architecture diagrams found")
+        if not browse_tags:
+            entry.extraction_warnings.append("No browse tags from YML metadata")
 
         return entry
+
+    def _derive_display_name(self, pattern_name: str, raw_title: str) -> str:
+        """Derive a human-readable display name.
+
+        The name should never be just 'Architecture' - use pattern_name
+        or enhance the raw title to be meaningful.
+        """
+        # If pattern_name is good, use it
+        if pattern_name and pattern_name.lower() not in ['architecture', 'overview', 'introduction']:
+            return pattern_name
+
+        # If raw_title is meaningful, clean it up
+        if raw_title and raw_title.lower() not in ['architecture', 'overview', 'introduction']:
+            # Remove generic suffixes
+            name = raw_title
+            for suffix in [' Architecture', ' - Azure Architecture Center', ' on Azure']:
+                if name.endswith(suffix):
+                    name = name[:-len(suffix)]
+            return name.strip()
+
+        # Last resort: return pattern_name even if not ideal
+        return pattern_name or raw_title or "Unnamed Architecture"
+
+    def _extract_browse_tags(self, doc: ParsedDocument) -> list[str]:
+        """Extract browse tags from YML products metadata.
+
+        Products like 'azure-kubernetes-service' become tags like 'Containers'.
+        """
+        tags = []
+
+        # Map product IDs to human-readable browse tags
+        product_to_tag = {
+            'azure-kubernetes-service': 'Containers',
+            'azure-container-apps': 'Containers',
+            'azure-container-instances': 'Containers',
+            'azure-app-service': 'Web',
+            'azure-functions': 'Serverless',
+            'azure-virtual-machines': 'Compute',
+            'azure-sql-database': 'Databases',
+            'azure-cosmos-db': 'Databases',
+            'azure-storage': 'Storage',
+            'azure-openai': 'AI',
+            'azure-machine-learning': 'AI',
+            'ai-services': 'AI',
+            'azure-synapse-analytics': 'Analytics',
+            'azure-databricks': 'Analytics',
+            'azure-data-factory': 'Data',
+            'azure-event-hubs': 'Messaging',
+            'azure-service-bus': 'Messaging',
+            'azure-api-management': 'Integration',
+            'azure-logic-apps': 'Integration',
+            'azure-monitor': 'Monitoring',
+            'azure-key-vault': 'Security',
+            'entra-id': 'Identity',
+            'azure-virtual-network': 'Networking',
+            'azure-front-door': 'Networking',
+            'azure-application-gateway': 'Networking',
+            'azure-firewall': 'Security',
+            'azure-private-link': 'Networking',
+        }
+
+        # Add 'Azure' as base tag if we have any Azure products
+        if doc.arch_metadata.products:
+            tags.append('Azure')
+
+        # Map products to tags
+        seen_tags = {'Azure'}
+        for product in doc.arch_metadata.products:
+            tag = product_to_tag.get(product)
+            if tag and tag not in seen_tags:
+                tags.append(tag)
+                seen_tags.add(tag)
+
+        return tags
+
+    def _extract_browse_categories(self, doc: ParsedDocument) -> list[str]:
+        """Extract browse categories from YML azure_categories metadata."""
+        categories = []
+
+        # Map azure category IDs to display names
+        category_to_display = {
+            'web': 'Web',
+            'ai-machine-learning': 'AI + Machine Learning',
+            'analytics': 'Analytics',
+            'compute': 'Compute',
+            'containers': 'Containers',
+            'databases': 'Databases',
+            'devops': 'DevOps',
+            'hybrid': 'Hybrid',
+            'identity': 'Identity',
+            'integration': 'Integration',
+            'iot': 'IoT',
+            'management-and-governance': 'Management',
+            'media': 'Media',
+            'migration': 'Migration',
+            'networking': 'Networking',
+            'security': 'Security',
+            'storage': 'Storage',
+        }
+
+        # Add 'Architecture' as base category for all entries
+        categories.append('Architecture')
+
+        # Add ms.topic based categories
+        topic = doc.arch_metadata.ms_topic
+        if topic == 'reference-architecture':
+            categories.append('Reference')
+        elif topic == 'example-scenario':
+            categories.append('Example Scenario')
+        elif topic == 'solution-idea':
+            categories.append('Solution Idea')
+
+        # Map azure categories
+        for cat in doc.arch_metadata.azure_categories:
+            display = category_to_display.get(cat, cat.replace('-', ' ').title())
+            if display not in categories:
+                categories.append(display)
+
+        return categories
+
+    def _determine_catalog_quality(self, doc: ParsedDocument) -> CatalogQuality:
+        """Determine the catalog quality level based on metadata source."""
+        if doc.arch_metadata.is_architecture_yml:
+            # Has authoritative YML metadata
+            if doc.arch_metadata.azure_categories and doc.arch_metadata.products:
+                return CatalogQuality.CURATED
+            else:
+                return CatalogQuality.AI_ENRICHED
+
+        # No YML metadata, purely AI-extracted
+        return CatalogQuality.AI_SUGGESTED
+
+    def _infer_expected_characteristics(
+        self,
+        core_services: list[str],
+        doc: ParsedDocument
+    ) -> ExpectedCharacteristics:
+        """Infer expected architectural characteristics from services and content."""
+        content_lower = doc.content.lower()
+        services_lower = ' '.join(s.lower() for s in core_services)
+
+        # Container-based services require DevOps/CI/CD
+        container_services = ['kubernetes', 'container', 'aks']
+        has_containers = any(svc in services_lower for svc in container_services)
+
+        # Serverless and PaaS services typically require CI/CD
+        cicd_services = ['functions', 'app service', 'container apps', 'logic apps']
+        has_cicd_services = any(svc in services_lower for svc in cicd_services)
+
+        # Check content for DevOps/CI/CD mentions
+        devops_keywords = ['ci/cd', 'cicd', 'pipeline', 'github actions', 'azure devops',
+                          'deployment', 'gitops', 'terraform', 'infrastructure as code']
+        has_devops_content = any(kw in content_lower for kw in devops_keywords)
+
+        # Private networking detection
+        private_keywords = ['private endpoint', 'private link', 'vnet integration',
+                           'private network', 'private subnet', 'no public']
+        has_private_networking = any(kw in content_lower for kw in private_keywords)
+
+        # Stateless detection
+        stateless_keywords = ['stateless', 'scale out', 'horizontal scaling', 'load balanc']
+        stateful_keywords = ['stateful', 'session affinity', 'sticky session', 'local storage']
+        is_stateless = any(kw in content_lower for kw in stateless_keywords)
+        is_stateful = any(kw in content_lower for kw in stateful_keywords)
+
+        # Determine characteristics
+        devops_required = has_containers or has_devops_content
+        ci_cd_required = has_containers or has_cicd_services or has_devops_content
+        private_networking_required = has_private_networking
+
+        # Container determination
+        if has_containers:
+            containers = TrinaryOption.TRUE
+        elif 'virtual machine' in services_lower or 'vm' in services_lower:
+            containers = TrinaryOption.FALSE
+        else:
+            containers = TrinaryOption.OPTIONAL
+
+        # Stateless determination
+        if is_stateless and not is_stateful:
+            stateless = TrinaryOption.TRUE
+        elif is_stateful and not is_stateless:
+            stateless = TrinaryOption.FALSE
+        else:
+            stateless = TrinaryOption.OPTIONAL
+
+        return ExpectedCharacteristics(
+            containers=containers,
+            stateless=stateless,
+            devops_required=devops_required,
+            ci_cd_required=ci_cd_required,
+            private_networking_required=private_networking_required,
+        )
 
     def _classify_services(self, services: list[str]) -> tuple[list[str], list[str]]:
         """Classify services into core and supporting categories."""
@@ -143,86 +368,195 @@ class MetadataExtractor:
         core_services: list[str],
         doc: ParsedDocument
     ) -> str:
-        """Infer a normalized pattern name representing architectural intent.
+        """Infer a workload-intent pattern name.
 
-        Pattern names should describe WHAT the architecture does, not just
-        the article title. For example:
-        - "Zone-Redundant App Service with Private Link"
-        - "Multi-Region AKS with Traffic Manager"
-        - "Event-Driven Microservices on Container Apps"
+        Pattern names should describe architectural INTENT, not just services.
+        Format: [Quality/Tier] [Workload Type] with [Key Features]
+
+        Good examples:
+        - "Enterprise-grade AKS cluster with private networking and ingress"
+        - "Highly available web application with geo-redundancy"
+        - "Event-driven microservices for order processing"
+
+        Bad examples (avoid):
+        - "Azure App Service with Azure SQL Database"
+        - "AKS with Cosmos DB with Redis"
         """
-        # Start with the title but clean it up
-        pattern = title
-
-        # Remove common article prefixes/suffixes
-        prefixes_to_remove = [
-            'architecture for ', 'reference architecture for ',
-            'example: ', 'tutorial: ', 'how to ',
-            'azure ', 'microsoft ',
-        ]
-        suffixes_to_remove = [
-            ' - azure architecture center', ' on azure',
-            ' architecture', ' pattern',
-        ]
-
-        pattern_lower = pattern.lower()
-        for prefix in prefixes_to_remove:
-            if pattern_lower.startswith(prefix):
-                pattern = pattern[len(prefix):]
-                pattern_lower = pattern.lower()
-
-        for suffix in suffixes_to_remove:
-            if pattern_lower.endswith(suffix):
-                pattern = pattern[:-len(suffix)]
-                pattern_lower = pattern.lower()
-
-        # If the pattern is too generic, try to enrich it with core services
-        generic_titles = ['architecture', 'overview', 'introduction', 'guide']
-        if pattern_lower in generic_titles or len(pattern) < 10:
-            if core_services:
-                # Build pattern from primary services
-                primary = core_services[:3]  # Top 3 services
-                pattern = ' with '.join(primary)
-
-        # Try to extract availability/topology hints from content
         content_lower = doc.content.lower()
-        topology_hints = []
+        services_lower = ' '.join(s.lower() for s in core_services)
 
-        if 'multi-region' in content_lower or 'multiple regions' in content_lower:
-            topology_hints.append('Multi-Region')
-        elif 'zone-redundant' in content_lower or 'availability zone' in content_lower:
-            topology_hints.append('Zone-Redundant')
+        # Step 1: Extract workload type/intent from content
+        workload_intent = self._extract_workload_intent(title, content_lower, services_lower)
 
-        if 'active-active' in content_lower:
-            topology_hints.append('Active-Active')
-        elif 'active-passive' in content_lower:
-            topology_hints.append('Active-Passive')
+        # Step 2: Extract quality/tier qualifiers
+        quality_prefix = self._extract_quality_prefix(content_lower)
 
-        if 'private endpoint' in content_lower or 'private link' in content_lower:
-            topology_hints.append('with Private Networking')
+        # Step 3: Extract key architectural features
+        features = self._extract_key_features(content_lower)
 
-        if 'mission-critical' in content_lower or 'mission critical' in content_lower:
-            topology_hints.insert(0, 'Mission-Critical')
+        # Step 4: Compose the pattern name
+        parts = []
 
-        # Prepend topology hints if not already in pattern
-        for hint in topology_hints:
-            if hint.lower() not in pattern.lower():
-                pattern = f"{hint} {pattern}"
+        if quality_prefix:
+            parts.append(quality_prefix)
 
-        # Clean up and title case
-        pattern = pattern.strip()
-        if pattern:
-            # Title case but preserve acronyms
-            words = pattern.split()
-            result = []
-            for word in words:
-                if word.isupper() and len(word) > 1:
-                    result.append(word)  # Keep acronyms
+        parts.append(workload_intent)
+
+        if features:
+            parts.append(f"with {' and '.join(features[:2])}")
+
+        pattern = ' '.join(parts)
+
+        # Final cleanup - title case but preserve acronyms
+        pattern = self._title_case_preserve_acronyms(pattern)
+
+        return pattern
+
+    def _extract_workload_intent(
+        self,
+        title: str,
+        content_lower: str,
+        services_lower: str
+    ) -> str:
+        """Extract the core workload intent from the document."""
+        # Clean up title first
+        intent = title
+
+        # Remove common prefixes/suffixes
+        prefixes = [
+            'architecture for ', 'reference architecture for ', 'baseline architecture for ',
+            'example: ', 'tutorial: ', 'how to ', 'azure ', 'microsoft ',
+        ]
+        suffixes = [
+            ' - azure architecture center', ' on azure', ' architecture',
+            ' pattern', ' reference', ' baseline',
+        ]
+
+        intent_lower = intent.lower()
+        for prefix in prefixes:
+            if intent_lower.startswith(prefix):
+                intent = intent[len(prefix):]
+                intent_lower = intent.lower()
+
+        for suffix in suffixes:
+            if intent_lower.endswith(suffix):
+                intent = intent[:-len(suffix)]
+                intent_lower = intent.lower()
+
+        # If still too generic, try to identify the primary workload type
+        generic_terms = ['architecture', 'overview', 'introduction', 'guide', 'baseline']
+        if intent_lower in generic_terms or len(intent) < 10:
+            # Try to infer from primary compute service
+            if 'kubernetes' in services_lower or 'aks' in services_lower:
+                intent = 'AKS cluster'
+            elif 'container apps' in services_lower:
+                intent = 'Container Apps deployment'
+            elif 'app service' in services_lower:
+                intent = 'App Service web application'
+            elif 'functions' in services_lower:
+                intent = 'Serverless application'
+            elif 'virtual machine' in services_lower:
+                intent = 'VM-based workload'
+            elif 'data factory' in services_lower or 'synapse' in services_lower:
+                intent = 'Data pipeline'
+            elif 'openai' in services_lower or 'machine learning' in services_lower:
+                intent = 'AI/ML workload'
+            elif 'event hub' in services_lower or 'service bus' in services_lower:
+                intent = 'Event-driven system'
+            else:
+                # Try content-based workload detection
+                if 'e-commerce' in content_lower or 'shopping' in content_lower:
+                    intent = 'E-commerce platform'
+                elif 'api gateway' in content_lower or 'api management' in content_lower:
+                    intent = 'API platform'
+                elif 'data warehouse' in content_lower:
+                    intent = 'Data warehouse'
+                elif 'iot' in content_lower:
+                    intent = 'IoT solution'
+                elif 'chatbot' in content_lower or 'conversational' in content_lower:
+                    intent = 'Conversational AI'
                 else:
-                    result.append(word.capitalize())
-            pattern = ' '.join(result)
+                    intent = 'Cloud workload'
 
-        return pattern or title
+        return intent.strip()
+
+    def _extract_quality_prefix(self, content_lower: str) -> str:
+        """Extract quality/tier prefix from content."""
+        # Check for quality indicators in priority order
+        if 'mission-critical' in content_lower or 'mission critical' in content_lower:
+            return 'Mission-critical'
+        elif 'enterprise-grade' in content_lower or 'enterprise grade' in content_lower:
+            return 'Enterprise-grade'
+        elif 'production-ready' in content_lower or 'production ready' in content_lower:
+            return 'Production-ready'
+        elif 'highly available' in content_lower or 'high availability' in content_lower:
+            return 'Highly available'
+        elif 'multi-region' in content_lower or 'multiple regions' in content_lower:
+            return 'Multi-region'
+        elif 'zone-redundant' in content_lower or 'availability zone' in content_lower:
+            return 'Zone-redundant'
+        elif 'baseline' in content_lower:
+            return 'Baseline'
+
+        return ''
+
+    def _extract_key_features(self, content_lower: str) -> list[str]:
+        """Extract key architectural features from content."""
+        features = []
+
+        # Security/networking features
+        if 'private endpoint' in content_lower or 'private link' in content_lower:
+            features.append('private networking')
+        if 'zero trust' in content_lower:
+            features.append('zero trust')
+        if 'web application firewall' in content_lower or 'waf' in content_lower:
+            features.append('WAF')
+
+        # Traffic/routing features
+        if 'ingress controller' in content_lower or 'nginx' in content_lower:
+            features.append('ingress')
+        if 'traffic manager' in content_lower or 'front door' in content_lower:
+            features.append('global load balancing')
+        if 'active-active' in content_lower:
+            features.append('active-active')
+        elif 'active-passive' in content_lower:
+            features.append('active-passive failover')
+
+        # Data features
+        if 'geo-replication' in content_lower or 'geo-redundant' in content_lower:
+            features.append('geo-redundancy')
+        if 'caching' in content_lower or 'redis' in content_lower:
+            features.append('caching')
+
+        # DevOps features
+        if 'gitops' in content_lower:
+            features.append('GitOps')
+        if 'blue-green' in content_lower or 'blue/green' in content_lower:
+            features.append('blue-green deployment')
+        if 'canary' in content_lower:
+            features.append('canary deployment')
+
+        return features
+
+    def _title_case_preserve_acronyms(self, text: str) -> str:
+        """Title case text but preserve acronyms like AKS, API, WAF."""
+        acronyms = {
+            'aks', 'api', 'waf', 'cdn', 'dns', 'sql', 'vm', 'vms', 'iot',
+            'ai', 'ml', 'ci', 'cd', 'cicd', 'saas', 'paas', 'iaas',
+        }
+
+        words = text.split()
+        result = []
+        for word in words:
+            lower = word.lower().rstrip('.,;:')
+            if lower in acronyms:
+                result.append(word.upper())
+            elif word.isupper() and len(word) > 1:
+                result.append(word)  # Keep existing acronyms
+            else:
+                result.append(word.capitalize())
+
+        return ' '.join(result)
 
     def _generate_id(self, rel_path: str) -> str:
         """Generate a unique ID from the file path."""

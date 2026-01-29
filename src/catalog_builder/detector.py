@@ -152,6 +152,11 @@ class ArchitectureDetector:
         filters = self._get_filters()
         ms_topic = doc.arch_metadata.ms_topic or doc.frontmatter.get('ms.topic', '')
 
+        # Check for non-architecture layouts (always exclude)
+        non_architecture_indicators = self._detect_non_architecture(doc)
+        if non_architecture_indicators:
+            return f"Not an architecture document: {non_architecture_indicators}"
+
         # Check excluded topics first
         if filters.excluded_topics and ms_topic in filters.excluded_topics:
             return f"Excluded topic: {ms_topic}"
@@ -251,6 +256,81 @@ class ArchitectureDetector:
             return True
 
         return False
+
+    def _detect_non_architecture(self, doc: ParsedDocument) -> str | None:
+        """Detect documents that are NOT architecture content.
+
+        Returns a description of why it's not an architecture, or None if it passes.
+        """
+        fm = doc.frontmatter
+        ms_topic = doc.arch_metadata.ms_topic or fm.get('ms.topic', '')
+        layout = fm.get('layout', '')
+
+        # Non-architecture ms.topic values
+        non_arch_topics = [
+            'article',  # Generic articles
+            'concept-article',  # Conceptual articles
+            'hub-page',  # Landing/hub pages
+            'landing-page',
+            'include',  # Include fragments
+            'contributor-guide',  # Contributor documentation
+            'quickstart',  # Quickstarts (not full architectures)
+            'tutorial',  # Tutorials (step-by-step, not architectures)
+            'how-to-guide',  # How-to guides
+            'overview',  # Overview pages
+        ]
+
+        if ms_topic in non_arch_topics:
+            return f"ms.topic is '{ms_topic}'"
+
+        # Non-architecture layouts
+        non_arch_layouts = [
+            'LandingPage',
+            'HubPage',
+            'ContentPage',
+        ]
+
+        if layout in non_arch_layouts:
+            return f"layout is '{layout}'"
+
+        # Check for hub/landing page patterns in frontmatter
+        if fm.get('is_hub_page') or fm.get('hub_page'):
+            return "hub page indicator in frontmatter"
+
+        # Check title patterns that indicate non-architecture
+        title = fm.get('title', '') or doc.title
+        title_lower = title.lower() if title else ''
+
+        non_arch_title_patterns = [
+            'what is ',
+            'about ',
+            'introduction to ',
+            'getting started',
+            'quickstart:',
+            'tutorial:',
+            'how to:',
+            'browse all',
+            'index of',
+            'table of contents',
+        ]
+
+        for pattern in non_arch_title_patterns:
+            if title_lower.startswith(pattern):
+                return f"title pattern '{pattern}'"
+
+        # Check for very short content (likely landing pages)
+        if doc.content and len(doc.content.strip()) < 500:
+            # Short content with no diagrams is likely not an architecture
+            if not doc.images:
+                return "very short content with no diagrams"
+
+        # Check for excessive links relative to content (landing pages)
+        if doc.content and len(doc.links) > 20:
+            content_len = len(doc.content.strip())
+            if content_len > 0 and len(doc.links) / (content_len / 1000) > 10:
+                return "high link density (likely landing page)"
+
+        return None
 
     def should_scan_directory(self, dir_path: Path, repo_root: Path) -> bool:
         """Determine if a directory should be scanned."""
