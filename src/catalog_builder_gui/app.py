@@ -51,7 +51,7 @@ def clone_repository(repo_url: str, clone_dir: str) -> tuple[bool, str]:
             except Exception as e:
                 return False, f"Error updating repo: {e}"
         else:
-            return False, f"Directory exists but is not a valid repo: {clone_dir}"
+            return False, f"Directory exists but is not the Azure Architecture Center repo (missing 'docs' folder): {clone_dir}. Try a different path like ~/architecture-center"
 
     # Create parent directory if needed
     clone_path.parent.mkdir(parents=True, exist_ok=True)
@@ -107,7 +107,7 @@ def render_sidebar() -> None:
         clone_dir = st.sidebar.text_input(
             "Clone Directory",
             value=get_state('clone_dir', DEFAULT_CLONE_DIR),
-            help="Local directory to clone the repository into"
+            help="Where to clone the architecture-center repo (NOT this project's directory)"
         )
         set_state('clone_dir', clone_dir)
 
@@ -141,7 +141,7 @@ def render_sidebar() -> None:
             clone_dir = st.text_input(
                 "Clone Directory",
                 value=get_state('clone_dir', DEFAULT_CLONE_DIR),
-                help="Local directory to clone the repository into"
+                help="Where to clone the architecture-center repo (NOT this project's directory)"
             )
             set_state('clone_dir', clone_dir)
 
