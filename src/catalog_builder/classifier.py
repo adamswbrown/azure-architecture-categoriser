@@ -1,5 +1,6 @@
 """AI-assisted classification suggestions for architecture entries."""
 
+import re
 from typing import Optional
 
 from .config import get_config
@@ -11,9 +12,12 @@ from .schema import (
     ClassificationMeta,
     Complexity,
     ComplexityLevel,
+    CostProfile,
+    ExclusionReason,
     ExtractionConfidence,
     OperatingModel,
     RuntimeModel,
+    SecurityLevel,
     Treatment,
     TimeCategory,
     WorkloadDomain,
@@ -61,6 +65,7 @@ class ArchitectureClassifier:
         """Suggest classifications for an architecture entry.
 
         All suggestions are marked as AI_SUGGESTED and require human review.
+        Uses enhanced content-based keyword scoring for better accuracy.
         """
         content = (doc.content + ' ' + doc.description + ' ' + doc.title).lower()
 
@@ -111,14 +116,29 @@ class ArchitectureClassifier:
             source="heuristic_analysis"
         )
 
-        # Suggest operating model based on family and services
-        entry.operating_model_required = self._suggest_operating_model(entry, content)
+        # Enhanced: Suggest operating model using content-based scoring
+        entry.operating_model_required = self._suggest_operating_model_enhanced(
+            entry, content, doc
+        )
 
-        # Suggest supported treatments based on family
-        entry.supported_treatments = self._suggest_treatments(entry)
+        # Enhanced: Suggest treatments using content-based keyword scoring
+        entry.supported_treatments = self._suggest_treatments_enhanced(
+            entry, content, doc
+        )
 
-        # Suggest time categories based on complexity
-        entry.supported_time_categories = self._suggest_time_categories(entry)
+        # Enhanced: Suggest time categories using content-based scoring
+        entry.supported_time_categories = self._suggest_time_categories_enhanced(
+            entry, content
+        )
+
+        # New: Suggest security level based on compliance mentions
+        entry.security_level = self._suggest_security_level(content, doc)
+
+        # New: Suggest cost profile based on content and services
+        entry.cost_profile = self._suggest_cost_profile(content, entry)
+
+        # New: Extract not suitable for exclusions
+        entry.not_suitable_for = self._extract_not_suitable_for(content, doc)
 
         return entry
 
@@ -389,3 +409,338 @@ class ArchitectureClassifier:
             categories = [TimeCategory.MIGRATE]
 
         return categories
+
+    # ========== Enhanced Classification Methods (Content-Based) ==========
+
+    def _suggest_treatments_enhanced(
+        self,
+        entry: ArchitectureEntry,
+        content: str,
+        doc: ParsedDocument
+    ) -> list[Treatment]:
+        """Suggest treatments using content-based keyword scoring."""
+        config = self._get_config()
+        scores: dict[str, float] = {}
+
+        # Score based on content keywords
+        for treatment, keywords in config.treatment_keywords.items():
+            score = sum(1 for kw in keywords if kw in content)
+            if score > 0:
+                scores[treatment] = score
+
+        # Boost based on Azure services
+        services_lower = ' '.join(s.lower() for s in entry.azure_services_used)
+
+        # VM presence suggests rehost capability
+        if 'virtual machine' in services_lower:
+            scores['rehost'] = scores.get('rehost', 0) + 2
+            scores['retain'] = scores.get('retain', 0) + 1
+
+        # AKS/Containers suggest refactor
+        if any(s in services_lower for s in ['kubernetes', 'container apps', 'container instance']):
+            scores['refactor'] = scores.get('refactor', 0) + 2
+            scores['rebuild'] = scores.get('rebuild', 0) + 1
+
+        # Managed services suggest replatform
+        if any(s in services_lower for s in ['managed instance', 'sql database', 'cosmos']):
+            scores['replatform'] = scores.get('replatform', 0) + 2
+
+        # ExpressRoute/Arc suggest retain/hybrid
+        if any(s in services_lower for s in ['expressroute', 'arc', 'vpn gateway']):
+            scores['retain'] = scores.get('retain', 0) + 2
+
+        # App Service, Functions suggest replatform
+        if any(s in services_lower for s in ['app service', 'functions']):
+            scores['replatform'] = scores.get('replatform', 0) + 1.5
+
+        # Boost from YML metadata (ms.collection: migration)
+        ms_collections = doc.frontmatter.get('ms.collection', [])
+        if isinstance(ms_collections, str):
+            ms_collections = [ms_collections]
+        if 'migration' in [c.lower() for c in ms_collections]:
+            scores['rehost'] = scores.get('rehost', 0) + 1
+            scores['replatform'] = scores.get('replatform', 0) + 1
+
+        # Include architecture family hints
+        family_treatments = self._get_family_treatment_hints(entry.family)
+        for t in family_treatments:
+            scores[t] = scores.get(t, 0) + 0.5
+
+        # Select treatments above threshold
+        threshold = 1.5
+        treatments = []
+        for t, score in scores.items():
+            if score >= threshold:
+                try:
+                    treatments.append(Treatment(t))
+                except ValueError:
+                    pass
+
+        # Fallback to family-based if nothing found
+        if not treatments:
+            treatments = self._suggest_treatments(entry)
+
+        return treatments
+
+    def _get_family_treatment_hints(self, family: ArchitectureFamily) -> list[str]:
+        """Get treatment hints based on architecture family."""
+        hints = {
+            ArchitectureFamily.IAAS: ['rehost', 'replatform', 'retain'],
+            ArchitectureFamily.PAAS: ['replatform', 'refactor'],
+            ArchitectureFamily.CLOUD_NATIVE: ['refactor', 'rebuild'],
+            ArchitectureFamily.DATA: ['replatform', 'refactor'],
+            ArchitectureFamily.INTEGRATION: ['replatform', 'refactor', 'replace'],
+            ArchitectureFamily.FOUNDATION: ['rebuild'],
+            ArchitectureFamily.SPECIALIZED: ['replatform', 'refactor'],
+        }
+        return hints.get(family, ['replatform', 'refactor'])
+
+    def _suggest_time_categories_enhanced(
+        self,
+        entry: ArchitectureEntry,
+        content: str
+    ) -> list[TimeCategory]:
+        """Suggest TIME categories using content-based keyword scoring."""
+        config = self._get_config()
+        scores: dict[str, float] = {}
+
+        for category, keywords in config.time_category_keywords.items():
+            score = sum(1 for kw in keywords if kw in content)
+            if score > 0:
+                scores[category] = score
+
+        # Cross-reference with treatments
+        if Treatment.REFACTOR in entry.supported_treatments:
+            scores['invest'] = scores.get('invest', 0) + 1.5
+            scores['migrate'] = scores.get('migrate', 0) + 1
+
+        if Treatment.REBUILD in entry.supported_treatments:
+            scores['invest'] = scores.get('invest', 0) + 2
+
+        if Treatment.REHOST in entry.supported_treatments:
+            scores['migrate'] = scores.get('migrate', 0) + 1.5
+            scores['tolerate'] = scores.get('tolerate', 0) + 1
+
+        if Treatment.REPLACE in entry.supported_treatments:
+            scores['eliminate'] = scores.get('eliminate', 0) + 1.5
+
+        if Treatment.RETAIN in entry.supported_treatments:
+            scores['tolerate'] = scores.get('tolerate', 0) + 1.5
+
+        # Complexity influence
+        if entry.complexity.implementation == ComplexityLevel.HIGH:
+            scores['invest'] = scores.get('invest', 0) + 1
+
+        if entry.complexity.implementation == ComplexityLevel.LOW:
+            scores['migrate'] = scores.get('migrate', 0) + 0.5
+
+        # Select categories above threshold
+        threshold = 1.5
+        categories = []
+        for c, score in scores.items():
+            if score >= threshold:
+                try:
+                    categories.append(TimeCategory(c))
+                except ValueError:
+                    pass
+
+        # Fallback
+        if not categories:
+            categories = self._suggest_time_categories(entry)
+
+        return categories
+
+    def _suggest_operating_model_enhanced(
+        self,
+        entry: ArchitectureEntry,
+        content: str,
+        doc: ParsedDocument
+    ) -> OperatingModel:
+        """Suggest operating model using content-based keyword scoring."""
+        config = self._get_config()
+        scores: dict[str, float] = {}
+
+        for model, keywords in config.operating_model_keywords.items():
+            score = sum(1 for kw in keywords if kw in content)
+            if score > 0:
+                scores[model] = score
+
+        # YML products boost
+        for product in doc.arch_metadata.products:
+            prod_lower = product.lower()
+            if 'devops' in prod_lower or 'pipeline' in prod_lower:
+                scores['devops'] = scores.get('devops', 0) + 2
+
+        # Architecture family influence
+        if entry.family == ArchitectureFamily.CLOUD_NATIVE:
+            scores['devops'] = scores.get('devops', 0) + 2
+            scores['sre'] = scores.get('sre', 0) + 1
+        elif entry.family == ArchitectureFamily.IAAS:
+            scores['traditional_it'] = scores.get('traditional_it', 0) + 1
+        elif entry.family == ArchitectureFamily.PAAS:
+            scores['transitional'] = scores.get('transitional', 0) + 1
+
+        # Availability model influence
+        if AvailabilityModel.MULTI_REGION_ACTIVE_ACTIVE in entry.availability_models:
+            scores['sre'] = scores.get('sre', 0) + 2
+
+        # Microservices influence
+        if RuntimeModel.MICROSERVICES in entry.expected_runtime_models:
+            scores['devops'] = scores.get('devops', 0) + 1.5
+
+        # Select highest scoring model
+        if scores:
+            best = max(scores, key=scores.get)
+            try:
+                return OperatingModel(best)
+            except ValueError:
+                pass
+
+        # Fallback to existing logic
+        return self._suggest_operating_model(entry, content)
+
+    def _suggest_security_level(
+        self,
+        content: str,
+        doc: ParsedDocument
+    ) -> SecurityLevel:
+        """Suggest security level based on compliance mentions and security patterns."""
+        config = self._get_config()
+        scores: dict[str, float] = {}
+
+        for level, keywords in config.security_level_keywords.items():
+            score = sum(1 for kw in keywords if kw in content)
+            if score > 0:
+                scores[level] = score
+
+        # YML categories boost
+        if 'security' in [c.lower() for c in doc.arch_metadata.azure_categories]:
+            scores['enterprise'] = scores.get('enterprise', 0) + 1
+
+        # Determine level with priority ordering (most restrictive wins)
+        priority_order = ['highly_regulated', 'regulated', 'enterprise', 'basic']
+        for level in priority_order:
+            if scores.get(level, 0) >= 2:
+                try:
+                    return SecurityLevel(level)
+                except ValueError:
+                    pass
+
+        # Check for any enterprise-level indicators
+        if scores.get('enterprise', 0) >= 1:
+            return SecurityLevel.ENTERPRISE
+
+        # Default to basic
+        return SecurityLevel.BASIC
+
+    def _suggest_cost_profile(
+        self,
+        content: str,
+        entry: ArchitectureEntry
+    ) -> CostProfile:
+        """Suggest cost profile based on content and service patterns."""
+        config = self._get_config()
+        scores: dict[str, float] = {}
+
+        for profile, keywords in config.cost_profile_keywords.items():
+            score = sum(1 for kw in keywords if kw in content)
+            if score > 0:
+                scores[profile] = score
+
+        # Service-based inference
+        services_lower = ' '.join(s.lower() for s in entry.azure_services_used)
+
+        if 'premium' in services_lower:
+            scores['scale_optimized'] = scores.get('scale_optimized', 0) + 1
+            scores['innovation_first'] = scores.get('innovation_first', 0) + 1
+
+        if any(s in services_lower for s in ['openai', 'cognitive', 'machine learning']):
+            scores['innovation_first'] = scores.get('innovation_first', 0) + 2
+
+        if any(s in services_lower for s in ['functions', 'container apps']):
+            scores['cost_minimized'] = scores.get('cost_minimized', 0) + 1
+
+        # High availability = scale optimized
+        if AvailabilityModel.MULTI_REGION_ACTIVE_ACTIVE in entry.availability_models:
+            scores['scale_optimized'] = scores.get('scale_optimized', 0) + 2
+
+        # Complexity influence
+        if entry.complexity.operations == ComplexityLevel.HIGH:
+            scores['scale_optimized'] = scores.get('scale_optimized', 0) + 1
+
+        if scores:
+            best = max(scores, key=scores.get)
+            try:
+                return CostProfile(best)
+            except ValueError:
+                pass
+
+        return CostProfile.BALANCED
+
+    def _extract_not_suitable_for(
+        self,
+        content: str,
+        doc: ParsedDocument
+    ) -> list[ExclusionReason]:
+        """Extract explicit exclusions from document content."""
+        config = self._get_config()
+        exclusions: set[ExclusionReason] = set()
+
+        # Extract explicit statements using regex patterns
+        for pattern in config.not_suitable_patterns:
+            matches = re.findall(pattern, content, re.IGNORECASE)
+            for match in matches:
+                exclusions.update(self._map_exclusion_text_to_reasons(match))
+
+        # Check sections for exclusion patterns
+        considerations = doc.sections.get('considerations', '')
+        alternatives = doc.sections.get('alternatives', '')
+        combined = (considerations + ' ' + alternatives).lower()
+
+        # Infer exclusions from content patterns
+        if 'simple workload' in combined or 'basic application' in combined:
+            exclusions.add(ExclusionReason.SIMPLE_WORKLOADS)
+
+        if 'greenfield' in combined and 'only' in combined:
+            exclusions.add(ExclusionReason.GREENFIELD_ONLY)
+
+        if 'windows only' in content or 'windows-only' in content:
+            exclusions.add(ExclusionReason.WINDOWS_ONLY)
+
+        if 'linux only' in content or 'linux-only' in content:
+            exclusions.add(ExclusionReason.LINUX_ONLY)
+
+        # Check for skill requirements
+        if 'kubernetes experience' in content or 'container expertise' in content:
+            exclusions.add(ExclusionReason.LOW_MATURITY_TEAMS)
+
+        return list(exclusions)
+
+    def _map_exclusion_text_to_reasons(self, text: str) -> list[ExclusionReason]:
+        """Map extracted exclusion text to ExclusionReason enum values."""
+        text_lower = text.lower()
+        reasons = []
+
+        mapping = {
+            'rehost': ExclusionReason.REHOST_ONLY,
+            'lift and shift': ExclusionReason.REHOST_ONLY,
+            'vm only': ExclusionReason.VM_ONLY_APPS,
+            'virtual machine only': ExclusionReason.VM_ONLY_APPS,
+            'low maturity': ExclusionReason.LOW_MATURITY_TEAMS,
+            'inexperienced team': ExclusionReason.LOW_MATURITY_TEAMS,
+            'regulated': ExclusionReason.REGULATED_WORKLOADS,
+            'compliance': ExclusionReason.REGULATED_WORKLOADS,
+            'budget': ExclusionReason.LOW_BUDGET,
+            'cost constrain': ExclusionReason.LOW_BUDGET,
+            'skill': ExclusionReason.SKILL_CONSTRAINED,
+            'simple': ExclusionReason.SIMPLE_WORKLOADS,
+            'basic workload': ExclusionReason.SIMPLE_WORKLOADS,
+            'greenfield': ExclusionReason.GREENFIELD_ONLY,
+            'legacy': ExclusionReason.LEGACY_SYSTEMS,
+        }
+
+        for keyword, reason in mapping.items():
+            if keyword in text_lower:
+                reasons.append(reason)
+
+        return reasons

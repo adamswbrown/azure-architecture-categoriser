@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from catalog_builder.parser import MarkdownParser, ParsedDocument
+from catalog_builder.parser import MarkdownParser, ParsedDocument, ArchitectureMetadata
 from catalog_builder.detector import ArchitectureDetector, DetectionResult
 from catalog_builder.extractor import MetadataExtractor
 from catalog_builder.classifier import ArchitectureClassifier
@@ -14,8 +14,16 @@ from catalog_builder.schema import (
     ArchitectureEntry,
     ArchitectureCatalog,
     ArchitectureFamily,
-    WorkloadDomain,
+    Complexity,
+    ComplexityLevel,
+    CostProfile,
+    ExclusionReason,
+    OperatingModel,
     RuntimeModel,
+    SecurityLevel,
+    TimeCategory,
+    Treatment,
+    WorkloadDomain,
 )
 
 
@@ -277,3 +285,177 @@ class TestCatalogSchema:
         )
 
         assert catalog.total_architectures == 2
+
+
+class TestEnhancedClassifier:
+    """Tests for enhanced content-based classification features."""
+
+    def test_suggest_rehost_treatment(self):
+        """Test rehost treatment detection from lift-and-shift content."""
+        from catalog_builder.classifier import ArchitectureClassifier
+        from catalog_builder.schema import Treatment, ArchitectureFamily
+
+        classifier = ArchitectureClassifier()
+        content = "this lift and shift migration requires no code changes to the existing application."
+
+        mock_doc = ParsedDocument(
+            path=Path("/test.md"),
+            title="Migration Guide",
+            description="Lift and shift to Azure",
+            arch_metadata=ArchitectureMetadata(products=[]),
+            frontmatter={}
+        )
+
+        entry = ArchitectureEntry(
+            architecture_id="test",
+            name="Test",
+            description="",
+            source_repo_path="docs/test.md",
+            family=ArchitectureFamily.IAAS,
+            azure_services_used=["Azure Virtual Machines"]
+        )
+
+        treatments = classifier._suggest_treatments_enhanced(entry, content, mock_doc)
+
+        assert Treatment.REHOST in treatments
+
+    def test_suggest_refactor_treatment(self):
+        """Test refactor treatment detection from microservices content."""
+        from catalog_builder.classifier import ArchitectureClassifier
+        from catalog_builder.schema import Treatment, ArchitectureFamily
+
+        classifier = ArchitectureClassifier()
+        content = "modernize the application by decomposing into cloud-native microservices using containerize approach."
+
+        mock_doc = ParsedDocument(
+            path=Path("/test.md"),
+            title="Modernization",
+            description="Cloud native modernization",
+            arch_metadata=ArchitectureMetadata(products=[]),
+            frontmatter={}
+        )
+
+        entry = ArchitectureEntry(
+            architecture_id="test",
+            name="Test",
+            description="",
+            source_repo_path="docs/test.md",
+            family=ArchitectureFamily.CLOUD_NATIVE,
+            azure_services_used=["Azure Kubernetes Service"]
+        )
+
+        treatments = classifier._suggest_treatments_enhanced(entry, content, mock_doc)
+
+        assert Treatment.REFACTOR in treatments
+
+    def test_suggest_security_level_regulated(self):
+        """Test detection of regulated security level."""
+        from catalog_builder.classifier import ArchitectureClassifier
+        from catalog_builder.schema import SecurityLevel
+
+        classifier = ArchitectureClassifier()
+        content = "this architecture is designed for hipaa compliance and pci-dss requirements."
+
+        mock_doc = ParsedDocument(
+            path=Path("/test.md"),
+            title="Regulated Workload",
+            description="Healthcare compliance",
+            arch_metadata=ArchitectureMetadata(azure_categories=[]),
+            frontmatter={}
+        )
+
+        security_level = classifier._suggest_security_level(content, mock_doc)
+
+        assert security_level == SecurityLevel.HIGHLY_REGULATED
+
+    def test_suggest_devops_operating_model(self):
+        """Test DevOps operating model detection."""
+        from catalog_builder.classifier import ArchitectureClassifier
+        from catalog_builder.schema import OperatingModel, ArchitectureFamily, RuntimeModel
+
+        classifier = ArchitectureClassifier()
+        content = "uses ci/cd with github actions and terraform infrastructure as code for automated deployment."
+
+        mock_doc = ParsedDocument(
+            path=Path("/test.md"),
+            title="DevOps Architecture",
+            description="CI/CD pipeline",
+            arch_metadata=ArchitectureMetadata(products=[]),
+            frontmatter={}
+        )
+
+        entry = ArchitectureEntry(
+            architecture_id="test",
+            name="Test",
+            description="",
+            source_repo_path="docs/test.md",
+            family=ArchitectureFamily.CLOUD_NATIVE,
+            expected_runtime_models=[RuntimeModel.MICROSERVICES]
+        )
+
+        operating_model = classifier._suggest_operating_model_enhanced(entry, content, mock_doc)
+
+        assert operating_model == OperatingModel.DEVOPS
+
+    def test_suggest_cost_profile_innovation(self):
+        """Test innovation-first cost profile detection."""
+        from catalog_builder.classifier import ArchitectureClassifier
+        from catalog_builder.schema import CostProfile, ArchitectureFamily
+
+        classifier = ArchitectureClassifier()
+        content = "uses azure openai and cognitive services for ai-powered features with machine learning."
+
+        entry = ArchitectureEntry(
+            architecture_id="test",
+            name="Test",
+            description="",
+            source_repo_path="docs/test.md",
+            family=ArchitectureFamily.CLOUD_NATIVE,
+            azure_services_used=["Azure OpenAI Service", "Azure Cognitive Services"]
+        )
+
+        cost_profile = classifier._suggest_cost_profile(content, entry)
+
+        assert cost_profile == CostProfile.INNOVATION_FIRST
+
+    def test_extract_not_suitable_for(self):
+        """Test extraction of explicit exclusions."""
+        from catalog_builder.classifier import ArchitectureClassifier
+        from catalog_builder.schema import ExclusionReason
+
+        classifier = ArchitectureClassifier()
+        content = "this pattern isn't suitable for simple workloads. windows only solution with low maturity teams."
+
+        mock_doc = ParsedDocument(
+            path=Path("/test.md"),
+            title="Complex Pattern",
+            description="Not for beginners",
+            arch_metadata=ArchitectureMetadata(products=[]),
+            sections={'considerations': 'requires kubernetes experience'}
+        )
+
+        exclusions = classifier._extract_not_suitable_for(content, mock_doc)
+
+        assert ExclusionReason.SIMPLE_WORKLOADS in exclusions
+        assert ExclusionReason.WINDOWS_ONLY in exclusions
+
+    def test_time_category_invest(self):
+        """Test TIME invest category detection."""
+        from catalog_builder.classifier import ArchitectureClassifier
+        from catalog_builder.schema import TimeCategory, Treatment, ComplexityLevel, Complexity
+
+        classifier = ArchitectureClassifier()
+        content = "greenfield cloud-native microservices with serverless and managed service approach for digital transformation."
+
+        entry = ArchitectureEntry(
+            architecture_id="test",
+            name="Test",
+            description="",
+            source_repo_path="docs/test.md",
+            supported_treatments=[Treatment.REFACTOR, Treatment.REBUILD],
+            complexity=Complexity(implementation=ComplexityLevel.HIGH)
+        )
+
+        categories = classifier._suggest_time_categories_enhanced(entry, content)
+
+        assert TimeCategory.INVEST in categories

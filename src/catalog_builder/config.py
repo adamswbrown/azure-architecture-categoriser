@@ -211,6 +211,161 @@ class ClassificationConfig(BaseModel):
         ],
     })
 
+    # Gartner 8R Treatment keywords
+    treatment_keywords: dict[str, list[str]] = Field(default_factory=lambda: {
+        'rehost': [
+            'lift and shift', 'lift-and-shift', 'no code changes',
+            'rehost', 'vm migration', 'mainframe emulator',
+            'unchanged business logic', 'migrate as-is',
+            'minimal disruption', 'recompile', 'same interfaces',
+        ],
+        'replatform': [
+            'minimal code changes', 'managed instance', 'managed service',
+            'paas', 'platform migration', 'database migration',
+            'container migration', 'os upgrade', 'sql managed instance',
+        ],
+        'refactor': [
+            'code conversion', 'code modernization', 'modernize',
+            'cloud-native', 'cloud native', 'microservices',
+            'decompose', 'event-driven', 'api-first',
+            'containerize', 'serverless conversion',
+        ],
+        'rebuild': [
+            'rebuild', 'rearchitect', 're-architect', 'greenfield',
+            'start from scratch', 'new development', 'reimagine',
+            'complete redesign', 'ground up',
+        ],
+        'replace': [
+            'replace', 'saas', 'cots', 'commercial off-the-shelf',
+            'third-party solution', 'vendor solution',
+        ],
+        'retain': [
+            'retain', 'hybrid', 'on-premises', 'on premises',
+            'expressroute', 'azure arc', 'private connection',
+            'keep existing', 'coexist', 'extend to cloud',
+        ],
+        'tolerate': [
+            'tolerate', 'legacy stable', 'maintain status quo',
+            'acceptable risk', 'deferred modernization',
+        ],
+        'retire': [
+            'retire', 'decommission', 'sunset', 'phase out',
+            'end of life', 'deprecate',
+        ],
+    })
+
+    # Gartner TIME category keywords
+    time_category_keywords: dict[str, list[str]] = Field(default_factory=lambda: {
+        'invest': [
+            'greenfield', 'strategic investment', 'modern stack',
+            'microservices', 'cloud-native', 'innovation',
+            'competitive advantage', 'digital transformation',
+            'managed service', 'serverless', 'event-driven',
+        ],
+        'migrate': [
+            'modernization', 'strangler fig', 'phased approach',
+            'migration', 'transition', 'incremental',
+            'step-by-step', 'brownfield', 'replatform',
+        ],
+        'tolerate': [
+            'legacy but stable', 'minimal disruption', 'maintain',
+            'status quo', 'acceptable', 'low risk',
+            'no immediate action', 'defer',
+        ],
+        'eliminate': [
+            'eliminate', 'replace', 'obsolete', 'deprecated',
+            'technical debt', 'end of support', 'unsupported',
+            'security risk', 'compliance gap',
+        ],
+    })
+
+    # Operating model keywords
+    operating_model_keywords: dict[str, list[str]] = Field(default_factory=lambda: {
+        'devops': [
+            'ci/cd', 'cicd', 'continuous integration', 'continuous delivery',
+            'github actions', 'azure pipelines', 'azure devops',
+            'infrastructure as code', 'iac', 'terraform', 'bicep',
+            'gitops', 'automated deployment', 'deployment pipeline',
+            'devops', 'pull request', 'code review',
+        ],
+        'sre': [
+            'site reliability', 'sre', 'observability', 'slo', 'sli',
+            'error budget', 'health modeling', 'chaos engineering',
+            'incident management', 'toil reduction',
+            'high availability', 'mission-critical', 'always-on',
+        ],
+        'transitional': [
+            'hybrid operations', 'mixed', 'transitional',
+            'partial automation', 'manual approval', 'staged rollout',
+        ],
+        'traditional_it': [
+            'manual operations', 'traditional', 'itil',
+            'change advisory board', 'cab', 'manual deployment',
+            'ticketing system', 'scheduled maintenance',
+        ],
+    })
+
+    # Security level keywords
+    security_level_keywords: dict[str, list[str]] = Field(default_factory=lambda: {
+        'highly_regulated': [
+            'fedramp', 'fedramp high', 'hipaa', 'hitrust',
+            'pci-dss', 'pci dss', 'sox', 'itar', 'cmmc',
+            'government', 'defense', 'classified', 'secret',
+            'financial services', 'healthcare compliance',
+        ],
+        'regulated': [
+            'compliance', 'regulatory', 'audit', 'certification',
+            'iso 27001', 'soc 2', 'soc2', 'data residency',
+            'data sovereignty', 'privacy', 'gdpr',
+        ],
+        'enterprise': [
+            'zero trust', 'zero-trust', 'managed identity',
+            'key vault', 'private endpoint', 'private link',
+            'network segmentation', 'waf', 'firewall', 'ddos',
+            'encryption at rest', 'encryption in transit',
+            'rbac', 'conditional access', 'entra id',
+        ],
+        'basic': [
+            'standard security', 'basic', 'default', 'starter',
+        ],
+    })
+
+    # Cost profile keywords
+    cost_profile_keywords: dict[str, list[str]] = Field(default_factory=lambda: {
+        'cost_minimized': [
+            'cost-effective', 'cost effective', 'budget', 'low cost',
+            'consumption plan', 'consumption-based', 'pay-per-use',
+            'reserved instance', 'reserved capacity', 'spot instance',
+            'spot vm', 'dev/test pricing', 'free tier', 'basic tier',
+            'shared', 'burstable', 'b-series',
+        ],
+        'balanced': [
+            'balanced', 'standard', 'general purpose', 'production',
+            'cost and performance', 'cost-performance',
+        ],
+        'scale_optimized': [
+            'auto-scaling', 'autoscaling', 'elastic', 'scale out',
+            'scale up', 'throughput units', 'premium tier',
+            'high performance', 'low latency', 'high throughput',
+            'performance optimized', 'mission-critical',
+        ],
+        'innovation_first': [
+            'premium', 'advanced features', 'cutting-edge',
+            'preview', 'latest', 'ai', 'machine learning',
+            'cognitive services', 'openai', 'innovation',
+            'experimentation', 'proof of concept',
+        ],
+    })
+
+    # Patterns to extract "not suitable for" exclusions
+    not_suitable_patterns: list[str] = Field(default_factory=lambda: [
+        r"(?:not|isn't|is not)\s+(?:suitable|recommended|ideal)\s+for[:\s]+([^.]+)",
+        r"(?:avoid|don't use)\s+(?:this|the)?\s*(?:architecture|pattern|approach)\s+(?:for|when)[:\s]+([^.]+)",
+        r"limitations?[:\s]+([^.]+)",
+        r"when\s+not\s+to\s+use[:\s]+([^.]+)",
+        r"(?:not|isn't)\s+(?:a good fit|appropriate)\s+for[:\s]+([^.]+)",
+    ])
+
 
 class ServiceConfig(BaseModel):
     """Azure service extraction configuration."""

@@ -49,13 +49,15 @@ class TrinaryOption(str, Enum):
 
 
 class Treatment(str, Enum):
-    """Supported migration/modernization treatments."""
+    """Supported migration/modernization treatments (Gartner 8R)."""
     RETIRE = "retire"
     TOLERATE = "tolerate"
     REHOST = "rehost"
     REPLATFORM = "replatform"
     REFACTOR = "refactor"
     REPLACE = "replace"
+    REBUILD = "rebuild"  # Complete re-architecture from scratch
+    RETAIN = "retain"  # Keep on-premises with hybrid/extension to cloud
 
 
 class TimeCategory(str, Enum):
@@ -114,6 +116,12 @@ class ExclusionReason(str, Enum):
     REGULATED_WORKLOADS = "regulated_workloads"
     LOW_BUDGET = "low_budget"
     SKILL_CONSTRAINED = "skill_constrained"
+    GREENFIELD_ONLY = "greenfield_only"  # Only suitable for new projects
+    SIMPLE_WORKLOADS = "simple_workloads"  # Over-engineered for simple needs
+    WINDOWS_ONLY = "windows_only"  # Linux incompatibility
+    LINUX_ONLY = "linux_only"  # Windows incompatibility
+    HIGH_LATENCY_TOLERANCE = "high_latency_tolerance"  # Requires low latency
+    LEGACY_SYSTEMS = "legacy_systems"  # Not suitable for legacy modernization
 
 
 class ExtractionConfidence(str, Enum):
