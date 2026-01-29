@@ -50,3 +50,12 @@ Thumbs.db
 *.tmp
 *.temp
 /tmp/
+
+# Generated output
+scoring_results/
+scoring_results_with_answers/
+scoring_results_readable/
+scoring_results_with_answers_readable/
+
+# Utility scripts (internal use only)
+scripts/

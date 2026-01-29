@@ -2,7 +2,7 @@
 
 All settings are now managed through a single YAML configuration file.
 
-For the complete design specification, see [prompts/catalog-builder-prompt-v1.md](prompts/catalog-builder-prompt-v1.md).
+For the complete design specification, see [design/catalog-builder-prompt-v1.md](design/catalog-builder-prompt-v1.md).
 
 ---
 
@@ -1046,13 +1046,13 @@ Documents starting with:
 
 ---
 
-## Prompt Documentation
+## Design Specifications
 
-The complete design specification for catalog generation is documented in the `prompts/` folder:
+The complete design specification for catalog generation is documented in the `docs/design/` folder:
 
 | Version | File | Description |
 |---------|------|-------------|
-| v1.0 | [catalog-builder-prompt-v1.md](prompts/catalog-builder-prompt-v1.md) | Initial release specification |
+| v1.0 | [catalog-builder-prompt-v1.md](design/catalog-builder-prompt-v1.md) | Initial release specification |
 
 The prompt documentation includes:
 - Core principles and design philosophy

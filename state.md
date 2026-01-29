@@ -81,17 +81,25 @@ azure-architecture-categoriser-/
 │       ├── state/session_state.py
 │       ├── utils/validation.py
 │       └── .streamlit/config.toml
-├── docs/                             # Component documentation (NEW)
+├── docs/                             # Documentation
 │   ├── catalog-builder.md
 │   ├── recommendations-app.md
-│   └── architecture-scorer.md
+│   ├── architecture-scorer.md
+│   ├── configuration.md
+│   └── design/                       # Design specifications
+│       ├── catalog-builder-prompt-v1.md
+│       └── architecture-scorer-prompt-v1.md
 ├── tests/
 │   ├── test_catalog_builder.py
 │   ├── test_architecture_scorer.py
-│   └── context_files/
+│   └── fixtures/                     # Test fixtures
+│       └── context_files/            # Test context files
+├── examples/                         # Example files
+│   └── example-java-context.json
+├── scripts/                          # Utility scripts
 ├── .streamlit/config.toml            # Theme configuration
 ├── pyproject.toml
-├── README.md, CONFIGURATION.md
+├── README.md
 ├── state.md, worklog.md
 └── architecture-catalog.json
 ```

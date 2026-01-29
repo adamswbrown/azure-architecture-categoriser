@@ -126,9 +126,28 @@ pip install -e ".[dev]"
 | [Catalog Builder](docs/catalog-builder.md) | Building architecture catalogs |
 | [Architecture Scorer](docs/architecture-scorer.md) | Scoring engine details |
 | [Recommendations App](docs/recommendations-app.md) | Customer-facing web app |
-| [Configuration](CONFIGURATION.md) | Full configuration reference |
-| [Catalog Builder Prompt](prompts/catalog-builder-prompt-v1.md) | Design specification |
-| [Scorer Prompt](prompts/architecture-scorer-prompt-v1.md) | Scoring specification |
+| [Configuration](docs/configuration.md) | Full configuration reference |
+| [Catalog Builder Spec](docs/design/catalog-builder-prompt-v1.md) | Design specification |
+| [Scorer Spec](docs/design/architecture-scorer-prompt-v1.md) | Scoring specification |
+
+## Repository Structure
+
+```
+azure-architecture-recommender/
+├── src/                           # Source code
+│   ├── catalog_builder/           # Catalog generation CLI
+│   ├── catalog_builder_gui/       # Catalog Builder GUI
+│   ├── architecture_scorer/       # Scoring engine
+│   └── architecture_recommendations_app/  # Customer web app
+├── docs/                          # Documentation
+│   ├── design/                    # Design specifications
+│   └── *.md                       # Component docs
+├── tests/                         # Tests
+│   └── fixtures/                  # Test data
+├── examples/                      # Example files
+├── scripts/                       # Utility scripts
+└── architecture-catalog.json      # Generated catalog
+```
 
 ## Version
 

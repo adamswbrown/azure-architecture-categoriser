@@ -228,4 +228,4 @@ Your Answers Applied:
 
 - [Catalog Builder](./catalog-builder.md) - Generate architecture catalogs
 - [Recommendations App](./recommendations-app.md) - Customer-facing web application
-- [Scorer Prompt](../prompts/architecture-scorer-prompt-v1.md) - Full specification
+- [Scorer Spec](./design/architecture-scorer-prompt-v1.md) - Full specification

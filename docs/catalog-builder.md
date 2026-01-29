@@ -204,7 +204,7 @@ Architecture candidates are identified by:
 
 ## Configuration
 
-See [CONFIGURATION.md](../CONFIGURATION.md) for the full configuration reference.
+See [configuration.md](./configuration.md) for the full configuration reference.
 
 ## Example Output
 
@@ -236,4 +236,4 @@ See [CONFIGURATION.md](../CONFIGURATION.md) for the full configuration reference
 
 - [Architecture Recommendations App](./recommendations-app.md) - Customer-facing web application
 - [Architecture Scorer](./architecture-scorer.md) - Scoring engine documentation
-- [Configuration Reference](../CONFIGURATION.md) - Full configuration options
+- [Configuration Reference](./configuration.md) - Full configuration options

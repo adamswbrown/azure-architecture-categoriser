@@ -23,7 +23,7 @@ from architecture_scorer.schema import (
 
 
 # Path to test context examples
-CONTEXT_EXAMPLES_DIR = Path(__file__).parent.parent / "prompt2_context_examples"
+CONTEXT_EXAMPLES_DIR = Path(__file__).parent / "fixtures" / "context_files"
 CATALOG_PATH = Path("/tmp/enhanced-catalog.json")
 
 
