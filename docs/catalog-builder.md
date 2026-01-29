@@ -112,15 +112,23 @@ A graphical interface is also available for building and inspecting catalogs:
 # Install GUI dependencies
 pip install -e ".[gui]"
 
-# Launch the GUI
-catalog-builder-gui
+# Launch the GUI (macOS/Linux)
+./bin/start-catalog-builder-gui.sh
+
+# Launch the GUI (Windows PowerShell)
+.\bin\start-catalog-builder-gui.ps1
 ```
 
+![Catalog Builder GUI](images/catalog-builder-gui.png)
+
 The GUI provides:
-- Visual catalog building with progress tracking
-- Architecture browsing and inspection
-- Quality statistics and charts
-- Export functionality
+- **Repository Configuration** - Point to your local Azure Architecture Center clone
+- **Quick Generate** - One-click catalog generation with default settings
+- **Custom Build** - Fine-tune filters by category, product, and quality requirements
+- **Progress Tracking** - Visual feedback during catalog generation
+- **Architecture Browsing** - Inspect individual entries in the generated catalog
+- **Quality Statistics** - View distribution of curated vs AI-enriched entries
+- **Export Options** - Save catalogs in different formats
 
 ## Catalog Schema
 

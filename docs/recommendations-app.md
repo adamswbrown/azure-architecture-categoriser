@@ -28,11 +28,16 @@ pip install -e ".[recommendations-app]"
 # Ensure you have a catalog file (or generate one first)
 # See: docs/catalog-builder.md
 
-# Run the application
-streamlit run src/architecture_recommendations_app/app.py
+# Run the application (macOS/Linux)
+./bin/start-recommendations-app.sh
+
+# Run the application (Windows PowerShell)
+.\bin\start-recommendations-app.ps1
 ```
 
 The app will open in your browser at `http://localhost:8501`.
+
+![Architecture Recommendations App](images/architecture%20recommendations-gui.png)
 
 ## User Flow
 
@@ -144,14 +149,26 @@ The context file should be a JSON array containing application assessment data:
 
 The app looks for the architecture catalog in this order:
 
-1. **Environment variable**: `ARCHITECTURE_CATALOG_PATH`
-2. **Current directory**: `./architecture-catalog.json`
-3. **Project root**: `<project>/architecture-catalog.json`
+1. **User-selected**: Upload or specify path via the sidebar
+2. **Environment variable**: `ARCHITECTURE_CATALOG_PATH`
+3. **Current directory**: `./architecture-catalog.json`
+4. **Project root**: `<project>/architecture-catalog.json`
+
+The sidebar shows the currently loaded catalog including:
+- Number of architectures
+- Source location
+- Last modified date
+- Full file path
+
+You can change catalogs at any time using the sidebar:
+- **Upload** a catalog JSON file directly
+- **Enter a path** to an existing catalog file
+- **Reset** to auto-detection
 
 ```bash
-# Use a custom catalog
+# Use a custom catalog via environment variable
 export ARCHITECTURE_CATALOG_PATH=/path/to/my-catalog.json
-streamlit run src/architecture_recommendations_app/app.py
+./bin/start-recommendations-app.sh
 ```
 
 ### Theme Configuration

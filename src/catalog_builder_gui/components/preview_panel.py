@@ -104,13 +104,13 @@ def render_preview_panel() -> None:
         # Product filter
         st.markdown("**Product Filter** (leave empty for all)")
 
-        # Initialize widget state from config if not already set
-        if 'product_filter' not in st.session_state:
-            st.session_state['product_filter'] = ", ".join(config.filters.allowed_products or [])
+        # Use active_filters as source of truth (set by Filter Presets tab)
+        product_default = ", ".join(active_filters.get('products', []))
 
         product_input = st.text_input(
             "Products (comma-separated)",
-            key="product_filter",
+            value=product_default,
+            key="product_filter_input",
             help="e.g., azure-kubernetes-service, azure-app-service",
             placeholder="azure-kubernetes-service, azure-sql-database"
         )
@@ -123,13 +123,13 @@ def render_preview_panel() -> None:
         # Category filter
         st.markdown("**Category Filter** (leave empty for all)")
 
-        # Initialize widget state from config if not already set
-        if 'category_filter' not in st.session_state:
-            st.session_state['category_filter'] = ", ".join(config.filters.allowed_categories or [])
+        # Use active_filters as source of truth (set by Filter Presets tab)
+        category_default = ", ".join(active_filters.get('categories', []))
 
         category_input = st.text_input(
             "Categories (comma-separated)",
-            key="category_filter",
+            value=category_default,
+            key="category_filter_input",
             help="e.g., web, containers, ai-machine-learning",
             placeholder="web, containers, databases"
         )

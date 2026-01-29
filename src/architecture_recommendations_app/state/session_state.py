@@ -16,6 +16,9 @@ def initialize_state() -> None:
         st.session_state.questions = None
         st.session_state.error_state = None
         st.session_state.user_answers = {}
+        # Catalog configuration (persists across analyses)
+        st.session_state.catalog_path = None
+        st.session_state.catalog_source = None
 
 
 def get_state(key: str, default: Any = None) -> Any:

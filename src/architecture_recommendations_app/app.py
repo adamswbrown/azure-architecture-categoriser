@@ -24,24 +24,65 @@ from architecture_scorer.schema import ScoringResult
 
 
 def get_catalog_path() -> str:
-    """Get the catalog path from environment or default locations."""
+    """Get the catalog path from session state, environment, or default locations."""
+    # 0. Session state (user-selected catalog)
+    session_catalog = get_state('catalog_path')
+    if session_catalog and Path(session_catalog).exists():
+        return session_catalog
+
     # 1. Environment variable
     env_path = os.environ.get("ARCHITECTURE_CATALOG_PATH")
     if env_path and Path(env_path).exists():
+        set_state('catalog_source', 'environment')
         return env_path
 
     # 2. Local file in current directory
     local_path = Path("architecture-catalog.json")
     if local_path.exists():
-        return str(local_path)
+        set_state('catalog_source', 'current_directory')
+        return str(local_path.resolve())
 
     # 3. Local file in project root
     project_root = Path(__file__).parent.parent.parent
     root_path = project_root / "architecture-catalog.json"
     if root_path.exists():
-        return str(root_path)
+        set_state('catalog_source', 'project_root')
+        return str(root_path.resolve())
 
     return None
+
+
+def get_catalog_info(catalog_path: str) -> dict:
+    """Get information about the catalog."""
+    info = {
+        'path': catalog_path,
+        'filename': Path(catalog_path).name,
+        'size_kb': 0,
+        'last_modified': None,
+        'architecture_count': 0,
+        'source': get_state('catalog_source') or 'unknown'
+    }
+
+    try:
+        path = Path(catalog_path)
+        stat = path.stat()
+        info['size_kb'] = round(stat.st_size / 1024, 1)
+
+        from datetime import datetime
+        info['last_modified'] = datetime.fromtimestamp(stat.st_mtime).strftime("%Y-%m-%d %H:%M")
+
+        # Count architectures
+        with open(catalog_path, 'r', encoding='utf-8') as f:
+            catalog_data = json.load(f)
+            if isinstance(catalog_data, dict) and 'architectures' in catalog_data:
+                info['architecture_count'] = len(catalog_data['architectures'])
+            elif isinstance(catalog_data, list):
+                info['architecture_count'] = len(catalog_data)
+
+    except Exception:
+        pass
+
+    return info
 
 
 def main() -> None:
@@ -50,7 +91,7 @@ def main() -> None:
         page_title="Azure Architecture Recommendations",
         page_icon=":cloud:",
         layout="wide",
-        initial_sidebar_state="collapsed"
+        initial_sidebar_state="expanded"
     )
 
     # Apply custom styles
@@ -59,11 +100,28 @@ def main() -> None:
     # Initialize session state
     initialize_state()
 
+    # Render sidebar with catalog configuration
+    _render_sidebar()
+
     # Check for catalog
     catalog_path = get_catalog_path()
     if not catalog_path:
-        st.error("Architecture catalog not found. Please ensure `architecture-catalog.json` exists.")
-        st.info("You can generate a catalog using the Catalog Builder GUI or CLI.")
+        st.error("Architecture catalog not found.")
+        st.info("""
+        **To get started, you need an architecture catalog.**
+
+        **Option 1:** Generate one using the Catalog Builder:
+        ```bash
+        ./bin/start-catalog-builder-gui.sh
+        ```
+
+        **Option 2:** Use the sidebar to select an existing catalog file.
+
+        **Option 3:** Set the environment variable:
+        ```bash
+        export ARCHITECTURE_CATALOG_PATH=/path/to/catalog.json
+        ```
+        """)
         return
 
     # Get current step
@@ -77,8 +135,149 @@ def main() -> None:
     elif current_step == 3:
         _render_step3_results()
 
-    # Footer with catalog info
-    _render_footer(catalog_path)
+
+def _render_sidebar() -> None:
+    """Render sidebar with catalog configuration and information."""
+    with st.sidebar:
+        st.title("Configuration")
+
+        # Catalog section
+        st.subheader("Architecture Catalog")
+
+        catalog_path = get_catalog_path()
+
+        if catalog_path:
+            info = get_catalog_info(catalog_path)
+
+            # Show current catalog info
+            st.success(f"**{info['architecture_count']}** architectures loaded")
+
+            with st.expander("Catalog Details", expanded=True):
+                st.markdown(f"**File:** `{info['filename']}`")
+
+                # Show source
+                source_labels = {
+                    'environment': '`ARCHITECTURE_CATALOG_PATH` env var',
+                    'current_directory': 'Current directory',
+                    'project_root': 'Project root',
+                    'user_selected': 'User selected',
+                    'unknown': 'Auto-detected'
+                }
+                source = info.get('source', 'unknown')
+                st.markdown(f"**Source:** {source_labels.get(source, source)}")
+
+                st.markdown(f"**Last Updated:** {info['last_modified'] or 'Unknown'}")
+                st.markdown(f"**Size:** {info['size_kb']} KB")
+
+                # Show full path in a copyable format
+                st.code(info['path'], language=None)
+
+        else:
+            st.warning("No catalog found")
+
+        st.markdown("---")
+
+        # Custom catalog selection
+        st.subheader("Load Different Catalog")
+
+        uploaded_catalog = st.file_uploader(
+            "Upload catalog JSON",
+            type=['json'],
+            key="catalog_upload",
+            help="Upload a custom architecture-catalog.json file"
+        )
+
+        if uploaded_catalog is not None:
+            try:
+                # Validate it's a valid catalog
+                catalog_data = json.load(uploaded_catalog)
+                if isinstance(catalog_data, dict) and 'architectures' in catalog_data:
+                    arch_count = len(catalog_data['architectures'])
+                elif isinstance(catalog_data, list):
+                    arch_count = len(catalog_data)
+                else:
+                    st.error("Invalid catalog format")
+                    return
+
+                # Save to temp location
+                temp_dir = Path(tempfile.gettempdir())
+                temp_catalog = temp_dir / "uploaded-architecture-catalog.json"
+
+                # Reset file position and save
+                uploaded_catalog.seek(0)
+                with open(temp_catalog, 'w', encoding='utf-8') as f:
+                    json.dump(catalog_data, f, indent=2)
+
+                set_state('catalog_path', str(temp_catalog))
+                set_state('catalog_source', 'user_selected')
+                st.success(f"Loaded catalog with {arch_count} architectures")
+
+                # Clear any existing results since catalog changed
+                set_state('scoring_result', None)
+                set_state('questions', None)
+
+                st.rerun()
+
+            except json.JSONDecodeError:
+                st.error("Invalid JSON file")
+            except Exception as e:
+                st.error(f"Error loading catalog: {e}")
+
+        # Or specify a path
+        catalog_input = st.text_input(
+            "Or enter catalog path",
+            placeholder="/path/to/architecture-catalog.json",
+            key="catalog_path_input",
+            help="Full path to an architecture catalog JSON file"
+        )
+
+        if catalog_input and st.button("Load Catalog", use_container_width=True):
+            if Path(catalog_input).exists():
+                set_state('catalog_path', catalog_input)
+                set_state('catalog_source', 'user_selected')
+                set_state('scoring_result', None)
+                set_state('questions', None)
+                st.success("Catalog loaded!")
+                st.rerun()
+            else:
+                st.error("File not found")
+
+        # Reset to auto-detect
+        if get_state('catalog_source') == 'user_selected':
+            if st.button("Reset to Auto-detect", use_container_width=True):
+                set_state('catalog_path', None)
+                set_state('catalog_source', None)
+                set_state('scoring_result', None)
+                set_state('questions', None)
+                st.rerun()
+
+        st.markdown("---")
+
+        # Help section
+        with st.expander("Help"):
+            st.markdown("""
+            **Where does the catalog come from?**
+
+            The app looks for a catalog in this order:
+            1. User-selected (upload or path)
+            2. `ARCHITECTURE_CATALOG_PATH` env var
+            3. `./architecture-catalog.json`
+            4. Project root `architecture-catalog.json`
+
+            **How to generate a catalog?**
+
+            Use the Catalog Builder GUI:
+            ```bash
+            ./bin/start-catalog-builder-gui.sh
+            ```
+
+            Or CLI:
+            ```bash
+            catalog-builder build-catalog \\
+              --repo-path ./architecture-center \\
+              --out architecture-catalog.json
+            ```
+            """)
 
 
 def _apply_custom_styles() -> None:
@@ -506,15 +705,6 @@ def _render_placeholder() -> None:
         """)
 
 
-def _render_footer(catalog_path: str) -> None:
-    """Render footer with catalog info."""
-    try:
-        catalog_stat = Path(catalog_path).stat()
-        from datetime import datetime
-        mod_time = datetime.fromtimestamp(catalog_stat.st_mtime).strftime("%Y-%m-%d %H:%M")
-        st.caption(f"Catalog: {Path(catalog_path).name} (Updated: {mod_time})")
-    except Exception:
-        pass
 
 
 if __name__ == "__main__":

@@ -122,6 +122,36 @@ pip install -e ".[dev]"
 - **PDF Reports** - Professional reports for stakeholders
 - **Multiple Interfaces** - Web app, CLI, or programmatic API
 
+## Sample Data
+
+The repository includes 25 sample context files demonstrating different migration scenarios:
+
+| Scenario | Description |
+|----------|-------------|
+| Java Refactor to AKS | Spring Boot microservices to Kubernetes |
+| .NET Replatform | Web app to Azure App Service |
+| Legacy Tolerate | VB6 application requiring VM hosting |
+| Healthcare HIPAA | Regulated application with compliance requirements |
+| AI/ML Platform | Machine learning workload with GPU needs |
+| Mainframe COBOL | Legacy mainframe with modernization blockers |
+| Startup Cost-Optimized | Serverless/consumption-based architecture |
+| Multi-Region Active-Active | Mission-critical global deployment |
+
+Generate or regenerate sample files:
+
+```bash
+# macOS/Linux
+./bin/generate-sample-data.sh
+
+# Windows PowerShell
+.\bin\generate-sample-data.ps1
+
+# List all available scenarios
+./bin/generate-sample-data.sh --list
+```
+
+See [tests/fixtures/context_files/README.md](tests/fixtures/context_files/README.md) for the full list.
+
 ## Documentation
 
 | Document | Description |
@@ -138,8 +168,9 @@ pip install -e ".[dev]"
 ```
 azure-architecture-recommender/
 ├── bin/                           # Launcher scripts
-│   ├── start-recommendations-app.sh/.ps1
-│   └── start-catalog-builder-gui.sh/.ps1
+│   ├── start-recommendations-app.sh/.ps1    # Launch recommendations app
+│   ├── start-catalog-builder-gui.sh/.ps1    # Launch catalog builder GUI
+│   └── generate-sample-data.sh/.ps1         # Generate test context files
 ├── src/                           # Source code
 │   ├── catalog_builder/           # Catalog generation CLI
 │   ├── catalog_builder_gui/       # Catalog Builder GUI
@@ -147,9 +178,11 @@ azure-architecture-recommender/
 │   └── architecture_recommendations_app/  # Customer web app
 ├── docs/                          # Documentation
 │   ├── design/                    # Design specifications
+│   ├── images/                    # Screenshots
 │   └── *.md                       # Component docs
 ├── tests/                         # Tests
-│   └── fixtures/                  # Test data
+│   ├── fixtures/context_files/    # Sample context files (25 scenarios)
+│   └── generate_sample_data.py    # Sample data generator
 ├── examples/                      # Example files
 └── architecture-catalog.json      # Generated catalog
 ```

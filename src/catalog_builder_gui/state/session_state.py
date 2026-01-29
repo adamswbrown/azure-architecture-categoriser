@@ -66,6 +66,11 @@ def initialize_state() -> None:
             'topics': [],
         }
 
+        # Initialize widget keys for Build Catalog tab text inputs
+        # These need to exist before presets try to update them
+        st.session_state.product_filter_input = ""
+        st.session_state.category_filter_input = ""
+
         # Auto-detect local repo for repo_path only
         # (clone_dir stays as DEFAULT_CLONE_DIR for new clones)
         local_repo = find_local_repo()
