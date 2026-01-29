@@ -1,0 +1,39 @@
+
+Architecture Scoring Engine
+Catalog: architecture-catalog.json (171 architectures)
+Context: prompt2_context_examples/08-enterprise-java-aks-curated.json
+
+╭────────────────────────────── Scoring Summary ───────────────────────────────╮
+│ PaymentGateway                                                               │
+│                                                                              │
+│ Primary Recommendation: Highly Available AKS Cluster With Private Networking │
+│ Confidence: Low                                                              │
+│ Eligible: 4 | Excluded: 167                                                  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+Key Drivers:
+  • Treatment: refactor (confirmed)
+  • Treatment: refactor
+  • Platform Compatibility: Azure Kubernetes Service
+  • App Mod Recommended: azure kubernetes service
+  • Possible match - review assumptions carefully
+
+Key Risks:
+  • Runtime Model: Architecture designed for different runtime pattern
+  • Cost Profile: Cost characteristics may not align with expectations
+  • Assumption: Assumed team maturity: transitional
+  • Assumption: Assumed cost posture: balanced
+
+Top Recommendations:
+
+  1. Highly Available AKS Cluster With Private Networking 30% example_only
+
+  2. App Service Web Application 25% example_only
+
+  3. Serverless Application With Private Networking 23% example_only
+
+  4. Data Pipeline 20% example_only
+
+
+⚠ 3 clarification questions pending
+Run interactively (default) to answer, or use -a question_id=value

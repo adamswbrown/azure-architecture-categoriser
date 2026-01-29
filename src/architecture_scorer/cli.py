@@ -432,6 +432,9 @@ def display_result(result: ScoringResult, verbose: bool, user_answers: Optional[
                 f"  [bold cyan]{i}. {rec.name}[/bold cyan] "
                 f"[bold]{rec.likelihood_score:.0f}%[/bold] {quality_badge}"
             )
+            # Always show URL if available
+            if rec.learn_url:
+                console.print(f"     [blue]URL:[/blue] {rec.learn_url}")
 
             if verbose:
                 console.print(f"     ID: {rec.architecture_id}")
@@ -443,8 +446,6 @@ def display_result(result: ScoringResult, verbose: bool, user_answers: Optional[
                     console.print(f"     [yellow]Struggles:[/yellow] {'; '.join(rec.struggle_summary[:2])}")
                 if rec.assumptions:
                     console.print(f"     [dim]Assumptions: {len(rec.assumptions)}[/dim]")
-                if rec.learn_url:
-                    console.print(f"     [blue]URL:[/blue] {rec.learn_url}")
 
             console.print()
 

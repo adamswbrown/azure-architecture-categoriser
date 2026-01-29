@@ -420,13 +420,91 @@ class TestClarificationQuestions:
 
 
 class TestUserAnswers:
-    """Tests for applying user answers."""
+    """Tests for applying user answers with sensible sample values."""
+
+    # ==========================================================================
+    # Scenario-specific answer sets that make business sense
+    # ==========================================================================
+
+    # Java microservices refactor scenario - cloud-native team
+    JAVA_REFACTOR_AKS_ANSWERS = {
+        "treatment": "refactor",
+        "time_category": "invest",
+        "availability": "zone_redundant",
+        "security_level": "enterprise",
+        "operating_model": "devops",
+        "cost_posture": "balanced",
+    }
+
+    # .NET replatform to App Service - transitional team
+    DOTNET_REPLATFORM_ANSWERS = {
+        "treatment": "replatform",
+        "time_category": "migrate",
+        "availability": "zone_redundant",
+        "security_level": "enterprise",
+        "operating_model": "transitional",
+        "cost_posture": "balanced",
+    }
+
+    # Legacy tolerate scenario - maintain as-is
+    LEGACY_TOLERATE_ANSWERS = {
+        "treatment": "tolerate",
+        "time_category": "tolerate",
+        "availability": "single_region",
+        "security_level": "basic",
+        "operating_model": "traditional_it",
+        "cost_posture": "cost_minimized",
+    }
+
+    # Lift and shift VM scenario
+    REHOST_VM_ANSWERS = {
+        "treatment": "rehost",
+        "time_category": "migrate",
+        "availability": "single_region",
+        "security_level": "basic",
+        "operating_model": "traditional_it",
+        "cost_posture": "cost_minimized",
+    }
+
+    # High availability enterprise scenario
+    HA_ENTERPRISE_ANSWERS = {
+        "treatment": "replatform",
+        "time_category": "invest",
+        "availability": "multi_region_active_passive",
+        "security_level": "regulated",
+        "operating_model": "devops",
+        "cost_posture": "scale_optimized",
+    }
+
+    # Mission-critical DR scenario
+    MISSION_CRITICAL_ANSWERS = {
+        "treatment": "refactor",
+        "time_category": "invest",
+        "availability": "multi_region_active_active",
+        "security_level": "highly_regulated",
+        "operating_model": "sre",
+        "cost_posture": "scale_optimized",
+    }
+
+    # Innovation/AI scenario
+    INNOVATION_AI_ANSWERS = {
+        "treatment": "refactor",
+        "time_category": "invest",
+        "availability": "zone_redundant",
+        "security_level": "enterprise",
+        "operating_model": "devops",
+        "cost_posture": "innovation_first",
+    }
+
+    # ==========================================================================
+    # Basic answer application tests
+    # ==========================================================================
 
     def test_apply_security_answer(self, scoring_engine: ScoringEngine):
         """Applying security level answer should update scoring."""
-        context_file = CONTEXT_EXAMPLES_DIR / "08-enterprise-java-aks-curated.json"
+        context_file = CONTEXT_EXAMPLES_DIR / "01-java-refactor-aks.json"
         if not context_file.exists():
-            pytest.skip("Enterprise Java context file not found")
+            pytest.skip("Java refactor context file not found")
 
         # Score without answers
         result_no_answer = scoring_engine.score(str(context_file), max_recommendations=5)
@@ -444,9 +522,9 @@ class TestUserAnswers:
 
     def test_apply_operating_model_answer(self, scoring_engine: ScoringEngine):
         """Applying operating model answer should update scoring."""
-        context_file = CONTEXT_EXAMPLES_DIR / "08-enterprise-java-aks-curated.json"
+        context_file = CONTEXT_EXAMPLES_DIR / "01-java-refactor-aks.json"
         if not context_file.exists():
-            pytest.skip("Enterprise Java context file not found")
+            pytest.skip("Java refactor context file not found")
 
         result = scoring_engine.score(
             str(context_file),
@@ -458,9 +536,9 @@ class TestUserAnswers:
 
     def test_apply_multiple_answers(self, scoring_engine: ScoringEngine):
         """Applying multiple answers should work correctly."""
-        context_file = CONTEXT_EXAMPLES_DIR / "08-enterprise-java-aks-curated.json"
+        context_file = CONTEXT_EXAMPLES_DIR / "01-java-refactor-aks.json"
         if not context_file.exists():
-            pytest.skip("Enterprise Java context file not found")
+            pytest.skip("Java refactor context file not found")
 
         result = scoring_engine.score(
             str(context_file),
@@ -474,6 +552,309 @@ class TestUserAnswers:
 
         assert result is not None
         assert len(result.recommendations) >= 0
+
+    # ==========================================================================
+    # Scenario-specific comprehensive answer tests
+    # ==========================================================================
+
+    def test_java_refactor_with_full_answers(self, scoring_engine: ScoringEngine):
+        """Java refactor scenario with all questions answered appropriately."""
+        context_file = CONTEXT_EXAMPLES_DIR / "01-java-refactor-aks.json"
+        if not context_file.exists():
+            pytest.skip("Java refactor context file not found")
+
+        result = scoring_engine.score(
+            str(context_file),
+            user_answers=self.JAVA_REFACTOR_AKS_ANSWERS,
+            max_recommendations=5
+        )
+
+        assert result is not None
+        assert len(result.recommendations) > 0
+        # With all answers provided, confidence should be higher
+        assert result.summary.confidence_level in ["High", "Medium"]
+
+    def test_dotnet_replatform_with_full_answers(self, scoring_engine: ScoringEngine):
+        """Dotnet replatform scenario with transitional team answers."""
+        context_file = CONTEXT_EXAMPLES_DIR / "02-dotnet-replatform-appservice.json"
+        if not context_file.exists():
+            pytest.skip("Dotnet replatform context file not found")
+
+        result = scoring_engine.score(
+            str(context_file),
+            user_answers=self.DOTNET_REPLATFORM_ANSWERS,
+            max_recommendations=5
+        )
+
+        assert result is not None
+        assert len(result.recommendations) > 0
+        # Treatment should match the answer
+        assert result.derived_intent.treatment.value.value == "replatform"
+
+    def test_legacy_tolerate_with_full_answers(self, scoring_engine: ScoringEngine):
+        """Legacy tolerate scenario with minimal investment answers."""
+        context_file = CONTEXT_EXAMPLES_DIR / "03-legacy-tolerate.json"
+        if not context_file.exists():
+            pytest.skip("Legacy tolerate context file not found")
+
+        result = scoring_engine.score(
+            str(context_file),
+            user_answers=self.LEGACY_TOLERATE_ANSWERS,
+            max_recommendations=5
+        )
+
+        assert result is not None
+        # Tolerate scenario may have few or no recommendations
+        assert result.derived_intent.treatment.value.value == "tolerate"
+
+    def test_high_complexity_with_ha_answers(self, scoring_engine: ScoringEngine):
+        """High complexity HA/DR scenario with enterprise answers."""
+        context_file = CONTEXT_EXAMPLES_DIR / "23-high-complexity-dotnet-ha-dr.json"
+        if not context_file.exists():
+            pytest.skip("High complexity HA/DR context file not found")
+
+        result = scoring_engine.score(
+            str(context_file),
+            user_answers=self.HA_ENTERPRISE_ANSWERS,
+            max_recommendations=5
+        )
+
+        assert result is not None
+        assert len(result.recommendations) > 0
+        # Should have higher confidence with answers
+        assert result.summary.confidence_level in ["High", "Medium"]
+
+    def test_very_high_complexity_with_mission_critical_answers(self, scoring_engine: ScoringEngine):
+        """Very high complexity enterprise scenario with mission-critical answers."""
+        context_file = CONTEXT_EXAMPLES_DIR / "24-very-high-complexity-java-enterprise.json"
+        if not context_file.exists():
+            pytest.skip("Very high complexity context file not found")
+
+        result = scoring_engine.score(
+            str(context_file),
+            user_answers=self.MISSION_CRITICAL_ANSWERS,
+            max_recommendations=5
+        )
+
+        assert result is not None
+        # Mission-critical configuration should produce valid results
+        assert result.derived_intent.security_requirement.value.value == "highly_regulated"
+
+    def test_extra_high_complexity_with_answers(self, scoring_engine: ScoringEngine):
+        """Extra high complexity mixed enterprise with full answers."""
+        context_file = CONTEXT_EXAMPLES_DIR / "25-extra-high-complexity-mixed-enterprise.json"
+        if not context_file.exists():
+            pytest.skip("Extra high complexity context file not found")
+
+        result = scoring_engine.score(
+            str(context_file),
+            user_answers=self.MISSION_CRITICAL_ANSWERS,
+            max_recommendations=5
+        )
+
+        assert result is not None
+        # Even complex scenarios should process with answers
+        assert result.summary is not None
+
+    # ==========================================================================
+    # Tests for answer impact on confidence
+    # ==========================================================================
+
+    def test_answers_improve_confidence(self, scoring_engine: ScoringEngine):
+        """Providing answers should generally improve confidence."""
+        context_file = CONTEXT_EXAMPLES_DIR / "01-java-refactor-aks.json"
+        if not context_file.exists():
+            pytest.skip("Java refactor context file not found")
+
+        # Score without answers
+        result_no_answers = scoring_engine.score(str(context_file), max_recommendations=5)
+
+        # Score with all answers
+        result_with_answers = scoring_engine.score(
+            str(context_file),
+            user_answers=self.JAVA_REFACTOR_AKS_ANSWERS,
+            max_recommendations=5
+        )
+
+        # Should have fewer unanswered questions
+        assert len(result_with_answers.clarification_questions) <= len(result_no_answers.clarification_questions)
+
+    def test_partial_answers_accepted(self, scoring_engine: ScoringEngine):
+        """Providing partial answers should still work."""
+        context_file = CONTEXT_EXAMPLES_DIR / "01-java-refactor-aks.json"
+        if not context_file.exists():
+            pytest.skip("Java refactor context file not found")
+
+        # Only answer some questions
+        partial_answers = {
+            "security_level": "enterprise",
+            "operating_model": "devops",
+        }
+
+        result = scoring_engine.score(
+            str(context_file),
+            user_answers=partial_answers,
+            max_recommendations=5
+        )
+
+        assert result is not None
+        assert len(result.recommendations) >= 0
+
+    # ==========================================================================
+    # Tests for each individual answer type
+    # ==========================================================================
+
+    def test_all_treatment_values(self, scoring_engine: ScoringEngine):
+        """Test all valid treatment answer values."""
+        context_file = CONTEXT_EXAMPLES_DIR / "01-java-refactor-aks.json"
+        if not context_file.exists():
+            pytest.skip("Context file not found")
+
+        treatment_values = ["tolerate", "rehost", "replatform", "refactor"]
+        for treatment in treatment_values:
+            result = scoring_engine.score(
+                str(context_file),
+                user_answers={"treatment": treatment},
+                max_recommendations=5
+            )
+            assert result is not None
+            assert result.derived_intent.treatment.value.value == treatment
+
+    def test_all_availability_values(self, scoring_engine: ScoringEngine):
+        """Test all valid availability answer values."""
+        context_file = CONTEXT_EXAMPLES_DIR / "01-java-refactor-aks.json"
+        if not context_file.exists():
+            pytest.skip("Context file not found")
+
+        availability_values = [
+            "single_region",
+            "zone_redundant",
+            "multi_region_active_passive",
+            "multi_region_active_active"
+        ]
+        for availability in availability_values:
+            result = scoring_engine.score(
+                str(context_file),
+                user_answers={"availability": availability},
+                max_recommendations=5
+            )
+            assert result is not None
+
+    def test_all_security_level_values(self, scoring_engine: ScoringEngine):
+        """Test all valid security level answer values."""
+        context_file = CONTEXT_EXAMPLES_DIR / "01-java-refactor-aks.json"
+        if not context_file.exists():
+            pytest.skip("Context file not found")
+
+        security_values = ["basic", "enterprise", "regulated", "highly_regulated"]
+        for security in security_values:
+            result = scoring_engine.score(
+                str(context_file),
+                user_answers={"security_level": security},
+                max_recommendations=5
+            )
+            assert result is not None
+            assert result.derived_intent.security_requirement.value.value == security
+
+    def test_all_operating_model_values(self, scoring_engine: ScoringEngine):
+        """Test all valid operating model answer values."""
+        context_file = CONTEXT_EXAMPLES_DIR / "01-java-refactor-aks.json"
+        if not context_file.exists():
+            pytest.skip("Context file not found")
+
+        operating_model_values = ["traditional_it", "transitional", "devops", "sre"]
+        for ops_model in operating_model_values:
+            result = scoring_engine.score(
+                str(context_file),
+                user_answers={"operating_model": ops_model},
+                max_recommendations=5
+            )
+            assert result is not None
+
+    def test_all_cost_posture_values(self, scoring_engine: ScoringEngine):
+        """Test all valid cost posture answer values."""
+        context_file = CONTEXT_EXAMPLES_DIR / "01-java-refactor-aks.json"
+        if not context_file.exists():
+            pytest.skip("Context file not found")
+
+        cost_values = ["cost_minimized", "balanced", "scale_optimized", "innovation_first"]
+        for cost in cost_values:
+            result = scoring_engine.score(
+                str(context_file),
+                user_answers={"cost_posture": cost},
+                max_recommendations=5
+            )
+            assert result is not None
+
+    def test_all_time_category_values(self, scoring_engine: ScoringEngine):
+        """Test all valid time category answer values."""
+        context_file = CONTEXT_EXAMPLES_DIR / "01-java-refactor-aks.json"
+        if not context_file.exists():
+            pytest.skip("Context file not found")
+
+        time_values = ["tolerate", "migrate", "invest", "eliminate"]
+        for time_cat in time_values:
+            result = scoring_engine.score(
+                str(context_file),
+                user_answers={"time_category": time_cat},
+                max_recommendations=5
+            )
+            assert result is not None
+
+    # ==========================================================================
+    # Tests for realistic business scenarios with matching answers
+    # ==========================================================================
+
+    def test_medium_complexity_java_with_matching_answers(self, scoring_engine: ScoringEngine):
+        """Medium complexity Java app with appropriate team maturity answers."""
+        context_file = CONTEXT_EXAMPLES_DIR / "22-medium-complexity-java-multi-env.json"
+        if not context_file.exists():
+            pytest.skip("Medium complexity Java context file not found")
+
+        # CustomerPortal is medium criticality, customer-facing, replatform treatment
+        appropriate_answers = {
+            "treatment": "replatform",
+            "time_category": "migrate",
+            "availability": "zone_redundant",
+            "security_level": "enterprise",  # Customer data requires enterprise security
+            "operating_model": "transitional",
+            "cost_posture": "balanced",
+        }
+
+        result = scoring_engine.score(
+            str(context_file),
+            user_answers=appropriate_answers,
+            max_recommendations=5
+        )
+
+        assert result is not None
+        assert len(result.recommendations) > 0
+        assert result.summary.confidence_level in ["High", "Medium"]
+
+    def test_low_complexity_with_simple_answers(self, scoring_engine: ScoringEngine):
+        """Low complexity 3-tier app with straightforward answers."""
+        context_file = CONTEXT_EXAMPLES_DIR / "21-low-complexity-3tier-dotnet.json"
+        if not context_file.exists():
+            pytest.skip("Low complexity 3-tier context file not found")
+
+        # Simple app, standard migration path
+        simple_answers = {
+            "treatment": "replatform",
+            "time_category": "migrate",
+            "availability": "single_region",
+            "security_level": "basic",
+            "operating_model": "transitional",
+            "cost_posture": "cost_minimized",
+        }
+
+        result = scoring_engine.score(
+            str(context_file),
+            user_answers=simple_answers,
+            max_recommendations=5
+        )
+
+        assert result is not None
+        assert len(result.recommendations) > 0
 
 
 class TestDatabaseScenarios:

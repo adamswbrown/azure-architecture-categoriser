@@ -1,0 +1,44 @@
+
+Architecture Scoring Engine
+Catalog: architecture-catalog.json (171 architectures)
+Context: 
+prompt2_context_examples/06-dotnet-conflicting-signals-appmod-overrides.json
+
+╭────────────────────────────── Scoring Summary ───────────────────────────────╮
+│ ClaimsIntake                                                                 │
+│                                                                              │
+│ Primary Recommendation: App Service Web Application                          │
+│ Confidence: Low                                                              │
+│ Eligible: 5 | Excluded: 164                                                  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+Key Drivers:
+  • Treatment: replatform (confirmed)
+  • Treatment: replatform
+  • App Mod Recommended: azure app service
+  • Operating Model: traditional_it
+  • Possible match - review assumptions carefully
+
+Key Risks:
+  • Availability: May need architecture modifications for required availability
+  • Cost Profile: Cost characteristics may not align with expectations
+  • Assumption: Assumed team maturity: traditional_it
+  • Assumption: Assumed cost posture: balanced
+
+Top Recommendations:
+
+  1. App Service Web Application 26% example_only
+
+  2. Highly Available Vm-based Workload With Private Networking 25% example_only
+
+  3. Mission-critical Serverless Application With Private Networking 24% 
+example_only
+
+  4. Mission-critical Serverless Application With Private Networking 23% 
+example_only
+
+  5. Highly Available Vm-based Workload With Private Networking 22% example_only
+
+
+⚠ 3 clarification questions pending
+Run interactively (default) to answer, or use -a question_id=value

@@ -1,0 +1,35 @@
+
+Architecture Scoring Engine
+Catalog: architecture-catalog.json (171 architectures)
+Context: prompt2_context_examples/19-appmod-blockers-mainframe.json
+
+╭────────────────────────────── Scoring Summary ───────────────────────────────╮
+│ CoreInsurancePolicy                                                          │
+│                                                                              │
+│ Primary Recommendation: Serverless Application With Private Networking       │
+│ Confidence: Low                                                              │
+│ Eligible: 2 | Excluded: 169                                                  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+Key Drivers:
+  • Treatment: refactor (confirmed)
+  • Treatment: refactor
+  • Operating Model: transitional
+  • Complexity: high/medium
+  • Possible match - review assumptions carefully
+
+Key Risks:
+  • Availability: May need architecture modifications for required availability
+  • Assumption: Assumed team maturity: transitional
+  • Close alternative: Data Pipeline (21%)
+  • Catalog quality: example_only (review recommended)
+
+Top Recommendations:
+
+  1. Serverless Application With Private Networking 25% example_only
+
+  2. Data Pipeline 21% example_only
+
+
+⚠ 1 clarification questions pending
+Run interactively (default) to answer, or use -a question_id=value
