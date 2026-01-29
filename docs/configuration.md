@@ -693,9 +693,10 @@ filters:
   # If true, only include documents with YamlMime:Architecture
   require_architecture_yml: false
 
-  # If true, exclude example scenarios and solution ideas
-  # (keep only reference architectures with catalog_quality="curated")
-  exclude_examples: false
+  # Exclude example scenarios and solution ideas (default: true)
+  # Keeps only reference architectures (curated, ai_enriched, ai_suggested)
+  # Set to false to include example_only architectures
+  exclude_examples: true
 
   # Exclude documents with these ms.topic values
   excluded_topics:
@@ -865,24 +866,32 @@ The `catalog_quality` field indicates the reliability of the entry's metadata:
 
 ### Filtering Example Scenarios
 
-Example scenarios and solution ideas are marked as `example_only` because they demonstrate specific implementations rather than prescriptive architectural patterns. To exclude them:
+Example scenarios and solution ideas are marked as `example_only` because they demonstrate specific implementations rather than prescriptive architectural patterns. **By default, they are excluded** from the catalog.
+
+**Default Behavior:**
+The catalog includes only reproducible reference patterns:
+- `curated` - Human-reviewed reference architectures
+- `ai_enriched` - Curated architectures enhanced with AI classifications
+- `ai_suggested` - AI-generated classifications
+
+**To include example scenarios:**
 
 **CLI Flag:**
 ```bash
-# Exclude example scenarios and solution ideas (keep only reference architectures)
-catalog-builder build-catalog --repo-path ./repo --exclude-examples
+# Include example scenarios and solution ideas
+catalog-builder build-catalog --repo-path ./repo --include-examples
 ```
 
 **Config File:**
 ```yaml
 filters:
-  exclude_examples: true  # Only include reference architectures
+  exclude_examples: false  # Include example_only architectures
 ```
 
-**Use cases for excluding examples:**
-- Building a catalog of prescriptive reference patterns
-- When you need authoritative architectural guidance only
-- For enterprise architecture decision frameworks
+**Use cases for including examples:**
+- Exploring the full breadth of Azure architecture patterns
+- Finding inspiration from real-world implementations
+- Learning from diverse implementation approaches
 
 ---
 

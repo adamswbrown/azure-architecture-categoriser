@@ -503,10 +503,12 @@ class FilterConfig(BaseModel):
     # This filters out most non-architecture content
     require_architecture_yml: bool = False
 
-    # If true, exclude example scenarios and solution ideas (keep only reference architectures)
+    # Exclude example scenarios and solution ideas (keep only reference architectures)
     # Example scenarios are marked as catalog_quality="example_only" and are
-    # illustrative implementations rather than prescriptive reference patterns
-    exclude_examples: bool = False
+    # illustrative implementations rather than reproducible reference patterns.
+    # Default is True because examples are not prescriptive patterns.
+    # Set to False to include all architectures including examples.
+    exclude_examples: bool = True
 
     # Exclude documents with these ms.topic values
     # Applied after allowed_topics filter

@@ -39,7 +39,7 @@ def render_config_editor() -> None:
         | Allowed Topics | reference-architecture, example-scenario, solution-idea | Only include these ms.topic values |
         | Allowed Categories | [] (all) | Restrict to specific azureCategories |
         | Require YML | False | Only include docs with YamlMime:Architecture |
-        | Exclude Examples | False | Exclude example-scenario and solution-idea |
+        | Exclude Examples | True | Exclude example-scenario and solution-idea (recommended) |
 
         **3. Classification Thresholds**
         Controls automatic classification assignment:
