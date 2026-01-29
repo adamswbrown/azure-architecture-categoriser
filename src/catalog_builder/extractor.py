@@ -751,15 +751,27 @@ class MetadataExtractor:
         return ""
 
     def _build_learn_url(self, rel_path: str) -> Optional[str]:
-        """Build the GitHub source URL for the document.
+        """Build the Microsoft Learn URL for the document.
 
-        Uses GitHub direct links which are guaranteed to work since we parse from this repo.
-        Format: https://github.com/MicrosoftDocs/architecture-center/blob/main/docs/...
+        Format: https://learn.microsoft.com/en-us/azure/architecture/{path}
+
+        Transformations:
+        - Remove 'docs/' prefix
+        - Remove '.md' suffix
+        - Remove '-content' suffix (repo convention, not in Learn URLs)
         """
         config = get_config().urls
 
-        # GitHub URL is straightforward - just append the relative path
-        return f"{config.github_base_url}{rel_path}"
+        # Transform repo path to Learn URL path
+        path = rel_path
+        if path.startswith('docs/'):
+            path = path[5:]
+        if path.endswith('.md'):
+            path = path[:-3]
+        if path.endswith('-content'):
+            path = path[:-8]
+
+        return f"{config.learn_base_url}/{path}"
 
     def _extract_diagrams(self, doc: ParsedDocument, rel_path: str) -> list[str]:
         """Extract diagram asset paths."""
