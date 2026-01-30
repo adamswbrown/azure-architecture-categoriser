@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   azure-architecture-categoriser:
-    image: ghcr.io/adamswbrown/azure-architecture-categoriser-:latest
+    image: ghcr.io/adamswbrown/azure-architecture-categoriser:latest
     build:
       context: .
       dockerfile: Dockerfile

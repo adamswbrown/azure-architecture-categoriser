@@ -93,7 +93,7 @@ The easiest way to run the application is via Docker - no Python installation re
 
 ```bash
 # Pull and run the container
-docker run -p 8501:8501 -p 8502:8502 ghcr.io/adamswbrown/azure-architecture-categoriser-:latest
+docker run -p 8501:8501 -p 8502:8502 ghcr.io/adamswbrown/azure-architecture-categoriser:latest
 ```
 
 Then open:
