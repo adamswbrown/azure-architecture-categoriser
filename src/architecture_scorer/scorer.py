@@ -175,11 +175,15 @@ class ArchitectureScorer:
         fit_summary = self._generate_fit_summary(matched)
         struggle_summary = self._generate_struggle_summary(mismatched)
 
-        # Construct diagram URL from first diagram asset
+        # Construct diagram URL from first valid diagram asset (skip github.svg logos)
         diagram_url = None
         if arch.diagram_assets:
-            first_diagram = arch.diagram_assets[0]
-            diagram_url = f"https://raw.githubusercontent.com/MicrosoftDocs/architecture-center/main/{first_diagram}"
+            for asset in arch.diagram_assets:
+                # Skip GitHub logo files - they're not actual architecture diagrams
+                if asset.endswith('github.svg') or '/github.svg' in asset:
+                    continue
+                diagram_url = f"https://raw.githubusercontent.com/MicrosoftDocs/architecture-center/main/{asset}"
+                break
 
         return ArchitectureRecommendation(
             architecture_id=arch.architecture_id,

@@ -2,6 +2,84 @@
 
 ## 2026-01-30
 
+### Session: Security Audit & Remediation
+
+**Goal:** Comprehensive security audit and remediation of all identified vulnerabilities.
+
+**Issues Identified & Fixed:**
+
+| Vulnerability | Severity | Status |
+|---------------|----------|--------|
+| XSS via unsafe HTML rendering | High | ✅ Fixed |
+| SSRF in PDF diagram fetching | Medium | ✅ Fixed |
+| Insecure temp file handling | Medium | ✅ Fixed |
+| Information disclosure (stack traces) | Low | ✅ Fixed |
+| GitHub Octocat showing instead of diagrams | Bug | ✅ Fixed |
+| Low confidence threshold not shown in UI | UX | ✅ Fixed |
+
+**Changes Made:**
+
+#### 1. XSS Protection (High Priority)
+Created `src/architecture_recommendations_app/utils/sanitize.py` with:
+- `safe_html()` - HTML entity escaping for user-controlled content
+- `safe_html_attr()` - Attribute-safe escaping for href/src values
+- Applied to all `unsafe_allow_html=True` Streamlit markdown calls
+
+Files modified:
+- `app.py` - Escaped app_name, app_type, criticality, technologies, environments
+- `results_display.py` - Escaped recommendation names, patterns, answer labels
+- `utils/__init__.py` - Exported new security functions
+
+#### 2. SSRF Protection (Medium Priority)
+Added URL validation with domain allowlist:
+- `validate_url()` - Validates URLs before fetching external resources
+- `ALLOWED_URL_DOMAINS` - microsoft.com, azure.com, github.com, etc.
+- `BLOCKED_IP_RANGES` - RFC 1918 ranges, loopback, link-local
+- `BLOCKED_HOSTNAMES` - Cloud metadata endpoints (169.254.169.254)
+
+Files modified:
+- `pdf_generator.py` - Validates diagram URLs before fetch
+- `results_display.py` - Validates learn URLs before href
+
+#### 3. Secure Temp File Handling (Medium Priority)
+- `secure_temp_file()` - Context manager with random names, 0o600 permissions, auto-cleanup
+- `secure_temp_directory()` - Same for directories
+- `sanitize_filename()` - Prevents path traversal attacks
+
+Files modified:
+- `app.py` - Uses secure_temp_file() for context and catalog files
+
+#### 4. Information Disclosure Fix (Low Priority)
+- Stack traces now only shown when `CATALOG_BUILDER_DEBUG=1` environment variable is set
+
+Files modified:
+- `preview_panel.py` - Conditional traceback display
+
+#### 5. GitHub Octocat Diagram Bug
+- Catalog entries had `github.svg` as first diagram asset
+- Fixed scorer to skip `github.svg` files and use actual architecture diagrams
+
+Files modified:
+- `scorer.py` - Skip github.svg when selecting diagram URL
+
+#### 6. Low Confidence Threshold UI
+- Added indicator showing "Low confidence: Scores below X%" in config panel
+
+Files modified:
+- `config_editor.py` - Added st.caption for Low threshold
+
+**Documentation:**
+- Created `docs/securityaudit.md` - Full audit report with remediation details
+- Created `examples/context_files/xss-test-context.json` - XSS test payloads
+
+**Tests:**
+- Created `tests/test_sanitize.py` - 44 comprehensive security tests
+- All 217 tests passing
+
+**GitHub Issue #3 Updated** - Linked security audit documentation
+
+---
+
 ### Session: Reference Architecture Focus
 
 **Goal:** Restrict catalog to reference architectures only (exclude example scenarios and solution ideas).

@@ -55,6 +55,17 @@ ARB_TO_FAMILY = {
     'arb-aiml': ArchitectureFamily.DATA,
 }
 
+# Additional ms.custom values that indicate architecture family
+CUSTOM_TO_FAMILY = {
+    'e2e-hybrid': ArchitectureFamily.IAAS,  # Hybrid connectivity typically involves VMs
+}
+
+# Azure categories that suggest architecture family
+CATEGORY_TO_FAMILY = {
+    'hybrid': ArchitectureFamily.IAAS,
+    'identity': ArchitectureFamily.IAAS,  # Identity extensions often run on VMs
+}
+
 
 class ArchitectureClassifier:
     """Provides AI-assisted classification suggestions for architectures.
@@ -232,6 +243,12 @@ class ArchitectureClassifier:
             if custom_lower in ARB_TO_FAMILY:
                 return ARB_TO_FAMILY[custom_lower], "yml_metadata"
 
+        # Priority 2: Check other ms.custom values (e2e-hybrid, etc.)
+        for custom_value in doc.arch_metadata.ms_custom:
+            custom_lower = custom_value.lower().strip()
+            if custom_lower in CUSTOM_TO_FAMILY:
+                return CUSTOM_TO_FAMILY[custom_lower], "yml_metadata"
+
         config = self._get_config()
         scores: dict[str, int] = {}
         source = "content_analysis"
@@ -261,6 +278,11 @@ class ArchitectureClassifier:
             scores['data'] = scores.get('data', 0) + 2
             source = "service_inference"
 
+        # Networking services suggest iaas (hybrid connectivity often involves VMs)
+        if any(s in service_lower for s in ['expressroute', 'vpn gateway', 'load balancer']):
+            scores['iaas'] = scores.get('iaas', 0) + 2
+            source = "service_inference"
+
         # Boost based on yml products
         for product in doc.arch_metadata.products:
             prod_lower = product.lower()
@@ -270,6 +292,17 @@ class ArchitectureClassifier:
                 scores['iaas'] = scores.get('iaas', 0) + 2
             elif 'app-service' in prod_lower or 'function' in prod_lower:
                 scores['paas'] = scores.get('paas', 0) + 2
+            elif any(p in prod_lower for p in ['expressroute', 'vpn-gateway', 'load-balancer']):
+                scores['iaas'] = scores.get('iaas', 0) + 1.5
+
+        # Boost based on Azure categories (hybrid/identity often involve VMs)
+        for category in doc.arch_metadata.azure_categories:
+            cat_lower = category.lower()
+            if cat_lower in CATEGORY_TO_FAMILY:
+                family = CATEGORY_TO_FAMILY[cat_lower]
+                scores[family.value] = scores.get(family.value, 0) + 1.5
+                if source == "content_analysis":
+                    source = "category_inference"
 
         if scores:
             best = max(scores, key=scores.get)

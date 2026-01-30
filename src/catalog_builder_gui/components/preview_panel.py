@@ -1,11 +1,20 @@
 """Preview panel component for catalog build preview."""
 
+import os
 from pathlib import Path
 from collections import Counter
 
 import streamlit as st
 
 from catalog_builder_gui.state import get_state, set_state
+
+
+def _is_debug_mode() -> bool:
+    """Check if debug mode is enabled via environment variable.
+
+    Set CATALOG_BUILDER_DEBUG=1 to enable full stack traces.
+    """
+    return os.environ.get('CATALOG_BUILDER_DEBUG', '').lower() in ('1', 'true', 'yes')
 
 
 def render_preview_panel() -> None:
@@ -394,8 +403,11 @@ def _run_preview_scan(repo_path: Path, max_files: int) -> None:
 
         except Exception as e:
             st.error(f"Error during scan: {e}")
-            import traceback
-            st.code(traceback.format_exc())
+            # Only show full traceback in debug mode to prevent information disclosure
+            if _is_debug_mode():
+                import traceback
+                with st.expander("Debug Details (CATALOG_BUILDER_DEBUG=1)"):
+                    st.code(traceback.format_exc())
 
 
 def _display_results(
@@ -570,6 +582,8 @@ def _generate_catalog(repo_path: str, output_path: str) -> None:
             progress_bar.empty()
             status_text.empty()
             st.error(f"Error generating catalog: {e}")
-            import traceback
-            with st.expander("Error Details"):
-                st.code(traceback.format_exc())
+            # Only show full traceback in debug mode to prevent information disclosure
+            if _is_debug_mode():
+                import traceback
+                with st.expander("Debug Details (CATALOG_BUILDER_DEBUG=1)"):
+                    st.code(traceback.format_exc())

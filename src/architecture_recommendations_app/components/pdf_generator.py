@@ -11,6 +11,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, Tabl
 from reportlab.lib.enums import TA_LEFT
 
 from architecture_scorer.schema import ScoringResult, ArchitectureRecommendation, ClarificationQuestion
+from architecture_recommendations_app.utils.sanitize import validate_url
 
 
 # Azure brand colors
@@ -210,37 +211,43 @@ def _add_recommendation_to_story(
 
     story.append(Spacer(1, 0.1 * inch))
 
-    # Try to include diagram image
+    # Try to include diagram image (with SSRF protection)
     if rec.diagram_url:
-        try:
-            import requests
-            response = requests.get(rec.diagram_url, timeout=10)
-            if response.ok:
-                img_buffer = BytesIO(response.content)
-
-                # Check if it's an SVG file
-                if rec.diagram_url.lower().endswith('.svg'):
-                    # Use svglib to convert SVG to ReportLab drawing
-                    from svglib.svglib import svg2rlg
-                    drawing = svg2rlg(img_buffer)
-                    if drawing:
-                        # Scale the drawing to fit
-                        target_width = 5 * inch
-                        scale = target_width / drawing.width if drawing.width > 0 else 1
-                        drawing.width = target_width
-                        drawing.height = drawing.height * scale
-                        drawing.scale(scale, scale)
-                        story.append(drawing)
-                        story.append(Spacer(1, 0.1 * inch))
-                else:
-                    # PNG/JPG - use Image directly
-                    img = Image(img_buffer, width=5 * inch, height=2.5 * inch)
-                    img.hAlign = 'CENTER'
-                    story.append(img)
-                    story.append(Spacer(1, 0.1 * inch))
-        except Exception:
-            # Skip image if it fails to load
+        # Validate URL before fetching to prevent SSRF attacks
+        url_valid, url_error = validate_url(rec.diagram_url, allow_http=True)
+        if not url_valid:
+            # Skip invalid URLs silently - don't include external images from untrusted sources
             pass
+        else:
+            try:
+                import requests
+                response = requests.get(rec.diagram_url, timeout=10)
+                if response.ok:
+                    img_buffer = BytesIO(response.content)
+
+                    # Check if it's an SVG file
+                    if rec.diagram_url.lower().endswith('.svg'):
+                        # Use svglib to convert SVG to ReportLab drawing
+                        from svglib.svglib import svg2rlg
+                        drawing = svg2rlg(img_buffer)
+                        if drawing:
+                            # Scale the drawing to fit
+                            target_width = 5 * inch
+                            scale = target_width / drawing.width if drawing.width > 0 else 1
+                            drawing.width = target_width
+                            drawing.height = drawing.height * scale
+                            drawing.scale(scale, scale)
+                            story.append(drawing)
+                            story.append(Spacer(1, 0.1 * inch))
+                    else:
+                        # PNG/JPG - use Image directly
+                        img = Image(img_buffer, width=5 * inch, height=2.5 * inch)
+                        img.hAlign = 'CENTER'
+                        story.append(img)
+                        story.append(Spacer(1, 0.1 * inch))
+            except Exception:
+                # Skip image if it fails to load
+                pass
 
     # Description (truncated)
     if rec.description:

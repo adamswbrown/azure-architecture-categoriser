@@ -49,6 +49,9 @@ def render_config_editor() -> None:
             help="Minimum match score (%) for Medium confidence"
         )
 
+        # Show Low threshold indicator
+        st.caption(f"**Low confidence:** Scores below {medium_score:.0f}%")
+
         # Validate thresholds
         if high_score <= medium_score:
             st.error("High threshold must be greater than Medium threshold")

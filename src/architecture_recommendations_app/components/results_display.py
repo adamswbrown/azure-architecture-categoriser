@@ -3,6 +3,7 @@
 import streamlit as st
 
 from architecture_scorer.schema import ScoringResult, ArchitectureRecommendation, ClarificationQuestion
+from architecture_recommendations_app.utils.sanitize import safe_html, safe_html_attr, validate_url
 
 
 # Quality badge colors
@@ -45,9 +46,10 @@ def render_user_answers(
                         answer_label = opt.label
                         break
 
+                # Escape user-provided values for XSS protection
                 st.markdown(
-                    f"**{q.question_text}**  \n"
-                    f"<span style='color:#0078D4;'>{answer_label}</span>",
+                    f"**{safe_html(q.question_text)}**  \n"
+                    f"<span style='color:#0078D4;'>{safe_html(answer_label)}</span>",
                     unsafe_allow_html=True
                 )
 
@@ -178,18 +180,21 @@ def _render_summary(result: ScoringResult) -> None:
         ("#666", "")
     )
 
-    # Compact metrics row using CSS grid
+    # Compact metrics row using CSS grid (with XSS protection)
+    app_name_escaped = safe_html(result.application_name)
+    confidence_escaped = safe_html(summary.confidence_level)
+
     st.markdown(
         f"""
         <div style="background:#f8f9fa; border-radius:8px; padding:0.75rem 1rem; margin-bottom:1rem;">
             <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:1rem; align-items:center;">
                 <div>
                     <span style="color:#666; font-size:0.7rem; text-transform:uppercase;">Application</span><br/>
-                    <span style="font-weight:600; font-size:1.1rem;">{result.application_name}</span>
+                    <span style="font-weight:600; font-size:1.1rem;">{app_name_escaped}</span>
                 </div>
                 <div style="text-align:center;">
                     <span style="color:#666; font-size:0.7rem; text-transform:uppercase;">Confidence</span><br/>
-                    <span style="font-weight:600; font-size:1.1rem; color:{conf_color};">{summary.confidence_level}</span>
+                    <span style="font-weight:600; font-size:1.1rem; color:{conf_color};">{confidence_escaped}</span>
                 </div>
                 <div style="text-align:center;">
                     <span style="color:#666; font-size:0.7rem; text-transform:uppercase;">Recommendations</span><br/>
@@ -244,12 +249,12 @@ def _render_recommendation_card(rec: ArchitectureRecommendation, is_primary: boo
 
         if is_primary:
             # Primary recommendation - full width, prominent display
-            # Header with title and badges
+            # Header with title and badges (with XSS protection)
             header_col, badge_col = st.columns([3, 1])
 
             with header_col:
-                st.markdown(f"### {rec.name}")
-                st.caption(f"Pattern: {rec.pattern_name}")
+                st.markdown(f"### {safe_html(rec.name)}")
+                st.caption(f"Pattern: {safe_html(rec.pattern_name)}")
 
             with badge_col:
                 # Score and quality badges stacked
@@ -310,21 +315,26 @@ def _render_recommendation_card(rec: ArchitectureRecommendation, is_primary: boo
                         st.markdown(f"**Supporting:** {', '.join(rec.supporting_services[:8])}")
 
             if rec.learn_url:
-                st.markdown(
-                    f'<a href="{rec.learn_url}" target="_blank" style="display:inline-block; '
-                    f'background:#0078D4; color:white; padding:0.5rem 1rem; border-radius:4px; '
-                    f'text-decoration:none; font-weight:500; margin-top:0.5rem;">'
-                    f'Learn more on Microsoft Docs &rarr;</a>',
-                    unsafe_allow_html=True
-                )
+                # Validate URL before using in href (SSRF/XSS protection)
+                url_valid, _ = validate_url(rec.learn_url, allow_http=True)
+                if url_valid:
+                    st.markdown(
+                        f'<a href="{safe_html_attr(rec.learn_url)}" target="_blank" style="display:inline-block; '
+                        f'background:#0078D4; color:white; padding:0.5rem 1rem; border-radius:4px; '
+                        f'text-decoration:none; font-weight:500; margin-top:0.5rem;">'
+                        f'Learn more on Microsoft Docs &rarr;</a>',
+                        unsafe_allow_html=True
+                    )
+                else:
+                    st.caption(f"_Documentation link: {safe_html(rec.learn_url)}_")
 
         else:
-            # Alternative recommendation - compact card
+            # Alternative recommendation - compact card (with XSS protection)
             # Header with score badge
             st.markdown(
                 f'<div style="display:flex; justify-content:space-between; align-items:flex-start;">'
-                f'<div><strong>{rec.name}</strong><br/>'
-                f'<span style="color:#666; font-size:0.85rem;">{rec.pattern_name}</span></div>'
+                f'<div><strong>{safe_html(rec.name)}</strong><br/>'
+                f'<span style="color:#666; font-size:0.85rem;">{safe_html(rec.pattern_name)}</span></div>'
                 f'<span style="background:{score_bg}; color:{score_color}; '
                 f'padding:0.25rem 0.5rem; border-radius:4px; font-size:0.9rem; font-weight:bold;">'
                 f'{score:.0f}%</span>'
@@ -355,12 +365,16 @@ def _render_recommendation_card(rec: ArchitectureRecommendation, is_primary: boo
                     services += f" +{len(rec.core_services) - 4} more"
                 st.caption(f"Services: {services}")
 
-            # Learn more link - styled as visible button
+            # Learn more link - styled as visible button (with URL validation)
             if rec.learn_url:
-                st.markdown(
-                    f'<a href="{rec.learn_url}" target="_blank" style="display:inline-block; '
-                    f'background:#0078D4; color:white; padding:0.3rem 0.6rem; border-radius:4px; '
-                    f'text-decoration:none; font-size:0.85rem; margin-top:0.3rem;">'
-                    f'View details &rarr;</a>',
-                    unsafe_allow_html=True
-                )
+                url_valid, _ = validate_url(rec.learn_url, allow_http=True)
+                if url_valid:
+                    st.markdown(
+                        f'<a href="{safe_html_attr(rec.learn_url)}" target="_blank" style="display:inline-block; '
+                        f'background:#0078D4; color:white; padding:0.3rem 0.6rem; border-radius:4px; '
+                        f'text-decoration:none; font-size:0.85rem; margin-top:0.3rem;">'
+                        f'View details &rarr;</a>',
+                        unsafe_allow_html=True
+                    )
+                else:
+                    st.caption(f"_Link: {safe_html(rec.learn_url)}_")

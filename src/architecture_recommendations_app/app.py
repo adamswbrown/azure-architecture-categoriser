@@ -17,6 +17,7 @@ if str(src_path) not in sys.path:
 
 from architecture_recommendations_app.state import initialize_state, get_state, set_state, clear_state
 from architecture_recommendations_app.utils.validation import validate_uploaded_file
+from architecture_recommendations_app.utils.sanitize import safe_html, secure_temp_file
 from architecture_recommendations_app.components.upload_section import render_upload_section
 from architecture_recommendations_app.components.results_display import render_results, render_user_answers
 from architecture_recommendations_app.components.pdf_generator import generate_pdf_report
@@ -356,11 +357,18 @@ def _render_sidebar() -> None:
                             st.error("Invalid catalog format")
                             return
 
-                        temp_dir = Path(tempfile.gettempdir())
-                        temp_catalog = temp_dir / "uploaded-architecture-catalog.json"
-                        uploaded_catalog_inner.seek(0)
-                        with open(temp_catalog, 'w', encoding='utf-8') as f:
-                            json.dump(catalog_data, f, indent=2)
+                        # Use secure temp file with random name (security fix for predictable paths)
+                        import os as _os
+                        fd, temp_catalog_path = tempfile.mkstemp(suffix='.json', prefix='catalog_')
+                        try:
+                            _os.chmod(temp_catalog_path, 0o600)  # Restrictive permissions
+                            uploaded_catalog_inner.seek(0)
+                            with _os.fdopen(fd, 'w', encoding='utf-8') as f:
+                                json.dump(catalog_data, f, indent=2)
+                        except Exception:
+                            _os.close(fd)
+                            raise
+                        temp_catalog = Path(temp_catalog_path)
 
                         set_state('catalog_path', str(temp_catalog))
                         set_state('catalog_source', 'user_selected')
@@ -879,10 +887,14 @@ def _render_file_summary(data: list) -> None:
     if context.get("app_overview"):
         overview = context["app_overview"][0] if context["app_overview"] else {}
 
-        app_name = overview.get("application", "Unknown")
-        app_type = overview.get("app_type", "Unknown")
-        criticality = overview.get("business_crtiticality", overview.get("business_criticality", "Unknown"))
+        # Escape user-provided values to prevent XSS (Security fix)
+        app_name = safe_html(overview.get("application", "Unknown"))
+        app_type = safe_html(overview.get("app_type", "Unknown"))
+        criticality = safe_html(overview.get("business_crtiticality", overview.get("business_criticality", "Unknown")))
         treatment = overview.get("treatment", "Unknown")
+        treatment_display = safe_html(treatment.title() if treatment else "Unknown")
+        app_type_truncated = safe_html(str(overview.get("app_type", "Unknown"))[:25])
+        app_type_suffix = "..." if len(str(overview.get("app_type", "Unknown"))) > 25 else ""
 
         # Compact card-style display
         st.markdown(
@@ -895,7 +907,7 @@ def _render_file_summary(data: list) -> None:
                     </div>
                     <div>
                         <div style="color:#666; font-size:0.75rem; text-transform:uppercase; margin-bottom:0.25rem;">Type</div>
-                        <div style="font-weight:600; font-size:0.95rem;">{app_type[:25]}{'...' if len(app_type) > 25 else ''}</div>
+                        <div style="font-weight:600; font-size:0.95rem;">{app_type_truncated}{app_type_suffix}</div>
                     </div>
                     <div>
                         <div style="color:#666; font-size:0.75rem; text-transform:uppercase; margin-bottom:0.25rem;">Criticality</div>
@@ -903,7 +915,7 @@ def _render_file_summary(data: list) -> None:
                     </div>
                     <div>
                         <div style="color:#666; font-size:0.75rem; text-transform:uppercase; margin-bottom:0.25rem;">Treatment</div>
-                        <div style="font-weight:600; font-size:0.95rem; color:#0078D4;">{treatment.title() if treatment else 'Unknown'}</div>
+                        <div style="font-weight:600; font-size:0.95rem; color:#0078D4;">{treatment_display}</div>
                     </div>
                 </div>
             </div>
@@ -911,12 +923,12 @@ def _render_file_summary(data: list) -> None:
             unsafe_allow_html=True
         )
 
-    # Technologies detected - as styled tags
+    # Technologies detected - as styled tags (escaped for XSS protection)
     technologies = context.get("detected_technology_running", [])
     if technologies:
         tech_tags = "".join([
             f'<span style="display:inline-block; background:#e8f4fd; color:#0078D4; '
-            f'padding:0.2rem 0.5rem; margin:0.15rem; border-radius:4px; font-size:0.8rem;">{tech}</span>'
+            f'padding:0.2rem 0.5rem; margin:0.15rem; border-radius:4px; font-size:0.8rem;">{safe_html(tech)}</span>'
             for tech in technologies[:12]
         ])
         if len(technologies) > 12:
@@ -932,7 +944,7 @@ def _render_file_summary(data: list) -> None:
             unsafe_allow_html=True
         )
 
-    # Server summary - inline compact
+    # Server summary - inline compact (escaped for XSS protection)
     servers = context.get("server_details", [])
     if servers:
         envs = set(s.get("environment", "Unknown") for s in servers)
@@ -946,23 +958,27 @@ def _render_file_summary(data: list) -> None:
         if linux_count:
             os_parts.append(f"{linux_count} Linux")
 
+        # Escape environment names for XSS protection
+        envs_escaped = ', '.join(safe_html(env) for env in envs)
+        os_parts_display = safe_html(', '.join(os_parts) if os_parts else 'Unknown')
+
         st.markdown(
             f"""
             <div style="display:flex; gap:2rem; color:#666; font-size:0.85rem; margin-bottom:1rem;">
                 <span><strong>{len(servers)}</strong> Server{'s' if len(servers) != 1 else ''}</span>
-                <span><strong>{', '.join(envs)}</strong> Environment{'s' if len(envs) != 1 else ''}</span>
-                <span><strong>{', '.join(os_parts) if os_parts else 'Unknown'}</strong></span>
+                <span><strong>{envs_escaped}</strong> Environment{'s' if len(envs) != 1 else ''}</span>
+                <span><strong>{os_parts_display}</strong></span>
             </div>
             """,
             unsafe_allow_html=True
         )
 
-    # App Mod results summary - collapsible
+    # App Mod results summary - collapsible (escaped for XSS protection)
     app_mod = context.get("App Mod results", [])
     if app_mod:
         with st.expander("App Modernization Assessment", expanded=False):
             for result in app_mod:
-                tech = result.get("technology", "Unknown")
+                tech = safe_html(result.get("technology", "Unknown"))
                 summary = result.get("summary", {})
                 recommended = result.get("recommended_targets", [])
 
@@ -975,7 +991,9 @@ def _render_file_summary(data: list) -> None:
                 if modernization_feasible:
                     badges.append('<span style="background:#DFF6DD; color:#107C10; padding:0.15rem 0.4rem; border-radius:3px; font-size:0.75rem; margin-right:0.3rem;">Modernization Feasible</span>')
 
-                targets_str = f" &rarr; {', '.join(recommended)}" if recommended else ""
+                # Escape recommended targets for XSS protection
+                targets_escaped = ', '.join(safe_html(t) for t in recommended)
+                targets_str = f" &rarr; {targets_escaped}" if recommended else ""
 
                 st.markdown(
                     f"""<div style="margin-bottom:0.5rem;">
@@ -989,18 +1007,15 @@ def _render_file_summary(data: list) -> None:
 def _get_questions(data: list, catalog_path: str) -> list:
     """Get clarification questions without full scoring."""
     try:
-        # Write to temp file for engine
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        # Use secure temp file with context manager for automatic cleanup
+        with secure_temp_file(suffix='.json', prefix='context_') as (f, temp_path):
             json.dump(data, f)
-            temp_path = f.name
+            f.flush()  # Ensure data is written before reading
 
-        try:
             engine = ScoringEngine()
             engine.load_catalog(catalog_path)
-            questions = engine.get_questions(temp_path)
+            questions = engine.get_questions(str(temp_path))
             return questions
-        finally:
-            Path(temp_path).unlink(missing_ok=True)
 
     except Exception as e:
         st.warning(f"Could not load questions: {e}")
@@ -1010,22 +1025,19 @@ def _get_questions(data: list, catalog_path: str) -> list:
 def _score_context(data: list, catalog_path: str, user_answers: dict) -> ScoringResult | None:
     """Score the context data using the scoring engine."""
     try:
-        # Write to temp file for engine
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        # Use secure temp file with context manager for automatic cleanup
+        with secure_temp_file(suffix='.json', prefix='context_') as (f, temp_path):
             json.dump(data, f)
-            temp_path = f.name
+            f.flush()  # Ensure data is written before reading
 
-        try:
             engine = ScoringEngine()
             engine.load_catalog(catalog_path)
             result = engine.score(
-                temp_path,
+                str(temp_path),
                 user_answers=user_answers if user_answers else None,
                 max_recommendations=5
             )
             return result
-        finally:
-            Path(temp_path).unlink(missing_ok=True)
 
     except Exception as e:
         st.error(f"Error analyzing context: {e}")

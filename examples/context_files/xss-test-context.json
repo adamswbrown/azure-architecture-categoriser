@@ -1,0 +1,71 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "<script>alert('XSS in app name')</script>",
+        "app_type": "<img src=x onerror=\"alert('XSS in app_type')\">",
+        "business_criticality": "\" onclick=\"alert('XSS in criticality')\" data-x=\"",
+        "treatment": "<svg onload=alert('XSS in treatment')>refactor"
+      }
+    ],
+    "detected_technology_running": [
+      "<script>alert('XSS in tech 1')</script>",
+      "Java 11",
+      "<img src=x onerror=alert(1)>",
+      "Spring Boot",
+      "<svg/onload=alert('tech')>",
+      "PostgreSQL",
+      "javascript:alert('XSS')",
+      "Docker",
+      "<iframe src='javascript:alert(1)'>",
+      "Kubernetes"
+    ],
+    "server_details": [
+      {
+        "server_name": "<script>alert('server1')</script>",
+        "environment": "<img src=x onerror=alert('env')>Production",
+        "OperatingSystem": "Windows Server 2019",
+        "TotalMemoryMB": 16384,
+        "NumberOfCores": 8
+      },
+      {
+        "server_name": "normal-server-02",
+        "environment": "Development",
+        "OperatingSystem": "Ubuntu 22.04",
+        "TotalMemoryMB": 8192,
+        "NumberOfCores": 4
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": "<script>alert('XSS in App Mod tech')</script>Java",
+        "summary": {
+          "container_ready": true,
+          "modernization_feasible": true,
+          "assessment_date": "2024-01-15"
+        },
+        "recommended_targets": [
+          "<script>alert('target1')</script>AKS",
+          "Azure App Service",
+          "<img src=x onerror=alert('target2')>"
+        ],
+        "platform_compatibility": [
+          {
+            "platform": "Azure Kubernetes Service",
+            "status": "Supported",
+            "notes": "Fully compatible"
+          }
+        ]
+      }
+    ],
+    "database_details": [
+      {
+        "database_name": "<script>alert('db')</script>",
+        "database_type": "PostgreSQL",
+        "version": "14.0",
+        "size_gb": 50
+      }
+    ],
+    "notes": "This is a test file containing XSS payloads to verify security fixes. If you see any alert boxes or script execution, the XSS protection is NOT working correctly. All values should be displayed as escaped text (e.g., &lt;script&gt; instead of <script>)."
+  }
+]
