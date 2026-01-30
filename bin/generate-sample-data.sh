@@ -21,4 +21,4 @@ fi
 python3 tests/generate_sample_data.py "$@"
 
 echo ""
-echo "Sample files are in: tests/fixtures/context_files/"
+echo "Sample files are in: examples/context_files/"

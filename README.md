@@ -35,6 +35,12 @@ This tool **integrates with** Dr. Migrate's workflow - it is not a feature of Dr
 
 **Note:** The Recommendations App uses the Architecture Scorer as its backend engine. Most users will never need to use the CLI directly.
 
+## Prerequisites
+
+- **Python 3.9+** - Required to run the application
+- **Git** - Required to clone the Azure Architecture Center repository when generating catalogs
+- **pip** - Python package manager for installing dependencies
+
 ## Quick Start (Typical User Flow)
 
 ### Step 1: Install
@@ -211,7 +217,7 @@ Generate or regenerate sample files:
 ./bin/generate-sample-data.sh --list
 ```
 
-See [tests/fixtures/context_files/README.md](tests/fixtures/context_files/README.md) for the full list.
+See [examples/context_files/README.md](examples/context_files/README.md) for the full list.
 
 ## Documentation
 
@@ -242,9 +248,9 @@ azure-architecture-recommender/
 │   ├── images/                    # Screenshots
 │   └── *.md                       # Component docs
 ├── tests/                         # Tests
-│   ├── fixtures/context_files/    # Sample context files (25 scenarios)
 │   └── generate_sample_data.py    # Sample data generator
 ├── examples/                      # Example files
+│   └── context_files/             # Sample context files (25 scenarios)
 └── architecture-catalog.json      # Generated catalog
 ```
 

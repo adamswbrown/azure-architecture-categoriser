@@ -30,4 +30,4 @@ try {
 & $pythonCmd tests/generate_sample_data.py $args
 
 Write-Host ""
-Write-Host "Sample files are in: tests/fixtures/context_files/"
+Write-Host "Sample files are in: examples/context_files/"

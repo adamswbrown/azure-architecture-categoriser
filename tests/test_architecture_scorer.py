@@ -22,8 +22,8 @@ from architecture_scorer.schema import (
 )
 
 
-# Path to test context examples
-CONTEXT_EXAMPLES_DIR = Path(__file__).parent / "fixtures" / "context_files"
+# Path to test context examples (in examples/ for user discoverability)
+CONTEXT_EXAMPLES_DIR = Path(__file__).parent.parent / "examples" / "context_files"
 CATALOG_PATH = Path("/tmp/enhanced-catalog.json")
 
 

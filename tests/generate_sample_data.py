@@ -1274,7 +1274,7 @@ def main():
     parser.add_argument(
         '--output-dir',
         type=Path,
-        default=Path(__file__).parent / 'fixtures' / 'context_files',
+        default=Path(__file__).parent.parent / 'examples' / 'context_files',
         help='Output directory for generated files'
     )
     parser.add_argument(
