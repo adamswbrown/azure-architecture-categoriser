@@ -481,6 +481,7 @@ def _generate_catalog(repo_path: str, output_path: str) -> None:
     """Generate the full catalog and display results."""
     import json
     from catalog_builder.catalog import CatalogBuilder
+    from catalog_builder.schema import GenerationSettings
 
     config = get_state('config')
 
@@ -491,6 +492,15 @@ def _generate_catalog(repo_path: str, output_path: str) -> None:
     # Apply config to global state
     import catalog_builder.config as config_module
     config_module._config = config
+
+    # Create generation settings to document what was included
+    generation_settings = GenerationSettings(
+        allowed_topics=config.filters.allowed_topics or [],
+        allowed_products=config.filters.allowed_products,
+        allowed_categories=config.filters.allowed_categories,
+        require_architecture_yml=config.filters.require_architecture_yml,
+        exclude_examples=config.filters.exclude_examples,
+    )
 
     with st.spinner("Building full catalog (this may take a minute)..."):
         progress_bar = st.progress(0)
@@ -505,7 +515,7 @@ def _generate_catalog(repo_path: str, output_path: str) -> None:
             status_text.text("Scanning repository...")
             progress_bar.progress(30)
 
-            catalog = builder.build()
+            catalog = builder.build(generation_settings=generation_settings)
 
             status_text.text("Writing catalog file...")
             progress_bar.progress(80)

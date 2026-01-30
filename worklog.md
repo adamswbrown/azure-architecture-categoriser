@@ -123,6 +123,55 @@ Created new `docs/reviewing-the-catalog.md` with:
 
 ---
 
+### Session: Generation Settings in Catalog
+
+**Goal:** Add generation settings metadata to the catalog JSON so users can see at a glance what filters were used to create it.
+
+**Changes Made:**
+
+1. **New Schema Model** - Added `GenerationSettings` to `catalog_builder/schema.py`:
+   - `allowed_topics` - Document types included (reference-architecture, etc.)
+   - `allowed_products` - Product filters applied
+   - `allowed_categories` - Category filters applied
+   - `require_architecture_yml` - Whether YamlMime:Architecture was required
+   - `exclude_examples` - Whether examples were excluded
+   - `description` property - Human-readable summary
+
+2. **Catalog Schema** - Added `generation_settings` field to `ArchitectureCatalog`
+
+3. **CLI** - Updated `build-catalog` command to create and save generation settings
+
+4. **GUI** - Updated `_generate_catalog()` to include generation settings
+
+5. **Stats Command** - Updated to display generation settings when viewing a catalog
+
+**Example Catalog Header:**
+```json
+{
+  "version": "1.0.0",
+  "generated_at": "2026-01-30T...",
+  "source_repo": "/path/to/architecture-center",
+  "source_commit": "abc123...",
+  "generation_settings": {
+    "allowed_topics": ["reference-architecture"],
+    "allowed_products": null,
+    "allowed_categories": null,
+    "require_architecture_yml": false,
+    "exclude_examples": false
+  },
+  "total_architectures": 51,
+  "architectures": [...]
+}
+```
+
+**Files Modified:**
+- `src/catalog_builder/schema.py` - Added GenerationSettings model
+- `src/catalog_builder/catalog.py` - Pass settings through build pipeline
+- `src/catalog_builder/cli.py` - Create and pass settings, display in stats
+- `src/catalog_builder_gui/components/preview_panel.py` - Include settings in GUI generation
+
+---
+
 ### Session: UX Polish & PDF Enhancements
 
 **Goal:** Improve visual density, add missing features to PDF reports, handle edge cases.

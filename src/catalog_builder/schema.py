@@ -333,6 +333,48 @@ class ArchitectureEntry(BaseModel):
         return self.core_services + self.supporting_services
 
 
+class GenerationSettings(BaseModel):
+    """Settings used to generate the catalog - for reproducibility and clarity."""
+    allowed_topics: list[str] = Field(
+        default_factory=list,
+        description="Document types included (e.g., reference-architecture, example-scenario, solution-idea)"
+    )
+    allowed_products: Optional[list[str]] = Field(
+        None,
+        description="Product filters applied (None = all products)"
+    )
+    allowed_categories: Optional[list[str]] = Field(
+        None,
+        description="Category filters applied (None = all categories)"
+    )
+    require_architecture_yml: bool = Field(
+        default=False,
+        description="Whether only YamlMime:Architecture files were included"
+    )
+    exclude_examples: bool = Field(
+        default=False,
+        description="Whether example scenarios were excluded"
+    )
+
+    @property
+    def description(self) -> str:
+        """Human-readable description of settings."""
+        parts = []
+        if self.allowed_topics:
+            parts.append(f"Topics: {', '.join(self.allowed_topics)}")
+        else:
+            parts.append("Topics: all")
+        if self.allowed_products:
+            parts.append(f"Products: {', '.join(self.allowed_products)}")
+        if self.allowed_categories:
+            parts.append(f"Categories: {', '.join(self.allowed_categories)}")
+        if self.require_architecture_yml:
+            parts.append("YamlMime:Architecture required")
+        if self.exclude_examples:
+            parts.append("Examples excluded")
+        return "; ".join(parts) if parts else "Default settings (all content)"
+
+
 class ArchitectureCatalog(BaseModel):
     """Complete architecture catalog."""
     version: str = Field(default="1.0.0", description="Catalog schema version")
@@ -342,6 +384,10 @@ class ArchitectureCatalog(BaseModel):
     )
     source_repo: str = Field(..., description="Source repository URL or path")
     source_commit: Optional[str] = Field(None, description="Source repository commit hash")
+    generation_settings: Optional[GenerationSettings] = Field(
+        None,
+        description="Filter settings used to generate this catalog"
+    )
     total_architectures: int = Field(default=0, description="Total number of architectures")
     architectures: list[ArchitectureEntry] = Field(
         default_factory=list,

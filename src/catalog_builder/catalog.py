@@ -9,7 +9,7 @@ from .classifier import ArchitectureClassifier
 from .detector import ArchitectureDetector
 from .extractor import GitMetadataExtractor, MetadataExtractor
 from .parser import MarkdownParser
-from .schema import ArchitectureCatalog, ArchitectureEntry
+from .schema import ArchitectureCatalog, ArchitectureEntry, GenerationSettings
 
 
 class CatalogBuilder:
@@ -30,8 +30,16 @@ class CatalogBuilder:
         self.classifier = ArchitectureClassifier()
         self.git_extractor = GitMetadataExtractor(repo_path)
 
-    def build(self) -> ArchitectureCatalog:
-        """Build the complete architecture catalog."""
+    def build(
+        self,
+        generation_settings: Optional[GenerationSettings] = None
+    ) -> ArchitectureCatalog:
+        """Build the complete architecture catalog.
+
+        Args:
+            generation_settings: Optional settings that were used to filter/generate
+                this catalog. Stored in the catalog for reproducibility.
+        """
         self.progress("Starting catalog build...")
 
         # Find all markdown files
@@ -59,6 +67,7 @@ class CatalogBuilder:
         catalog = ArchitectureCatalog(
             source_repo=str(self.repo_path),
             source_commit=self.git_extractor.get_current_commit(),
+            generation_settings=generation_settings,
             architectures=entries,
         )
 
@@ -165,14 +174,21 @@ class CatalogValidator:
 def build_catalog(
     repo_path: Path,
     output_path: Path,
-    progress_callback: Optional[Callable[[str], None]] = None
+    progress_callback: Optional[Callable[[str], None]] = None,
+    generation_settings: Optional[GenerationSettings] = None
 ) -> tuple[ArchitectureCatalog, list[str]]:
     """Build and save the architecture catalog.
+
+    Args:
+        repo_path: Path to the architecture-center repository
+        output_path: Path to save the catalog JSON
+        progress_callback: Optional callback for progress messages
+        generation_settings: Optional settings documenting how the catalog was filtered
 
     Returns the catalog and a list of validation issues.
     """
     builder = CatalogBuilder(repo_path, progress_callback)
-    catalog = builder.build()
+    catalog = builder.build(generation_settings=generation_settings)
 
     validator = CatalogValidator()
     issues = validator.validate(catalog)

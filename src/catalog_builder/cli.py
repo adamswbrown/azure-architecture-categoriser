@@ -10,7 +10,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 
 from .catalog import build_catalog, CatalogBuilder, CatalogValidator
 from .config import load_config, save_default_config, find_config_file, reset_config, get_config
-from .schema import ArchitectureCatalog, ExtractionConfidence
+from .schema import ArchitectureCatalog, ExtractionConfidence, GenerationSettings
 
 
 console = Console()
@@ -153,6 +153,15 @@ def build_catalog_cmd(
         console.print(f"Filters: {'; '.join(active_filters)}")
     console.print()
 
+    # Create generation settings to document what was included
+    generation_settings = GenerationSettings(
+        allowed_topics=cfg.filters.allowed_topics or [],
+        allowed_products=cfg.filters.allowed_products,
+        allowed_categories=cfg.filters.allowed_categories,
+        require_architecture_yml=cfg.filters.require_architecture_yml,
+        exclude_examples=cfg.filters.exclude_examples,
+    )
+
     def progress_callback(message: str):
         if verbose:
             console.print(f"  {message}")
@@ -166,7 +175,12 @@ def build_catalog_cmd(
         task = progress.add_task("Building catalog...", total=None)
 
         try:
-            catalog, issues = build_catalog(repo_path, out, progress_callback)
+            catalog, issues = build_catalog(
+                repo_path,
+                out,
+                progress_callback,
+                generation_settings=generation_settings
+            )
         except Exception as e:
             console.print(f"\n[red]Error building catalog:[/red] {e}")
             if verbose:
@@ -437,6 +451,23 @@ def stats(catalog: Path):
     console.print(f"Source: {cat.source_repo}")
     if cat.source_commit:
         console.print(f"Commit: {cat.source_commit[:12]}")
+
+    # Show generation settings if present
+    if cat.generation_settings:
+        console.print(f"\n[bold]Generation Settings[/bold]")
+        gs = cat.generation_settings
+        if gs.allowed_topics:
+            console.print(f"  Topics: {', '.join(gs.allowed_topics)}")
+        else:
+            console.print(f"  Topics: all (no filter)")
+        if gs.allowed_products:
+            console.print(f"  Products: {', '.join(gs.allowed_products)}")
+        if gs.allowed_categories:
+            console.print(f"  Categories: {', '.join(gs.allowed_categories)}")
+        if gs.require_architecture_yml:
+            console.print(f"  YamlMime:Architecture: required")
+        if gs.exclude_examples:
+            console.print(f"  Examples: excluded")
 
     # Aggregate stats
     total_services = sum(len(a.azure_services_used) for a in cat.architectures)
