@@ -45,14 +45,14 @@ def render_preview_panel() -> None:
             st.markdown("""
             | Setting | Default Value | Result |
             |---------|---------------|--------|
-            | **Topics** | reference-architecture, example-scenario, solution-idea | All topic types |
-            | **Exclude Examples** | No | All ~170 architectures (curated + examples) |
+            | **Topics** | reference-architecture | Production-ready patterns only |
+            | **Exclude Examples** | Yes (implicit) | ~50 curated architectures |
             | **Products** | All | No product filtering |
             | **Categories** | All | No category filtering |
             | **Require YML** | No | Include detected architectures |
 
-            **Note:** Example scenarios are included by default. These are learning/POC architectures
-            (not production-ready patterns). Check "Exclude Examples" in Filters for production catalogs.
+            **Note:** Only reference architectures are included by default. These are curated,
+            production-ready patterns. To include example scenarios, use Filter Presets > "Examples Included".
             """)
 
         col1, col2 = st.columns([2, 1])
