@@ -47,8 +47,8 @@ This tool **integrates with** Dr. Migrate's workflow - it is not a feature of Dr
 
 ```bash
 # Clone this repository
-git clone https://github.com/adamswbrown/azure-architecture-categoriser-.git
-cd azure-architecture-categoriser-
+git clone https://github.com/adamswbrown/azure-architecture-categoriser.git
+cd azure-architecture-categoriser
 
 # Install with GUI support
 pip install -e ".[recommendations-app,gui]"
@@ -104,8 +104,8 @@ Then open:
 
 ```bash
 # Clone the repo (for docker-compose.yml)
-git clone https://github.com/adamswbrown/azure-architecture-categoriser-.git
-cd azure-architecture-categoriser-
+git clone https://github.com/adamswbrown/azure-architecture-categoriser.git
+cd azure-architecture-categoriser
 
 # Start services
 docker compose up -d
@@ -160,8 +160,8 @@ architecture-scorer score \
 
 ```bash
 # Clone this repository
-git clone https://github.com/adamswbrown/azure-architecture-categoriser-.git
-cd azure-architecture-categoriser-
+git clone https://github.com/adamswbrown/azure-architecture-categoriser.git
+cd azure-architecture-categoriser
 
 # Base installation (CLI tools)
 pip install -e .

@@ -10,8 +10,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  # Note: Using explicit name without trailing hyphen (repo name has trailing hyphen which Docker doesn't support)
-  IMAGE_NAME: adamswbrown/azure-architecture-categoriser
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build:
