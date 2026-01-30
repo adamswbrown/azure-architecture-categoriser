@@ -10,13 +10,13 @@ PRODUCT_PRESETS = {
     'Show All (No Filter)': {
         'products': [],
         'categories': [],
-        'description': 'Complete catalog, no restrictions (~289 architectures)',
+        'description': 'All reference architectures (~50)',
         'icon': '🌐',
     },
     'Azure (All)': {
         'products': ['azure'],
         'categories': [],
-        'description': 'All Azure services (~280 architectures)',
+        'description': 'All Azure reference architectures',
         'icon': '☁️',
     },
     'Azure Kubernetes (AKS)': {
@@ -183,12 +183,12 @@ def render_filter_presets() -> None:
 
         **1. Topic Filters (ms.topic)**
         Controls which document types are included:
-        - `reference-architecture` - Curated, production-ready patterns (~50 docs)
+        - `reference-architecture` - Curated, production-ready patterns (~50 docs) **[DEFAULT]**
         - `example-scenario` - Real-world implementation examples (~100 docs)
         - `solution-idea` - Conceptual solution designs (~80 docs)
 
-        By default, all three topic types are included. Other document types (tutorials, guides,
-        how-to articles) are excluded as they're not architecture patterns.
+        By default, only reference architectures are included. These are production-ready,
+        curated patterns suitable for enterprise workloads.
 
         **2. Product Filters**
         Filter by Azure products mentioned in the architecture. Uses prefix matching:
@@ -209,10 +209,10 @@ def render_filter_presets() -> None:
         ### Typical Counts
         | Filter | Approximate Results |
         |--------|---------------------|
-        | No filters | ~171 architectures |
-        | Reference only | ~50 architectures |
-        | Azure Kubernetes | ~25 architectures |
-        | AI/ML category | ~30 architectures |
+        | Reference only (default) | ~50 architectures |
+        | + Examples & Solution Ideas | ~171 architectures |
+        | Azure Kubernetes | ~15 architectures |
+        | AI/ML category | ~10 architectures |
         """)
 
     config = get_state('config')
@@ -246,9 +246,6 @@ def render_filter_presets() -> None:
         config.filters.allowed_categories = None
         config.filters.require_architecture_yml = False
         set_state('config', config)
-        # Update the text input widget states in the Build tab
-        st.session_state['product_filter_input'] = ""
-        st.session_state['category_filter_input'] = ""
         st.success("All filters cleared!")
         st.rerun()
 
@@ -272,8 +269,6 @@ def render_filter_presets() -> None:
                 config.filters.allowed_products = preset['products'] if preset['products'] else None
                 set_state('active_filters', active_filters)
                 set_state('config', config)
-                # Update the text input widget state in the Build tab
-                st.session_state['product_filter_input'] = ", ".join(preset['products'])
                 st.rerun()
 
     st.markdown("---")
@@ -296,8 +291,6 @@ def render_filter_presets() -> None:
                 config.filters.allowed_categories = preset['categories'] if preset['categories'] else None
                 set_state('active_filters', active_filters)
                 set_state('config', config)
-                # Update the text input widget state in the Build tab
-                st.session_state['category_filter_input'] = ", ".join(preset['categories'])
                 st.rerun()
 
     st.markdown("---")
@@ -345,9 +338,6 @@ def render_filter_presets() -> None:
                     config.filters.allowed_categories = categories if categories else None
                     set_state('active_filters', active_filters)
                     set_state('config', config)
-                    # Update the text input widget states in the Build tab
-                    st.session_state['product_filter_input'] = ", ".join(products)
-                    st.session_state['category_filter_input'] = ", ".join(categories)
                     st.rerun()
             with col3:
                 if st.button("Delete", key=f"delete_{preset_name}"):

@@ -192,6 +192,72 @@ Each architecture entry includes:
 | **ai_suggested** | Content analysis | All metadata extracted by AI |
 | **example_only** | Example scenarios | Not prescriptive reference architectures |
 
+## Document Types and Filtering
+
+The Azure Architecture Center contains three main document types, identified by the `ms.topic` metadata field:
+
+| Type | Description | Count | Default |
+|------|-------------|-------|---------|
+| **reference-architecture** | Curated, production-ready patterns designed for enterprise workloads | ~50 | ✅ Included |
+| **example-scenario** | Real-world implementation examples showing specific use cases | ~100 | ❌ Excluded |
+| **solution-idea** | Conceptual designs and starting points for solutions | ~80 | ❌ Excluded |
+
+### Why Reference Architectures Only (Default)
+
+By default, the catalog builder includes **only reference architectures**. This was a deliberate design choice:
+
+1. **Production-Ready**: Reference architectures are Microsoft's curated, vetted patterns suitable for enterprise production workloads
+2. **Higher Quality Metadata**: These documents have richer, more consistent metadata (YamlMime:Architecture)
+3. **Better Recommendations**: Fewer, higher-quality entries produce more confident and relevant recommendations
+4. **Enterprise Focus**: Organizations seeking architecture guidance typically need production-ready patterns, not conceptual examples
+
+### When to Include Examples and Solution Ideas
+
+You may want to include example scenarios and solution ideas when:
+
+- **Broader Exploration**: Discovering a wider range of Azure patterns and possibilities
+- **Learning**: Understanding different approaches to similar problems
+- **Proof of Concept**: Building POCs where production-readiness is less critical
+- **Niche Workloads**: Finding patterns for specialized use cases not covered by reference architectures
+- **Inspiration**: Generating ideas before committing to a specific architecture
+
+### How to Change the Filter
+
+**GUI Method (Recommended):**
+1. Open the Catalog Builder GUI: `./bin/start-catalog-builder-gui.sh`
+2. Navigate to the **Filter Presets** tab
+3. Under **Quality Presets**, click **"Examples Included"**
+4. Build your catalog with the updated filter
+
+**CLI Method:**
+```bash
+# Include all document types
+catalog-builder build-catalog \
+  --repo-path ./architecture-center \
+  --topic reference-architecture \
+  --topic example-scenario \
+  --topic solution-idea \
+  --out catalog-with-examples.json
+```
+
+**Configuration File Method:**
+```yaml
+# catalog-config.yaml
+filters:
+  allowed_topics:
+    - reference-architecture
+    - example-scenario
+    - solution-idea
+```
+
+### Catalog Size Comparison
+
+| Configuration | Architectures | Use Case |
+|---------------|---------------|----------|
+| Reference only (default) | ~50 | Production recommendations |
+| + Example scenarios | ~150 | Learning and exploration |
+| + Solution ideas | ~230 | Maximum coverage |
+
 ## Detection Heuristics
 
 Architecture candidates are identified by:
@@ -242,6 +308,7 @@ See [configuration.md](./configuration.md) for the full configuration reference.
 
 ## Related Documentation
 
+- [Reviewing the Catalog](./reviewing-the-catalog.md) - How to review and validate catalogs
 - [Architecture Recommendations App](./recommendations-app.md) - Customer-facing web application
 - [Architecture Scorer](./architecture-scorer.md) - Scoring engine documentation
 - [Configuration Reference](./configuration.md) - Full configuration options

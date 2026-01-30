@@ -144,8 +144,8 @@ pip install -e ".[dev]"
 │  ┌──────────────────┐         └──────────────────────────────────────┘  │
 │  │ architecture-    │                          │                        │
 │  │ catalog.json     │                          ▼                        │
-│  │ (~170 patterns:  │         ┌──────────────────────────────────────┐  │
-│  │  curated+examples)│         │  PDF Report / JSON Export            │  │
+│  │ (~50 reference   │         ┌──────────────────────────────────────┐  │
+│  │  architectures)  │         │  PDF Report / JSON Export            │  │
 │  └──────────────────┘         └──────────────────────────────────────┘  │
 │                                                                          │
 │  ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─   │
@@ -158,7 +158,7 @@ pip install -e ".[dev]"
 1. **One-Time Setup: Build Catalog**
    - Launch Catalog Builder GUI
    - Clone Azure Architecture Center repository
-   - Generate `architecture-catalog.json` (~170 architectures: curated + examples)
+   - Generate `architecture-catalog.json` (~50 reference architectures)
 
 2. **Assess Application** (in Dr. Migrate)
    - Use Dr. Migrate to assess your application with AppCat
@@ -180,7 +180,7 @@ pip install -e ".[dev]"
 
 ## Key Features
 
-- **~170 Azure Architectures** from official Azure Architecture Center (curated patterns + examples)
+- **~50 Reference Architectures** from official Azure Architecture Center (production-ready patterns)
 - **Quality Indicators** - Each architecture marked as curated, AI-enriched, or example (learning/POC)
 - **Explainable Recommendations** - See why each architecture fits or struggles
 - **Confidence Levels** - Know how certain the recommendations are
@@ -262,13 +262,18 @@ azure-architecture-recommender/
 - PDF report generation
 - Light theme with Azure branding
 
+**v1.3** - Reference Architecture Focus:
+- Default catalog now includes only reference architectures (~50)
+- Example scenarios and solution ideas excluded by default
+- Improved "No Strong Matches" handling with actionable guidance
+
 **v1.1** - Architecture Scorer release:
 - Interactive CLI with clarification questions
 - Confidence level calculations
 - Programmatic API
 
 **v1.0** - Initial release:
-- 171 architectures from Azure Architecture Center
+- Initial catalog with 171 architectures (references + examples)
 - Clean Azure services extraction
 - Quality differentiation (curated vs example_only)
 

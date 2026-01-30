@@ -2,6 +2,127 @@
 
 ## 2026-01-30
 
+### Session: Reference Architecture Focus
+
+**Goal:** Restrict catalog to reference architectures only (exclude example scenarios and solution ideas).
+
+**Rationale:** Reference architectures are curated, production-ready patterns suitable for enterprise workloads. Example scenarios and solution ideas are more conceptual and less suitable for direct architecture recommendations.
+
+**Changes Made:**
+
+1. **Default Config** - Changed `allowed_topics` default from `['reference-architecture', 'example-scenario', 'solution-idea']` to `['reference-architecture']` only
+
+2. **Catalog Builder GUI** - Updated filter presets:
+   - Updated "How Filters Work" explanation to reflect new default
+   - Updated typical counts (~50 instead of ~170)
+   - Updated product preset descriptions
+
+3. **Documentation** - Updated README.md:
+   - Changed architecture counts from ~170 to ~50
+   - Updated architecture diagram in ASCII art
+   - Added v1.3 version notes
+
+4. **Streamlit Bug Fix** - Fixed `st.session_state` modification error:
+   - Removed direct session state assignments for widget keys
+   - Removed `key` parameters from filter text inputs
+   - Widgets now properly read from `active_filters` via `value` parameter
+
+**Files Modified:**
+- `src/catalog_builder/config.py` - Default topics filter
+- `src/catalog_builder_gui/components/filter_presets.py` - UI text, presets
+- `src/catalog_builder_gui/components/preview_panel.py` - Removed widget keys
+- `src/catalog_builder_gui/state/session_state.py` - Removed unused state init
+- `README.md` - Counts, version history
+
+**Impact:**
+- New catalogs will contain ~50 reference architectures (down from ~170)
+- Higher quality recommendations (only curated patterns)
+- Users can still include examples via Quality Presets > "Examples Included"
+
+---
+
+### Session: Documentation Update - Catalog Customization
+
+**Goal:** Document that users CAN change the catalog filter, explain the rationale for the default, and when to include examples.
+
+**Changes Made:**
+
+Added new "Document Types and Filtering" section to `docs/catalog-builder.md`:
+
+1. **Document Types Table** - Lists the three types (reference-architecture, example-scenario, solution-idea) with counts and default inclusion status
+
+2. **Why Reference Architectures Only** - Explains the rationale:
+   - Production-ready patterns
+   - Higher quality metadata
+   - Better recommendations from fewer, quality entries
+   - Enterprise focus
+
+3. **When to Include Examples** - Use cases for broader catalogs:
+   - Broader exploration
+   - Learning
+   - Proof of concept projects
+   - Niche workloads
+   - Inspiration
+
+4. **How to Change the Filter** - Three methods documented:
+   - GUI method (Filter Presets > Examples Included)
+   - CLI method (`--topic` flag)
+   - Configuration file method (YAML)
+
+5. **Catalog Size Comparison** - Table showing ~50 (default), ~150 (+examples), ~230 (all)
+
+**Files Modified:**
+- `docs/catalog-builder.md` - Added comprehensive filtering documentation
+
+---
+
+### Session: Catalog Review Guide
+
+**Goal:** Create documentation explaining how a human can review and validate the architecture catalog.
+
+**Changes Made:**
+
+Created new `docs/reviewing-the-catalog.md` with:
+
+1. **Viewing the Catalog** - Three methods:
+   - CLI inspection (`catalog-builder stats`, `inspect`)
+   - GUI browser
+   - Direct JSON inspection
+
+2. **What to Review** - Detailed guidance on:
+   - Catalog statistics (counts, quality distribution, families)
+   - Individual entry fields (identity, classification, expectations, services)
+   - Quality level meanings and confidence
+
+3. **Review Checklists** - Three levels:
+   - Quick review (5 minutes)
+   - Thorough review (30 minutes)
+   - Deep review (2+ hours)
+
+4. **Common Issues** - How to identify and address:
+   - Missing architectures
+   - Incorrect classification
+   - Missing services
+   - Broken Learn URLs
+
+5. **Validation** - Testing with the recommendations app
+
+6. **Updating the Catalog** - Options for corrections:
+   - Regenerate with different filters
+   - Update source repository
+   - Post-process JSON directly
+
+7. **Review Frequency** - When to review (initial, monthly, after updates)
+
+**Files Created:**
+- `docs/reviewing-the-catalog.md` - Complete catalog review guide
+
+**Files Modified:**
+- `docs/catalog-builder.md` - Added link to review guide
+- `docs/recommendations-app.md` - Added link to review guide
+
+---
+
 ### Session: UX Polish & PDF Enhancements
 
 **Goal:** Improve visual density, add missing features to PDF reports, handle edge cases.

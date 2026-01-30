@@ -114,7 +114,6 @@ def render_preview_panel() -> None:
         product_input = st.text_input(
             "Products (comma-separated)",
             value=product_default,
-            key="product_filter_input",
             help="e.g., azure-kubernetes-service, azure-app-service",
             placeholder="azure-kubernetes-service, azure-sql-database"
         )
@@ -133,7 +132,6 @@ def render_preview_panel() -> None:
         category_input = st.text_input(
             "Categories (comma-separated)",
             value=category_default,
-            key="category_filter_input",
             help="e.g., web, containers, ai-machine-learning",
             placeholder="web, containers, databases"
         )

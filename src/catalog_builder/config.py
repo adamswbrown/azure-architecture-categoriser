@@ -480,10 +480,9 @@ class FilterConfig(BaseModel):
 
     # Only include documents with these ms.topic values
     # Set to empty list to allow all
+    # Default: reference-architecture only (curated, production-ready patterns)
     allowed_topics: list[str] = Field(default_factory=lambda: [
         'reference-architecture',
-        'example-scenario',
-        'solution-idea',
     ])
 
     # Only include documents with these azureCategories

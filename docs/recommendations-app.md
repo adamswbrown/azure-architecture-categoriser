@@ -304,5 +304,6 @@ If you see "No Strong Matches Found":
 ## Related Documentation
 
 - [Catalog Builder](./catalog-builder.md) - Generate architecture catalogs
+- [Reviewing the Catalog](./reviewing-the-catalog.md) - How to review and validate catalogs
 - [Architecture Scorer](./architecture-scorer.md) - Scoring engine details
 - [Main README](../README.md) - Project overview
