@@ -2,6 +2,61 @@
 
 ## 2026-01-30
 
+### Session: Docker Containerization & v1.0 Release
+
+**Goal:** Containerize the application for easy distribution via GitHub Container Registry.
+
+**Changes Made:**
+
+#### 1. Dockerfile (Multi-stage build)
+- **Builder stage:** Python 3.11-slim with gcc, libcairo2-dev, pkg-config
+- **Production stage:** Python 3.11-slim with git, libcairo2, curl
+- Non-root user (appuser) for security
+- Health check endpoint configured
+- Both Streamlit apps included (8501 + 8502)
+
+#### 2. GitHub Actions Workflows
+- **docker-publish.yml:** Auto-build and push to ghcr.io
+  - Triggers on push to main, tags (v*), PRs
+  - Multi-platform: linux/amd64, linux/arm64 (Apple Silicon)
+  - Uses QEMU for cross-platform builds
+  - Automatic tagging (latest, branch, semver)
+- **codeql.yml:** Security scanning on PRs and weekly
+
+#### 3. Supporting Files
+- **docker-compose.yml:** Easy local development with volume mounts
+- **docker-entrypoint.sh:** Starts both Streamlit apps
+- **.dockerignore:** Excludes tests, docs, cache from image
+
+#### 4. Repository Rename
+- Renamed from `azure-architecture-categoriser-` to `azure-architecture-categoriser` (removed trailing hyphen)
+- Docker image names don't support trailing hyphens
+
+**Docker Image:**
+```bash
+docker run -p 8501:8501 -p 8502:8502 ghcr.io/adamswbrown/azure-architecture-categoriser:v1.0
+```
+
+**Build Issues Resolved:**
+1. README.md missing in builder context (pyproject.toml references it)
+2. pycairo needs libcairo2-dev and pkg-config to compile
+3. libcairo2 needed at runtime for PDF generation
+4. curl needed for health checks
+5. Multi-platform build required for Apple Silicon Macs
+6. Tag format (v1.0 vs v1.0.0) required `type=ref,event=tag` in metadata action
+
+**Files Created:**
+- `Dockerfile`
+- `docker-entrypoint.sh`
+- `docker-compose.yml`
+- `.dockerignore`
+- `.github/workflows/docker-publish.yml`
+- `.github/workflows/codeql.yml`
+
+**v1.0 Tag Created** - First public release
+
+---
+
 ### Session: Security Audit & Remediation
 
 **Goal:** Comprehensive security audit and remediation of all identified vulnerabilities.

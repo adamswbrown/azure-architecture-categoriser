@@ -1,11 +1,20 @@
 # Azure Architecture Recommender - Project State
 
 ## Current Phase
-**Phase 4: Security Hardening - COMPLETE**
+**Phase 5: Containerization - COMPLETE**
 
 ## Status
 
-### Security (NEW - 2026-01-30)
+### Docker & CI/CD (NEW - 2026-01-30)
+- [x] Multi-stage Dockerfile (Python 3.11-slim)
+- [x] Multi-platform builds (amd64 + arm64)
+- [x] GitHub Container Registry (ghcr.io)
+- [x] GitHub Actions workflow for auto-publish
+- [x] CodeQL security scanning workflow
+- [x] docker-compose.yml for local development
+- [x] Health checks configured
+
+### Security (2026-01-30)
 - [x] XSS protection via HTML entity escaping
 - [x] SSRF protection via URL domain allowlist
 - [x] Secure temp file handling (random names, 0o600 permissions)
@@ -106,6 +115,12 @@ azure-architecture-categoriser-/
 │   └── example-java-context.json
 ├── scripts/                          # Utility scripts
 ├── .streamlit/config.toml            # Theme configuration
+├── .github/workflows/                # CI/CD
+│   ├── codeql.yml                    # Security scanning
+│   └── docker-publish.yml            # Container build & publish
+├── Dockerfile                        # Multi-stage container build
+├── docker-compose.yml                # Local development
+├── docker-entrypoint.sh              # Container entrypoint
 ├── pyproject.toml
 ├── README.md
 ├── state.md, worklog.md
@@ -127,19 +142,19 @@ azure-architecture-categoriser-/
 ## Blocking Issues
 None.
 
-## GitHub Issues Created
-1. [#1 - Integrate Catalog Builder into Recommendations App](https://github.com/adamswbrown/azure-architecture-categoriser-/issues/1)
-2. [#2 - Containerize the Application](https://github.com/adamswbrown/azure-architecture-categoriser-/issues/2)
-3. [#3 - Add CodeQL Security Scanning](https://github.com/adamswbrown/azure-architecture-categoriser-/issues/3)
+## GitHub Issues
+1. [#1 - Integrate Catalog Builder into Recommendations App](https://github.com/adamswbrown/azure-architecture-categoriser/issues/1) - Open
+2. [#2 - Containerize the Application](https://github.com/adamswbrown/azure-architecture-categoriser/issues/2) - **COMPLETE**
+3. [#3 - Add CodeQL Security Scanning](https://github.com/adamswbrown/azure-architecture-categoriser/issues/3) - **COMPLETE**
 
-## Recent Changes (2026-01-29)
-1. **Recommendations App v1.2** - 3-step wizard flow with improved UX
-2. **Documentation Refactor** - Separated docs for each component
-3. **GitHub Issues** - Created roadmap for containerization, catalog integration, CodeQL
-4. **Theme Configuration** - Force light mode with Azure branding
+## Recent Changes (2026-01-30)
+1. **v1.0 Release** - First public Docker container release
+2. **Docker Containerization** - Multi-platform images (amd64 + arm64)
+3. **GitHub Actions** - Auto-publish to ghcr.io on push/tag
+4. **CodeQL Scanning** - Automated security analysis on PRs
+5. **Security Audit** - XSS, SSRF, temp file hardening
 
 ## Next Actions
-1. Containerize the application (Issue #2)
-2. Integrate catalog generation into Recommendations App (Issue #1)
-3. Add CodeQL security scanning (Issue #3)
-4. Improve diagram asset extraction in catalog builder
+1. Integrate catalog generation into Recommendations App (Issue #1)
+2. Improve diagram asset extraction in catalog builder
+3. Add more test context files for edge cases
