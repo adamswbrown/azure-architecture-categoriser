@@ -2,7 +2,28 @@
 
 A complete solution for matching applications to Azure architecture patterns based on assessment data.
 
-## What Does This Tool Do?
+## Two Core Functions
+
+This tool provides **two complementary applications**:
+
+| | **Catalog Builder** | **Recommendations App** |
+|---|---------------------|------------------------|
+| **Purpose** | Build and customize the architecture catalog | Get architecture recommendations for your apps |
+| **When to Use** | One-time setup, or periodic refresh | Every time you assess an application |
+| **Port** | 8502 | 8501 |
+| **For** | Administrators, platform teams | End users, migration teams |
+
+### 1. Catalog Builder (Setup Tool)
+
+The **Catalog Builder** creates the reference architecture catalog by parsing the [Azure Architecture Center](https://learn.microsoft.com/azure/architecture/browse). Use it to:
+- Clone the latest Azure Architecture Center repository
+- Generate `architecture-catalog.json` with ~50 reference architectures
+- Customize which architectures to include/exclude
+- Refresh the catalog when Microsoft publishes new patterns
+
+**Run once** during initial setup, then periodically to stay current.
+
+### 2. Recommendations App (Daily Use)
 
 The **Recommendations App** is a web-based wizard that helps you find the right Azure architecture for your application. Simply upload your application assessment data, answer a few optional questions, and receive ranked architecture recommendations with detailed explanations.
 
