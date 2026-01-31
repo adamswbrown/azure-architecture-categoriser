@@ -1,0 +1,305 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.40.2.10011",
+      "templateHash": "12859953772487784909"
+    }
+  },
+  "parameters": {
+    "environment": {
+      "type": "string",
+      "defaultValue": "prod",
+      "allowedValues": [
+        "dev",
+        "staging",
+        "prod"
+      ],
+      "metadata": {
+        "description": "Environment name (dev, staging, prod)"
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "australiaeast",
+      "metadata": {
+        "description": "Azure region for resources"
+      }
+    },
+    "containerImage": {
+      "type": "string",
+      "defaultValue": "ghcr.io/adamswbrown/azure-architecture-categoriser:latest",
+      "metadata": {
+        "description": "Container image to deploy"
+      }
+    },
+    "ghcrUsername": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "GitHub Container Registry username (for private repos)"
+      }
+    },
+    "ghcrToken": {
+      "type": "securestring",
+      "defaultValue": "",
+      "metadata": {
+        "description": "GitHub Container Registry token (for private repos)"
+      }
+    }
+  },
+  "variables": {
+    "prefix": "azarch",
+    "resourceGroupName": "[format('rg-{0}-{1}', variables('prefix'), parameters('environment'))]",
+    "containerAppEnvName": "[format('cae-{0}-{1}', variables('prefix'), parameters('environment'))]",
+    "containerAppName": "[format('ca-{0}-recommender-{1}', variables('prefix'), parameters('environment'))]",
+    "logAnalyticsName": "[format('log-{0}-{1}', variables('prefix'), parameters('environment'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/resourceGroups",
+      "apiVersion": "2023-07-01",
+      "name": "[variables('resourceGroupName')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "environment": "[parameters('environment')]",
+        "application": "azure-architecture-recommender",
+        "managedBy": "bicep"
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2025-04-01",
+      "name": "container-app-deployment",
+      "resourceGroup": "[variables('resourceGroupName')]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "environment": {
+            "value": "[parameters('environment')]"
+          },
+          "containerAppEnvName": {
+            "value": "[variables('containerAppEnvName')]"
+          },
+          "containerAppName": {
+            "value": "[variables('containerAppName')]"
+          },
+          "logAnalyticsName": {
+            "value": "[variables('logAnalyticsName')]"
+          },
+          "containerImage": {
+            "value": "[parameters('containerImage')]"
+          },
+          "ghcrUsername": {
+            "value": "[parameters('ghcrUsername')]"
+          },
+          "ghcrToken": {
+            "value": "[parameters('ghcrToken')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.40.2.10011",
+              "templateHash": "11640606939395695889"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string"
+            },
+            "environment": {
+              "type": "string"
+            },
+            "containerAppEnvName": {
+              "type": "string"
+            },
+            "containerAppName": {
+              "type": "string"
+            },
+            "logAnalyticsName": {
+              "type": "string"
+            },
+            "containerImage": {
+              "type": "string"
+            },
+            "ghcrUsername": {
+              "type": "string",
+              "defaultValue": ""
+            },
+            "ghcrToken": {
+              "type": "securestring",
+              "defaultValue": ""
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.OperationalInsights/workspaces",
+              "apiVersion": "2023-09-01",
+              "name": "[parameters('logAnalyticsName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "sku": {
+                  "name": "PerGB2018"
+                },
+                "retentionInDays": 30
+              }
+            },
+            {
+              "type": "Microsoft.App/managedEnvironments",
+              "apiVersion": "2023-11-02-preview",
+              "name": "[parameters('containerAppEnvName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "appLogsConfiguration": {
+                  "destination": "log-analytics",
+                  "logAnalyticsConfiguration": {
+                    "customerId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsName')), '2023-09-01').customerId]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsName')), '2023-09-01').primarySharedKey]"
+                  }
+                },
+                "zoneRedundant": "[equals(parameters('environment'), 'prod')]"
+              },
+              "tags": {
+                "environment": "[parameters('environment')]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.App/containerApps",
+              "apiVersion": "2023-11-02-preview",
+              "name": "[parameters('containerAppName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "managedEnvironmentId": "[resourceId('Microsoft.App/managedEnvironments', parameters('containerAppEnvName'))]",
+                "configuration": {
+                  "ingress": {
+                    "external": true,
+                    "targetPort": 8501,
+                    "transport": "http",
+                    "allowInsecure": false,
+                    "traffic": [
+                      {
+                        "latestRevision": true,
+                        "weight": 100
+                      }
+                    ]
+                  },
+                  "registries": "[if(not(empty(parameters('ghcrUsername'))), createArray(createObject('server', 'ghcr.io', 'username', parameters('ghcrUsername'), 'passwordSecretRef', 'ghcr-token')), createArray())]",
+                  "secrets": "[if(not(empty(parameters('ghcrToken'))), createArray(createObject('name', 'ghcr-token', 'value', parameters('ghcrToken'))), createArray())]"
+                },
+                "template": {
+                  "containers": [
+                    {
+                      "name": "recommender",
+                      "image": "[parameters('containerImage')]",
+                      "resources": {
+                        "cpu": "[json('0.5')]",
+                        "memory": "1Gi"
+                      },
+                      "env": [
+                        {
+                          "name": "STREAMLIT_SERVER_HEADLESS",
+                          "value": "true"
+                        },
+                        {
+                          "name": "STREAMLIT_SERVER_ENABLE_CORS",
+                          "value": "false"
+                        },
+                        {
+                          "name": "STREAMLIT_BROWSER_GATHER_USAGE_STATS",
+                          "value": "false"
+                        }
+                      ],
+                      "probes": [
+                        {
+                          "type": "Liveness",
+                          "httpGet": {
+                            "path": "/_stcore/health",
+                            "port": 8501
+                          },
+                          "initialDelaySeconds": 10,
+                          "periodSeconds": 30
+                        },
+                        {
+                          "type": "Readiness",
+                          "httpGet": {
+                            "path": "/_stcore/health",
+                            "port": 8501
+                          },
+                          "initialDelaySeconds": 5,
+                          "periodSeconds": 10
+                        }
+                      ]
+                    }
+                  ],
+                  "scale": {
+                    "minReplicas": "[if(equals(parameters('environment'), 'prod'), 1, 0)]",
+                    "maxReplicas": "[if(equals(parameters('environment'), 'prod'), 3, 1)]",
+                    "rules": [
+                      {
+                        "name": "http-scaling",
+                        "http": {
+                          "metadata": {
+                            "concurrentRequests": "10"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              "tags": {
+                "environment": "[parameters('environment')]",
+                "application": "azure-architecture-recommender"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.App/managedEnvironments', parameters('containerAppEnvName'))]"
+              ]
+            }
+          ],
+          "outputs": {
+            "containerAppUrl": {
+              "type": "string",
+              "value": "[format('https://{0}', reference(resourceId('Microsoft.App/containerApps', parameters('containerAppName')), '2023-11-02-preview').configuration.ingress.fqdn)]"
+            },
+            "containerAppName": {
+              "type": "string",
+              "value": "[parameters('containerAppName')]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[subscriptionResourceId('Microsoft.Resources/resourceGroups', variables('resourceGroupName'))]"
+      ]
+    }
+  ],
+  "outputs": {
+    "resourceGroupName": {
+      "type": "string",
+      "value": "[variables('resourceGroupName')]"
+    },
+    "containerAppUrl": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, variables('resourceGroupName')), 'Microsoft.Resources/deployments', 'container-app-deployment'), '2025-04-01').outputs.containerAppUrl.value]"
+    },
+    "containerAppName": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, variables('resourceGroupName')), 'Microsoft.Resources/deployments', 'container-app-deployment'), '2025-04-01').outputs.containerAppName.value]"
+    }
+  }
+}
