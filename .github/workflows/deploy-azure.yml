@@ -1,7 +1,13 @@
 name: Deploy to Azure Container Apps
 
 on:
-  # Manual trigger only for now (disable auto-trigger until infra exists)
+  # Auto-deploy after successful container build
+  workflow_run:
+    workflows: ["Build and Publish Container"]
+    types: [completed]
+    branches: [main]
+
+  # Manual trigger with options
   workflow_dispatch:
     inputs:
       environment:
@@ -20,7 +26,7 @@ on:
       deploy_infra:
         description: 'Deploy/update infrastructure (REQUIRED for first deploy)'
         required: true
-        default: 'yes'
+        default: 'no'
         type: choice
         options:
           - 'yes'
@@ -32,17 +38,51 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  deploy-infrastructure:
+  # Auto-deploy job (triggered by workflow_run)
+  auto-deploy:
     runs-on: ubuntu-latest
-    if: ${{ inputs.deploy_infra == 'yes' }}
+    if: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' }}
 
     permissions:
       id-token: write
       contents: read
 
-    outputs:
-      rg_name: ${{ steps.names.outputs.rg_name }}
-      app_name: ${{ steps.names.outputs.app_name }}
+    steps:
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Update Container App image
+        run: |
+          az containerapp update \
+            --name ca-azarch-recommender-prod \
+            --resource-group rg-azarch-prod \
+            --image ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+
+      - name: Get deployment URL
+        run: |
+          FQDN=$(az containerapp show \
+            --name ca-azarch-recommender-prod \
+            --resource-group rg-azarch-prod \
+            --query "properties.configuration.ingress.fqdn" \
+            --output tsv)
+          echo "### Auto-Deploy Complete! :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Trigger:** Container build succeeded" >> $GITHUB_STEP_SUMMARY
+          echo "**Image:** ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:latest" >> $GITHUB_STEP_SUMMARY
+          echo "**URL:** https://${FQDN}" >> $GITHUB_STEP_SUMMARY
+
+  # Manual infrastructure deployment
+  deploy-infrastructure:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.deploy_infra == 'yes' }}
+
+    permissions:
+      id-token: write
+      contents: read
 
     steps:
       - name: Checkout repository
@@ -54,12 +94,6 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-      - name: Set resource names
-        id: names
-        run: |
-          echo "rg_name=rg-azarch-${{ inputs.environment }}" >> $GITHUB_OUTPUT
-          echo "app_name=ca-azarch-recommender-${{ inputs.environment }}" >> $GITHUB_OUTPUT
 
       - name: Deploy Infrastructure via Bicep
         uses: azure/arm-deploy@v2
@@ -75,10 +109,10 @@ jobs:
 
       - name: Get deployment URL
         run: |
-          sleep 10  # Wait for app to register
+          sleep 10
           FQDN=$(az containerapp show \
-            --name ${{ steps.names.outputs.app_name }} \
-            --resource-group ${{ steps.names.outputs.rg_name }} \
+            --name ca-azarch-recommender-${{ inputs.environment }} \
+            --resource-group rg-azarch-${{ inputs.environment }} \
             --query "properties.configuration.ingress.fqdn" \
             --output tsv)
           echo "### Infrastructure Deployed! :rocket:" >> $GITHUB_STEP_SUMMARY
@@ -86,9 +120,10 @@ jobs:
           echo "**Environment:** ${{ inputs.environment }}" >> $GITHUB_STEP_SUMMARY
           echo "**URL:** https://${FQDN}" >> $GITHUB_STEP_SUMMARY
 
+  # Manual image update
   update-image:
     runs-on: ubuntu-latest
-    if: ${{ inputs.deploy_infra == 'no' }}
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.deploy_infra == 'no' }}
 
     permissions:
       id-token: write
@@ -118,5 +153,6 @@ jobs:
             --output tsv)
           echo "### Image Updated! :rocket:" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment:** ${{ inputs.environment }}" >> $GITHUB_STEP_SUMMARY
           echo "**Image:** ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.image_tag }}" >> $GITHUB_STEP_SUMMARY
           echo "**URL:** https://${FQDN}" >> $GITHUB_STEP_SUMMARY
