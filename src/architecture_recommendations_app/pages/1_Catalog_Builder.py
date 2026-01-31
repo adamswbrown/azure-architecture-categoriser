@@ -194,6 +194,23 @@ def render_sidebar() -> None:
     your applications, or **Catalog Stats** to explore the catalog.
     """)
 
+    # Footer with credits and GitHub link
+    st.sidebar.markdown("---")
+    st.sidebar.markdown(
+        """
+        <div style="text-align: center; padding: 1rem 0; color: #666; font-size: 0.85rem;">
+            <p style="margin-bottom: 0.5rem;">
+                Built by <a href="https://askadam.cloud/#about" target="_blank"><strong>Adam Brown</strong></a><br/>
+                with help from Claude & Copilot 😉
+            </p>
+            <a href="https://github.com/adamswbrown/azure-architecture-categoriser" target="_blank">
+                <img src="https://img.shields.io/badge/View_on-GitHub-181717?style=for-the-badge&logo=github" alt="View on GitHub"/>
+            </a>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
 
 def main():
     st.set_page_config(
