@@ -53,6 +53,50 @@ def load_catalog(catalog_path: str) -> dict | None:
         return None
 
 
+def render_generation_settings(generation_settings: dict) -> None:
+    """Render generation settings in a human-readable format."""
+    if not generation_settings:
+        st.caption("No generation settings recorded")
+        return
+
+    # Topics
+    topics = generation_settings.get('allowed_topics', [])
+    if topics:
+        topic_labels = {
+            'reference-architecture': 'Reference Architectures',
+            'example-scenario': 'Example Scenarios',
+            'solution-idea': 'Solution Ideas'
+        }
+        topic_display = ', '.join(topic_labels.get(t, t) for t in topics)
+        st.markdown(f"**Document Types:** {topic_display}")
+    else:
+        st.markdown("**Document Types:** All types included")
+
+    # Products filter
+    products = generation_settings.get('allowed_products', [])
+    if products:
+        st.markdown(f"**Product Filter:** {', '.join(products)}")
+    else:
+        st.markdown("**Product Filter:** No filter (all products)")
+
+    # Categories filter
+    categories = generation_settings.get('allowed_categories', [])
+    if categories:
+        st.markdown(f"**Category Filter:** {', '.join(categories)}")
+    else:
+        st.markdown("**Category Filter:** No filter (all categories)")
+
+    # Flags
+    flags = []
+    if generation_settings.get('exclude_examples', False):
+        flags.append("Examples excluded")
+    if generation_settings.get('require_architecture_yml', False):
+        flags.append("Requires YamlMime:Architecture")
+
+    if flags:
+        st.markdown(f"**Options:** {', '.join(flags)}")
+
+
 def main():
     st.set_page_config(
         page_title="Catalog Stats - Azure Architecture Recommendations",
@@ -119,12 +163,12 @@ def main():
 
     st.markdown("---")
 
-    # Charts section
+    # Charts section - 4 tabs
     tab1, tab2, tab3, tab4 = st.tabs([
         "By Family",
         "By Operating Model",
-        "Top Services",
-        "Quality Breakdown"
+        "Additional Insights",
+        "Browse Architectures"
     ])
 
     with tab1:
@@ -173,7 +217,10 @@ def main():
             st.info("No operating model data available")
 
     with tab3:
-        st.subheader("Top Azure Services")
+        st.subheader("Additional Insights")
+
+        # Top Services
+        st.markdown("#### Top Azure Services")
 
         service_counts = Counter()
         for arch in architectures:
@@ -193,132 +240,122 @@ def main():
         else:
             st.info("No service data available")
 
-    with tab4:
-        st.subheader("Quality Breakdown")
-
-        # Count by quality indicators
-        quality_counts = Counter()
-        for arch in architectures:
-            # Check for quality indicators
-            if arch.get('example_only', False):
-                quality_counts['Example/POC'] += 1
-            elif arch.get('ai_enriched', False):
-                quality_counts['AI-Enriched'] += 1
-            else:
-                quality_counts['Curated'] += 1
-
-        if quality_counts:
-            chart_data = dict(quality_counts.most_common())
-            st.bar_chart(chart_data)
-
-            st.markdown("**Quality Levels:**")
-            col1, col2, col3 = st.columns(3)
-
-            with col1:
-                count = quality_counts.get('Curated', 0)
-                st.metric("Curated", count)
-                st.caption("Production-ready, reviewed patterns")
-
-            with col2:
-                count = quality_counts.get('AI-Enriched', 0)
-                st.metric("AI-Enriched", count)
-                st.caption("Auto-classified with AI assistance")
-
-            with col3:
-                count = quality_counts.get('Example/POC', 0)
-                st.metric("Example/POC", count)
-                st.caption("Learning scenarios, not production-ready")
-        else:
-            st.info("No quality data available")
-
-    st.markdown("---")
-
-    # Additional analytics
-    st.subheader("Additional Insights")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        st.markdown("**By Category**")
-        category_counts = Counter()
-        for arch in architectures:
-            for cat in arch.get('browse_categories', []):
-                category_counts[cat] += 1
-
-        if category_counts:
-            top_10 = dict(category_counts.most_common(10))
-            st.bar_chart(top_10)
-        else:
-            st.info("No category data")
-
-    with col2:
-        st.markdown("**By Runtime Model**")
-        runtime_counts = Counter()
-        for arch in architectures:
-            for rt in arch.get('expected_runtime_models', []):
-                runtime_counts[rt] += 1
-
-        if runtime_counts:
-            st.bar_chart(dict(runtime_counts.most_common()))
-        else:
-            st.info("No runtime model data")
-
-    # Generation settings
-    if generation_settings:
         st.markdown("---")
-        with st.expander("Catalog Generation Settings"):
-            st.json(generation_settings)
 
-    # Browse architectures
-    st.markdown("---")
-    st.subheader("Browse Architectures")
+        # Category and Runtime side by side
+        col1, col2 = st.columns(2)
 
-    # Filter options
-    col1, col2, col3 = st.columns(3)
+        with col1:
+            st.markdown("#### By Category")
+            category_counts = Counter()
+            for arch in architectures:
+                for cat in arch.get('browse_categories', []):
+                    category_counts[cat] += 1
 
-    with col1:
-        families = sorted(set(arch.get('family', 'unknown') for arch in architectures))
-        selected_family = st.selectbox("Filter by Family", ["All"] + families)
+            if category_counts:
+                top_10 = dict(category_counts.most_common(10))
+                st.bar_chart(top_10)
+            else:
+                st.info("No category data")
 
-    with col2:
-        op_models = sorted(set(arch.get('operating_model_required', 'unknown') for arch in architectures))
-        selected_op_model = st.selectbox("Filter by Operating Model", ["All"] + op_models)
+        with col2:
+            st.markdown("#### By Runtime Model")
+            runtime_counts = Counter()
+            for arch in architectures:
+                for rt in arch.get('expected_runtime_models', []):
+                    runtime_counts[rt] += 1
 
-    with col3:
-        search_term = st.text_input("Search by name", placeholder="e.g., kubernetes")
+            if runtime_counts:
+                st.bar_chart(dict(runtime_counts.most_common()))
+            else:
+                st.info("No runtime model data")
 
-    # Apply filters
-    filtered = architectures
-    if selected_family != "All":
-        filtered = [a for a in filtered if a.get('family') == selected_family]
-    if selected_op_model != "All":
-        filtered = [a for a in filtered if a.get('operating_model_required') == selected_op_model]
-    if search_term:
-        filtered = [a for a in filtered if search_term.lower() in a.get('name', '').lower()]
+        st.markdown("---")
 
-    st.caption(f"Showing {len(filtered)} of {len(architectures)} architectures")
+        # Security Level distribution
+        col1, col2 = st.columns(2)
 
-    # Display filtered architectures
-    for arch in filtered[:20]:
-        with st.expander(f"**{arch.get('name', 'Unknown')}** ({arch.get('family', 'unknown')})"):
-            col1, col2 = st.columns(2)
+        with col1:
+            st.markdown("#### By Security Level")
+            security_counts = Counter()
+            for arch in architectures:
+                sec_level = arch.get('security_level', 'unknown')
+                security_counts[sec_level] += 1
 
-            with col1:
-                st.markdown(f"**Description:** {arch.get('description', 'N/A')[:200]}...")
-                st.markdown(f"**Family:** {arch.get('family', 'N/A')}")
-                st.markdown(f"**Operating Model:** {arch.get('operating_model_required', 'N/A')}")
-                st.markdown(f"**Security Level:** {arch.get('security_level', 'N/A')}")
+            if security_counts:
+                st.bar_chart(dict(security_counts.most_common()))
+            else:
+                st.info("No security level data")
 
-            with col2:
-                if arch.get('core_services'):
-                    st.markdown(f"**Core Services:** {', '.join(arch['core_services'][:5])}")
-                if arch.get('browse_categories'):
-                    st.markdown(f"**Categories:** {', '.join(arch['browse_categories'][:5])}")
-                if arch.get('learn_url'):
-                    st.markdown(f"[View on Microsoft Learn]({arch['learn_url']})")
+        with col2:
+            st.markdown("#### By Availability Model")
+            avail_counts = Counter()
+            for arch in architectures:
+                for am in arch.get('availability_models', []):
+                    avail_counts[am] += 1
 
-    if len(filtered) > 20:
-        st.info(f"Showing first 20 of {len(filtered)} matching architectures")
+            if avail_counts:
+                st.bar_chart(dict(avail_counts.most_common()))
+            else:
+                st.info("No availability model data")
+
+        # Generation settings
+        st.markdown("---")
+        st.markdown("#### Catalog Generation Settings")
+        render_generation_settings(generation_settings)
+
+    with tab4:
+        st.subheader("Browse Architectures")
+
+        # Filter options
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            families = sorted(set(arch.get('family', 'unknown') for arch in architectures))
+            selected_family = st.selectbox("Filter by Family", ["All"] + families)
+
+        with col2:
+            op_models = sorted(set(arch.get('operating_model_required', 'unknown') for arch in architectures))
+            selected_op_model = st.selectbox("Filter by Operating Model", ["All"] + op_models)
+
+        with col3:
+            search_term = st.text_input("Search by name", placeholder="e.g., kubernetes")
+
+        # Apply filters
+        filtered = architectures
+        if selected_family != "All":
+            filtered = [a for a in filtered if a.get('family') == selected_family]
+        if selected_op_model != "All":
+            filtered = [a for a in filtered if a.get('operating_model_required') == selected_op_model]
+        if search_term:
+            filtered = [a for a in filtered if search_term.lower() in a.get('name', '').lower()]
+
+        st.caption(f"Showing {len(filtered)} of {len(architectures)} architectures")
+
+        # Display filtered architectures
+        for arch in filtered[:20]:
+            with st.expander(f"**{arch.get('name', 'Unknown')}** ({arch.get('family', 'unknown')})"):
+                col1, col2 = st.columns(2)
+
+                with col1:
+                    desc = arch.get('description', 'N/A')
+                    if len(desc) > 200:
+                        desc = desc[:200] + "..."
+                    st.markdown(f"**Description:** {desc}")
+                    st.markdown(f"**Family:** {arch.get('family', 'N/A')}")
+                    st.markdown(f"**Operating Model:** {arch.get('operating_model_required', 'N/A')}")
+                    st.markdown(f"**Security Level:** {arch.get('security_level', 'N/A')}")
+
+                with col2:
+                    if arch.get('core_services'):
+                        st.markdown(f"**Core Services:** {', '.join(arch['core_services'][:5])}")
+                    if arch.get('browse_categories'):
+                        st.markdown(f"**Categories:** {', '.join(arch['browse_categories'][:5])}")
+                    if arch.get('learn_url'):
+                        st.markdown(f"[View on Microsoft Learn]({arch['learn_url']})")
+
+        if len(filtered) > 20:
+            st.info(f"Showing first 20 of {len(filtered)} matching architectures")
 
 
 if __name__ == "__main__":
