@@ -43,190 +43,214 @@ def render_preview_panel() -> None:
         return
 
     # =========================================================================
-    # MODE 1: QUICK GENERATE (DEFAULTS)
+    # QUICK ACTION BUTTONS (Option 4)
     # =========================================================================
-    st.header("Option 1: Quick Generate")
+    st.header("Quick Build")
 
-    with st.container(border=True):
-        st.markdown("""
-        **Use default settings** to generate a catalog immediately. No configuration needed.
-        """)
-
-        with st.expander("What defaults include", expanded=False):
-            st.markdown("""
-            | Setting | Default Value | Result |
-            |---------|---------------|--------|
-            | **Topics** | reference-architecture | Production-ready patterns only |
-            | **Exclude Examples** | Yes (implicit) | ~50 curated architectures |
-            | **Products** | All | No product filtering |
-            | **Categories** | All | No category filtering |
-            | **Require YML** | No | Include detected architectures |
-
-            **Note:** Only reference architectures are included by default. These are curated,
-            production-ready patterns. To include example scenarios, use Filter Presets > "Examples Included".
-            """)
-
-        col1, col2 = st.columns([2, 1])
-        with col1:
-            quick_output = st.text_input(
-                "Output File",
-                value=_get_default_output_path(),
-                key="quick_output",
-                help="Path to save the catalog JSON (defaults to project root)"
-            )
-        with col2:
-            st.write("")  # Spacer
-            st.write("")
-            if st.button("Generate with Defaults", type="primary", use_container_width=True, key="quick_generate"):
-                # Reset to defaults before generating
+    col1, col2 = st.columns(2)
+    with col1:
+        with st.container(border=True):
+            st.markdown("### Quick Build")
+            st.markdown("**~51 Reference Architectures**")
+            st.caption("Production-ready, curated patterns")
+            if st.button("Build Quick Catalog", type="primary", use_container_width=True, key="quick_build"):
+                # Set config for reference architectures only
                 from catalog_builder.config import CatalogConfig
                 import catalog_builder.config as config_module
-                config_module._config = CatalogConfig()
-                _generate_catalog(repo_path, quick_output)
+                config_module._config = CatalogConfig()  # Uses defaults (reference-architecture + exclude_examples=True)
+                _generate_catalog(repo_path, _get_default_output_path())
+
+    with col2:
+        with st.container(border=True):
+            st.markdown("### Full Build")
+            st.markdown("**~171 All Architectures**")
+            st.caption("Includes examples & solution ideas")
+            if st.button("Build Full Catalog", type="secondary", use_container_width=True, key="full_build"):
+                # Set config for all content types
+                from catalog_builder.config import CatalogConfig
+                import catalog_builder.config as config_module
+                config = CatalogConfig()
+                config.filters.allowed_topics = ['reference-architecture', 'example-scenario', 'solution-idea']
+                config.filters.exclude_examples = False
+                config_module._config = config
+                _generate_catalog(repo_path, _get_default_output_path())
+
+    st.markdown("---")
 
     # =========================================================================
-    # MODE 2: CUSTOM BUILD (CONFIGURE → PREVIEW → GENERATE)
+    # CUSTOM BUILD (Option 1 + Option 3)
     # =========================================================================
-    st.markdown("")  # Spacer
-    st.header("Option 2: Custom Build")
+    st.header("Custom Build")
 
     with st.container(border=True):
-        st.markdown("""
-        **Configure filters**, preview what matches, then generate.
-        """)
+        st.markdown("Configure exactly what to include in your catalog.")
 
-        # Step 1: Configure filters inline
-        st.subheader("Step 1: Configure Filters")
+        # Content Type Selector (Option 1 - unified selector)
+        st.subheader("Content Types")
 
+        # Define content types with descriptions and approximate counts
+        content_types = {
+            "Reference Architectures (~51)": {
+                "topic": "reference-architecture",
+                "description": "Production-ready, curated architecture patterns",
+                "is_example": False,
+            },
+            "Example Scenarios (~86)": {
+                "topic": "example-scenario",
+                "description": "Learning-focused implementations for POC/demos",
+                "is_example": True,
+            },
+            "Solution Ideas (~34)": {
+                "topic": "solution-idea",
+                "description": "Conceptual solutions and starting points",
+                "is_example": True,
+            },
+        }
+
+        # Get current state
         config = get_state('config')
         active_filters = get_state('active_filters', {'products': [], 'categories': [], 'topics': []})
-
-        # Topic filter
-        st.markdown("**Document Types (ms.topic)**")
-        all_topics = ['reference-architecture', 'example-scenario', 'solution-idea']
         current_topics = config.filters.allowed_topics or []
 
-        selected_topics = []
-        topic_cols = st.columns(3)
-        for i, topic in enumerate(all_topics):
-            with topic_cols[i]:
-                checked = st.checkbox(
-                    topic.replace('-', ' ').title(),
-                    value=topic in current_topics,
-                    key=f"topic_{topic}"
-                )
-                if checked:
-                    selected_topics.append(topic)
+        # Build default selection based on current config
+        default_selection = []
+        for label, info in content_types.items():
+            if info["topic"] in current_topics:
+                # Check if examples are excluded - if so, don't show example types as selected
+                if info["is_example"] and config.filters.exclude_examples:
+                    continue
+                default_selection.append(label)
 
-        # Update config if topics changed
-        if set(selected_topics) != set(current_topics):
-            config.filters.allowed_topics = selected_topics
-            set_state('config', config)
+        # If no selection and defaults, select reference architectures
+        if not default_selection:
+            default_selection = ["Reference Architectures (~51)"]
 
-        st.markdown("")  # Spacer
-
-        # Product filter
-        st.markdown("**Product Filter** (leave empty for all)")
-
-        # Use active_filters as source of truth (set by Filter Presets tab)
-        product_default = ", ".join(active_filters.get('products', []))
-
-        product_input = st.text_input(
-            "Products (comma-separated)",
-            value=product_default,
-            help="e.g., azure-kubernetes-service, azure-app-service",
-            placeholder="azure-kubernetes-service, azure-sql-database"
+        # Multiselect for content types
+        selected_types = st.multiselect(
+            "Select content types to include:",
+            options=list(content_types.keys()),
+            default=default_selection,
+            help="Choose which types of architecture documentation to include",
+            key="content_type_selector"
         )
 
-        # Parse and sync to config
-        product_list = [p.strip() for p in product_input.split(",") if p.strip()]
-        config.filters.allowed_products = product_list if product_list else None
-        active_filters['products'] = product_list
+        # Show descriptions for selected types
+        if selected_types:
+            for label in selected_types:
+                info = content_types[label]
+                st.caption(f"  **{label.split('(')[0].strip()}**: {info['description']}")
 
-        # Category filter
-        st.markdown("**Category Filter** (leave empty for all)")
+        # Update config based on selection
+        new_topics = [content_types[label]["topic"] for label in selected_types]
+        has_examples = any(content_types[label]["is_example"] for label in selected_types)
 
-        # Use active_filters as source of truth (set by Filter Presets tab)
-        category_default = ", ".join(active_filters.get('categories', []))
-
-        category_input = st.text_input(
-            "Categories (comma-separated)",
-            value=category_default,
-            help="e.g., web, containers, ai-machine-learning",
-            placeholder="web, containers, databases"
-        )
-
-        # Parse and sync to config
-        category_list = [c.strip() for c in category_input.split(",") if c.strip()]
-        config.filters.allowed_categories = category_list if category_list else None
-        active_filters['categories'] = category_list
-
-        # Save state
+        # Set exclude_examples based on whether any example types are selected
+        config.filters.allowed_topics = new_topics
+        config.filters.exclude_examples = not has_examples  # False if examples selected, True otherwise
         set_state('config', config)
-        set_state('active_filters', active_filters)
 
-        # Show current filter summary
+        # =========================================================================
+        # LIVE PREVIEW COUNT (Option 3)
+        # =========================================================================
         st.markdown("---")
-        summary_parts = []
-        if selected_topics:
-            summary_parts.append(f"**Topics:** {', '.join(selected_topics)}")
-        else:
-            summary_parts.append("**Topics:** All")
-        if product_list:
-            summary_parts.append(f"**Products:** {', '.join(product_list)}")
-        else:
-            summary_parts.append("**Products:** All")
-        if category_list:
-            summary_parts.append(f"**Categories:** {', '.join(category_list)}")
-        else:
-            summary_parts.append("**Categories:** All")
 
-        st.caption(" | ".join(summary_parts))
+        # Calculate and show live preview
+        if new_topics:
+            estimated_count = 0
+            breakdown = []
+            for label in selected_types:
+                info = content_types[label]
+                # Extract count from label (e.g., "~51" from "Reference Architectures (~51)")
+                import re
+                match = re.search(r'\(~(\d+)\)', label)
+                if match:
+                    count = int(match.group(1))
+                    estimated_count += count
+                    breakdown.append(f"{info['topic'].replace('-', ' ').title()}: ~{count}")
 
-        with st.expander("Advanced options (other tabs)"):
-            st.markdown("""
-            For more options, use these tabs:
-            - **Filter Presets** - Quick preset buttons for common filters
-            - **Keyword Dictionaries** - Customize classification keywords
-            - **Config Editor** - Full YAML configuration
-            """)
+            st.info(f"**Estimated catalog size: ~{estimated_count} architectures**")
+            if len(breakdown) > 1:
+                st.caption("Breakdown: " + " | ".join(breakdown))
+        else:
+            st.warning("Select at least one content type to build a catalog.")
 
         st.markdown("---")
 
-        # Step 2: Preview
-        st.subheader("Step 2: Preview (optional)")
+        # Additional filters (optional)
+        with st.expander("Additional Filters (optional)", expanded=False):
+            # Product filter
+            st.markdown("**Product Filter** (leave empty for all)")
+            product_default = ", ".join(active_filters.get('products', []))
 
-        with st.expander("How preview works", expanded=False):
-            st.markdown("""
-            The preview scans the repository and shows which architectures match your current settings:
-            - Scans architecture folders first (example-scenario, reference-architectures, etc.)
-            - Applies your topic, product, and category filters
-            - Shows inclusion/exclusion breakdown
-
-            This helps you verify your configuration before generating the full catalog.
-            """)
-
-        col1, col2 = st.columns([2, 1])
-        with col1:
-            max_files = st.slider(
-                "Max files to scan",
-                min_value=10,
-                max_value=500,
-                value=100,
-                step=10,
-                help="Limit the number of files to scan for faster preview"
+            product_input = st.text_input(
+                "Products (comma-separated)",
+                value=product_default,
+                help="e.g., azure-kubernetes-service, azure-app-service",
+                placeholder="azure-kubernetes-service, azure-sql-database"
             )
-        with col2:
-            st.write("")  # Spacer
-            run_preview = st.button("Run Preview", type="secondary", use_container_width=True)
 
-        if run_preview:
-            _run_preview_scan(repo, max_files)
+            # Parse and sync to config
+            product_list = [p.strip() for p in product_input.split(",") if p.strip()]
+            config.filters.allowed_products = product_list if product_list else None
+            active_filters['products'] = product_list
+
+            # Category filter
+            st.markdown("**Category Filter** (leave empty for all)")
+            category_default = ", ".join(active_filters.get('categories', []))
+
+            category_input = st.text_input(
+                "Categories (comma-separated)",
+                value=category_default,
+                help="e.g., web, containers, ai-machine-learning",
+                placeholder="web, containers, databases"
+            )
+
+            # Parse and sync to config
+            category_list = [c.strip() for c in category_input.split(",") if c.strip()]
+            config.filters.allowed_categories = category_list if category_list else None
+            active_filters['categories'] = category_list
+
+            # Save state
+            set_state('config', config)
+            set_state('active_filters', active_filters)
+
+            # Show filter summary if any filters are active
+            if product_list or category_list:
+                st.caption(
+                    f"Active filters: "
+                    f"{f'Products: {len(product_list)}' if product_list else ''}"
+                    f"{' | ' if product_list and category_list else ''}"
+                    f"{f'Categories: {len(category_list)}' if category_list else ''}"
+                )
+
+        # Preview scan (optional)
+        with st.expander("Run Preview Scan (optional)", expanded=False):
+            st.markdown("""
+            Scan the repository to see exactly which architectures match your settings.
+            This is optional - use it to verify your configuration before building.
+            """)
+
+            col1, col2 = st.columns([2, 1])
+            with col1:
+                max_files = st.slider(
+                    "Max files to scan",
+                    min_value=10,
+                    max_value=500,
+                    value=100,
+                    step=10,
+                    help="Limit the number of files to scan for faster preview"
+                )
+            with col2:
+                st.write("")  # Spacer
+                run_preview = st.button("Run Preview", type="secondary", use_container_width=True)
+
+            if run_preview:
+                _run_preview_scan(repo, max_files)
 
         st.markdown("---")
 
-        # Generate section
-        st.subheader("Step 3: Generate with Current Settings")
+        # Generate button
+        st.subheader("Generate Custom Catalog")
 
         col1, col2 = st.columns([2, 1])
         with col1:
@@ -239,7 +263,8 @@ def render_preview_panel() -> None:
         with col2:
             st.write("")  # Spacer
             st.write("")
-            if st.button("Generate Catalog", type="primary", use_container_width=True, key="custom_generate"):
+            if st.button("Generate Catalog", type="primary", use_container_width=True, key="custom_generate",
+                         disabled=not selected_types):
                 _generate_catalog(repo_path, custom_output)
 
 
