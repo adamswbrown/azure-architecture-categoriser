@@ -1,13 +1,7 @@
 name: Deploy to Azure Container Apps
 
 on:
-  # Trigger after docker-publish completes
-  workflow_run:
-    workflows: ["Build and Publish Container"]
-    types: [completed]
-    branches: [main]
-
-  # Manual trigger with options
+  # Manual trigger only for now (disable auto-trigger until infra exists)
   workflow_dispatch:
     inputs:
       environment:
@@ -26,7 +20,7 @@ on:
       deploy_infra:
         description: 'Deploy/update infrastructure (REQUIRED for first deploy)'
         required: true
-        default: 'no'
+        default: 'yes'
         type: choice
         options:
           - 'yes'
@@ -38,37 +32,21 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  deploy:
+  deploy-infrastructure:
     runs-on: ubuntu-latest
-    # Only run if triggered manually OR if the docker-publish workflow succeeded
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ inputs.deploy_infra == 'yes' }}
 
     permissions:
-      id-token: write   # For OIDC authentication
+      id-token: write
       contents: read
+
+    outputs:
+      rg_name: ${{ steps.names.outputs.rg_name }}
+      app_name: ${{ steps.names.outputs.app_name }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Set environment variables
-        id: vars
-        run: |
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            echo "environment=${{ inputs.environment }}" >> $GITHUB_OUTPUT
-            echo "image_tag=${{ inputs.image_tag }}" >> $GITHUB_OUTPUT
-            echo "deploy_infra=${{ inputs.deploy_infra }}" >> $GITHUB_OUTPUT
-          else
-            echo "environment=prod" >> $GITHUB_OUTPUT
-            echo "image_tag=latest" >> $GITHUB_OUTPUT
-            echo "deploy_infra=no" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Show configuration
-        run: |
-          echo "Environment: ${{ steps.vars.outputs.environment }}"
-          echo "Image tag: ${{ steps.vars.outputs.image_tag }}"
-          echo "Deploy infrastructure: ${{ steps.vars.outputs.deploy_infra }}"
 
       - name: Azure Login (OIDC)
         uses: azure/login@v2
@@ -77,75 +55,68 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Deploy Infrastructure
-        if: ${{ steps.vars.outputs.deploy_infra == 'yes' }}
+      - name: Set resource names
+        id: names
+        run: |
+          echo "rg_name=rg-azarch-${{ inputs.environment }}" >> $GITHUB_OUTPUT
+          echo "app_name=ca-azarch-recommender-${{ inputs.environment }}" >> $GITHUB_OUTPUT
+
+      - name: Deploy Infrastructure via Bicep
         uses: azure/arm-deploy@v2
         with:
           scope: subscription
           region: ${{ env.AZURE_REGION }}
           template: ./infra/main.bicep
           parameters: >
-            environment=${{ steps.vars.outputs.environment }}
+            environment=${{ inputs.environment }}
             location=${{ env.AZURE_REGION }}
-            containerImage=${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.image_tag }}
-          deploymentName: azarch-${{ steps.vars.outputs.environment }}-${{ github.run_number }}
-
-      - name: Get Container App name
-        id: app-info
-        run: |
-          ENV="${{ steps.vars.outputs.environment }}"
-          RG_NAME="rg-azarch-${ENV}"
-          APP_NAME="ca-azarch-recommender-${ENV}"
-          echo "rg_name=${RG_NAME}" >> $GITHUB_OUTPUT
-          echo "app_name=${APP_NAME}" >> $GITHUB_OUTPUT
-
-      - name: Check if Container App exists
-        id: check-app
-        run: |
-          if az containerapp show --name ${{ steps.app-info.outputs.app_name }} --resource-group ${{ steps.app-info.outputs.rg_name }} &>/dev/null; then
-            echo "exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "exists=false" >> $GITHUB_OUTPUT
-            echo "::error::Container App does not exist. Run workflow with 'Deploy infrastructure: yes' first."
-            exit 1
-          fi
-
-      - name: Update Container App image
-        if: ${{ steps.vars.outputs.deploy_infra == 'no' && steps.check-app.outputs.exists == 'true' }}
-        run: |
-          az containerapp update \
-            --name ${{ steps.app-info.outputs.app_name }} \
-            --resource-group ${{ steps.app-info.outputs.rg_name }} \
-            --image ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.image_tag }}
+            containerImage=${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.image_tag }}
+          deploymentName: azarch-${{ inputs.environment }}-${{ github.run_number }}
 
       - name: Get deployment URL
-        id: get-url
         run: |
+          sleep 10  # Wait for app to register
           FQDN=$(az containerapp show \
-            --name ${{ steps.app-info.outputs.app_name }} \
-            --resource-group ${{ steps.app-info.outputs.rg_name }} \
+            --name ${{ steps.names.outputs.app_name }} \
+            --resource-group ${{ steps.names.outputs.rg_name }} \
             --query "properties.configuration.ingress.fqdn" \
             --output tsv)
-          echo "url=https://${FQDN}" >> $GITHUB_OUTPUT
-          echo "### Deployment Complete! :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "### Infrastructure Deployed! :rocket:" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Environment:** ${{ steps.vars.outputs.environment }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Image:** ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.image_tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment:** ${{ inputs.environment }}" >> $GITHUB_STEP_SUMMARY
           echo "**URL:** https://${FQDN}" >> $GITHUB_STEP_SUMMARY
 
-      - name: Health check
+  update-image:
+    runs-on: ubuntu-latest
+    if: ${{ inputs.deploy_infra == 'no' }}
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Update Container App image
         run: |
-          echo "Waiting for app to be ready..."
-          sleep 30
+          az containerapp update \
+            --name ca-azarch-recommender-${{ inputs.environment }} \
+            --resource-group rg-azarch-${{ inputs.environment }} \
+            --image ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.image_tag }}
 
-          for i in {1..5}; do
-            HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${{ steps.get-url.outputs.url }}/_stcore/health" || echo "000")
-            if [ "$HTTP_STATUS" == "200" ]; then
-              echo "Health check passed!"
-              exit 0
-            fi
-            echo "Attempt $i: Got status $HTTP_STATUS, waiting..."
-            sleep 10
-          done
-
-          echo "::warning::Health check did not pass within expected time. App may still be starting."
+      - name: Get deployment URL
+        run: |
+          FQDN=$(az containerapp show \
+            --name ca-azarch-recommender-${{ inputs.environment }} \
+            --resource-group rg-azarch-${{ inputs.environment }} \
+            --query "properties.configuration.ingress.fqdn" \
+            --output tsv)
+          echo "### Image Updated! :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Image:** ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.image_tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "**URL:** https://${FQDN}" >> $GITHUB_STEP_SUMMARY
