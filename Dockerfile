@@ -36,8 +36,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
 
-# Copy application source and catalog
+# Copy application source, sample files, and catalog
 COPY src/ src/
+COPY examples/ examples/
 COPY docker-entrypoint.sh /app/
 COPY architecture-catalog.json /app/
 
