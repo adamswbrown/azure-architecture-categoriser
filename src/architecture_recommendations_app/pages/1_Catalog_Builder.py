@@ -215,35 +215,40 @@ def main():
     # Main content
     st.title("Azure Architecture Catalog Builder")
 
-    # Welcome section
-    with st.expander("Getting Started", expanded=not get_state('repo_path')):
+    # Getting Started - visible section (not collapsed)
+    if not get_state('repo_path'):
+        st.info("**Step 1:** Clone the Azure Architecture Center repository using the sidebar to get started.")
+
+    col1, col2 = st.columns([2, 1])
+
+    with col1:
         st.markdown("""
-        ### What This Tool Does
-
         The Catalog Builder scans the [Azure Architecture Center](https://learn.microsoft.com/en-us/azure/architecture/)
-        repository and creates a structured catalog of architecture patterns. This catalog is used by the
+        repository and creates a structured catalog of architecture patterns. This catalog powers the
         **Recommendations** page to match your applications to suitable architectures.
-
-        ### Quick Start
-
-        1. **Clone the Repository** (sidebar) - Get the Azure Architecture Center content
-        2. **Generate Catalog** (tab 1) - Build `architecture-catalog.json` with defaults
-
-        **Optional customization:**
-        - **Preview** - See what will be included before generating
-        - **Adjust Filters** (tab 2) - Customize which architectures to include
-        - **Edit Keywords** (tab 3) - Modify classification dictionaries
-        - **Config Editor** (tab 4) - Full YAML configuration
-
-        ### Default Settings
-
-        | Setting | Default | Effect |
-        |---------|---------|--------|
-        | **Topic Filter** | reference-architecture | Production-ready patterns (~50) |
-        | **Product Filter** | None (all) | No product restrictions |
-        | **Category Filter** | None (all) | No category restrictions |
         """)
 
+    with col2:
+        st.markdown("""
+        **Quick Start:**
+        1. Clone the repository (sidebar)
+        2. Generate catalog (Build tab)
+        """)
+
+    # Keeping the catalog current
+    with st.container():
+        st.markdown("##### Keeping Your Catalog Current")
+        st.markdown("""
+        The Azure Architecture Center is updated regularly with new patterns and improvements.
+        To get the latest architectures:
+
+        - **Local usage:** Click "Update Repository (git pull)" in the sidebar periodically
+        - **Docker/hosted:** Rebuild the container image to include the latest catalog
+        - **Public deployments:** The bundled catalog is a snapshot from when the image was built;
+          use the Catalog Builder to generate a fresh catalog if you need the latest patterns
+        """)
+
+    st.markdown("---")
     st.markdown("Configure the catalog builder settings through the tabs below.")
 
     # Tabs for different functionality
