@@ -249,7 +249,7 @@ def main() -> None:
 
         **Option 2:** Use the sidebar to upload an existing catalog file.
 
-        **Option 3:** Click "Generate Catalog" in the sidebar to build one with default settings.
+        **Option 3:** Click "Generate Catalog with Defaults" in the sidebar to build one with default settings (~51 reference architectures).
         """)
         return
 
@@ -346,21 +346,48 @@ def _render_sidebar() -> None:
                 # Copyable path (collapsed by default via small font)
                 st.code(info['path'], language=None)
 
-            # Refresh button outside expander (more visible)
-            if st.button("Refresh Catalog", use_container_width=True,
-                       help="Update from Azure Architecture Center", key="refresh_catalog_btn"):
-                set_state('refresh_catalog_requested', True)
-                st.rerun()
+            # Refresh button with confirmation
+            with st.expander("Refresh Catalog with Defaults", expanded=get_state('show_refresh_confirm', False)):
+                st.warning("This will replace your current catalog with default settings:")
+                st.markdown("""
+                **Default settings:**
+                - **Topics:** Reference Architectures only (~51 patterns)
+                - **Products:** No filter (all products)
+                - **Categories:** No filter (all categories)
+                - **Examples:** Excluded (production-ready only)
+
+                For custom filtering, use the **Catalog Builder** page instead.
+                """)
+                col1, col2 = st.columns(2)
+                with col1:
+                    if st.button("Confirm Refresh", type="primary", use_container_width=True, key="confirm_refresh_btn"):
+                        set_state('show_refresh_confirm', False)
+                        set_state('refresh_catalog_requested', True)
+                        st.rerun()
+                with col2:
+                    if st.button("Cancel", use_container_width=True, key="cancel_refresh_btn"):
+                        set_state('show_refresh_confirm', False)
+                        st.rerun()
 
         else:
             st.warning("No catalog found")
 
             # Offer to generate a catalog when none exists
             st.info("Click below to generate a catalog from the Azure Architecture Center.")
-            if st.button("Generate Catalog", type="primary", use_container_width=True,
-                        key="generate_catalog_btn"):
-                set_state('refresh_catalog_requested', True)
-                st.rerun()
+            with st.expander("Generate Catalog with Defaults", expanded=True):
+                st.markdown("""
+                **Default settings:**
+                - **Topics:** Reference Architectures only (~51 patterns)
+                - **Products:** No filter (all products)
+                - **Categories:** No filter (all categories)
+                - **Examples:** Excluded (production-ready only)
+
+                For custom filtering, use the **Catalog Builder** page instead.
+                """)
+                if st.button("Generate Catalog", type="primary", use_container_width=True,
+                            key="generate_catalog_btn"):
+                    set_state('refresh_catalog_requested', True)
+                    st.rerun()
 
         st.markdown("---")
 
@@ -380,8 +407,8 @@ def _render_sidebar() -> None:
 
             **Catalog Sources:**
 
-            - **Generate Catalog** (above) - Fetches latest Azure Architecture Center and builds with default settings
-            - **Catalog Builder** page - Advanced filtering by product, category, or topic
+            - **Refresh with Defaults** (above) - Fetches latest Azure Architecture Center, builds with reference architectures only (~51)
+            - **Catalog Builder** page - Custom filtering by product, category, or topic (can include example scenarios, solution ideas)
             - Catalogs generated in Catalog Builder are automatically used by Recommendations
 
             **Where does the catalog come from?**
