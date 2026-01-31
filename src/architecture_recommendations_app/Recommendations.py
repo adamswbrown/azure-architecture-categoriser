@@ -67,6 +67,118 @@ def _show_help_dialog():
         st.rerun()
 
 
+# Sample files for demo - curated selection showcasing different scenarios
+SAMPLE_FILES = [
+    {
+        "file": "01-java-refactor-aks.json",
+        "name": "Java Microservices → AKS",
+        "description": "Spring Boot application refactoring to Azure Kubernetes Service",
+        "treatment": "Refactor",
+        "tech": "Java 11, Spring Boot, PostgreSQL",
+        "complexity": "Medium",
+    },
+    {
+        "file": "02-dotnet-replatform-appservice.json",
+        "name": ".NET Core → App Service",
+        "description": "Modern .NET application replatforming to Azure App Service",
+        "treatment": "Replatform",
+        "tech": ".NET 6, SQL Server, Redis",
+        "complexity": "Low",
+    },
+    {
+        "file": "07-greenfield-cloud-native-perfect.json",
+        "name": "Cloud-Native Greenfield",
+        "description": "New application built for cloud from the start",
+        "treatment": "Rebuild",
+        "tech": "Node.js, Cosmos DB, Event Grid",
+        "complexity": "Medium",
+    },
+    {
+        "file": "09-rehost-vm-lift-shift.json",
+        "name": "VM Lift-and-Shift",
+        "description": "Legacy application moving to Azure VMs with minimal changes",
+        "treatment": "Rehost",
+        "tech": "Windows Server, IIS, SQL Server",
+        "complexity": "Low",
+    },
+    {
+        "file": "13-highly-regulated-healthcare.json",
+        "name": "Healthcare (HIPAA)",
+        "description": "Highly regulated healthcare application requiring compliance",
+        "treatment": "Replatform",
+        "tech": ".NET, SQL Server, HL7 FHIR",
+        "complexity": "High",
+    },
+    {
+        "file": "17-cost-minimized-startup.json",
+        "name": "Startup MVP",
+        "description": "Cost-optimized startup application prioritizing budget",
+        "treatment": "Replatform",
+        "tech": "Python, PostgreSQL, Redis",
+        "complexity": "Low",
+    },
+    {
+        "file": "18-innovation-first-ai-ml.json",
+        "name": "AI/ML Platform",
+        "description": "Innovation-focused AI and machine learning workload",
+        "treatment": "Rebuild",
+        "tech": "Python, TensorFlow, Spark",
+        "complexity": "High",
+    },
+    {
+        "file": "14-multi-region-active-active.json",
+        "name": "Multi-Region HA",
+        "description": "Mission-critical application requiring global availability",
+        "treatment": "Refactor",
+        "tech": "Java, Cosmos DB, Traffic Manager",
+        "complexity": "Very High",
+    },
+]
+
+
+@st.dialog("Sample Context Files", width="large")
+def _show_sample_files_dialog():
+    """Display sample files available for download."""
+    st.markdown("""
+    These are **synthetic demo scenarios** created to showcase the recommender's capabilities.
+    Each file simulates a different migration scenario with realistic application profiles.
+    """)
+
+    st.info("**Tip:** Select a scenario that matches your interests, then upload it to see recommendations.")
+
+    # Get the samples directory path
+    samples_dir = Path(__file__).parent.parent.parent / "examples" / "context_files"
+
+    for sample in SAMPLE_FILES:
+        with st.container(border=True):
+            col1, col2 = st.columns([3, 1])
+
+            with col1:
+                st.markdown(f"**{sample['name']}**")
+                st.caption(sample['description'])
+                st.markdown(f"Treatment: `{sample['treatment']}` · Complexity: `{sample['complexity']}`")
+                st.markdown(f"*Tech: {sample['tech']}*")
+
+            with col2:
+                file_path = samples_dir / sample['file']
+                if file_path.exists():
+                    with open(file_path, 'r') as f:
+                        file_content = f.read()
+                    st.download_button(
+                        "Download",
+                        data=file_content,
+                        file_name=sample['file'],
+                        mime="application/json",
+                        key=f"download_{sample['file']}",
+                        use_container_width=True,
+                    )
+                else:
+                    st.caption("File not found")
+
+    st.markdown("---")
+    st.caption("For production use, generate context files using [Dr. Migrate](https://drmigrate.com).")
+
+
 def _render_title_with_help(key_suffix: str = ""):
     """Render the page title with a help button."""
     title_col, help_col = st.columns([10, 1])
@@ -606,8 +718,8 @@ def _render_step1_upload(catalog_path: str) -> None:
 
     st.markdown("")  # Small spacer
 
-    # Upload section
-    uploaded_file = render_upload_section()
+    # Upload section with sample files button
+    uploaded_file = render_upload_section(on_sample_click=_show_sample_files_dialog)
 
     if uploaded_file is not None:
         file_hash = hash(uploaded_file.getvalue())
