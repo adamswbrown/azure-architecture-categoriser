@@ -9,6 +9,17 @@ import streamlit as st
 from catalog_builder_gui.state import get_state, set_state
 
 
+def _get_default_output_path() -> str:
+    """Get the default output path for the catalog (project root)."""
+    # Try to find the project root (where architecture-catalog.json should live)
+    current = Path(__file__).resolve()
+    for parent in current.parents:
+        if (parent / 'pyproject.toml').exists() or (parent / 'architecture-catalog.json').exists():
+            return str(parent / 'architecture-catalog.json')
+    # Fallback to current directory
+    return 'architecture-catalog.json'
+
+
 def _is_debug_mode() -> bool:
     """Check if debug mode is enabled via environment variable.
 
@@ -59,9 +70,9 @@ def render_preview_panel() -> None:
         with col1:
             quick_output = st.text_input(
                 "Output File",
-                value="architecture-catalog.json",
+                value=_get_default_output_path(),
                 key="quick_output",
-                help="Path to save the catalog JSON"
+                help="Path to save the catalog JSON (defaults to project root)"
             )
         with col2:
             st.write("")  # Spacer
@@ -221,9 +232,9 @@ def render_preview_panel() -> None:
         with col1:
             custom_output = st.text_input(
                 "Output File",
-                value="architecture-catalog.json",
+                value=_get_default_output_path(),
                 key="custom_output",
-                help="Path to save the catalog JSON"
+                help="Path to save the catalog JSON (defaults to project root)"
             )
         with col2:
             st.write("")  # Spacer
@@ -547,7 +558,7 @@ def _generate_catalog(repo_path: str, output_path: str) -> None:
             st.session_state.catalog_source = 'catalog_builder'
 
             # Success message with stats
-            st.success(f"Catalog generated successfully!")
+            st.success(f"Catalog generated successfully! Go to **Recommendations** to use it.")
 
             # Calculate useful stats from the catalog
             all_services = set()
