@@ -57,6 +57,7 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8501/_stcore/health || exit 1
 
 # Environment variables for Streamlit
+# Force rebuild: 2026-02-02 13:27
 ENV STREAMLIT_SERVER_HEADLESS=true
 ENV STREAMLIT_SERVER_ENABLE_CORS=true
 ENV STREAMLIT_SERVER_ENABLE_XSRF_PROTECTION=false
