@@ -191,6 +191,70 @@ def _get_samples_directory() -> Path | None:
     return None
 
 
+def _get_all_samples(samples_dir: Path) -> list[dict]:
+    """Dynamically discover all sample files and build metadata.
+
+    Scans the samples directory for .json files and extracts metadata.
+    Falls back to hardcoded SAMPLE_FILES metadata when available.
+    """
+    import json
+
+    # Build lookup of hardcoded metadata by filename
+    hardcoded_metadata = {sample['file']: sample for sample in SAMPLE_FILES}
+
+    samples = []
+
+    # Find all .json files in samples directory
+    json_files = sorted(samples_dir.glob("*.json"))
+
+    for file_path in json_files:
+        filename = file_path.name
+
+        # Skip test files
+        if 'test' in filename.lower() or 'xss' in filename.lower():
+            continue
+
+        # Start with hardcoded metadata if available
+        if filename in hardcoded_metadata:
+            samples.append(hardcoded_metadata[filename])
+            continue
+
+        # Try to extract metadata from the file itself
+        try:
+            with open(file_path, 'r') as f:
+                content = json.load(f)
+
+            # Extract info from app_overview if available
+            app_info = {}
+            if isinstance(content, list) and len(content) > 0:
+                app_overview = content[0].get('app_overview', [])
+                if app_overview:
+                    app_info = app_overview[0]
+
+            # Generate metadata
+            sample = {
+                'file': filename,
+                'name': app_info.get('application', filename.replace('.json', '').replace('-', ' ').title()),
+                'description': f"{app_info.get('app_type', 'Application')} - Treatment: {app_info.get('treatment', 'Unknown')}",
+                'treatment': app_info.get('treatment', 'Unknown'),
+                'complexity': 'Medium',  # Default
+                'tech': ', '.join(content[0].get('detected_technology_running', [])[:3]) if isinstance(content, list) and len(content) > 0 else 'Various',
+            }
+            samples.append(sample)
+        except Exception as e:
+            # Fallback: create minimal metadata
+            samples.append({
+                'file': filename,
+                'name': filename.replace('.json', '').replace('-', ' ').title(),
+                'description': 'Sample context file',
+                'treatment': 'Unknown',
+                'complexity': 'Unknown',
+                'tech': 'Various',
+            })
+
+    return samples
+
+
 @st.dialog("Sample Context Files", width="large")
 def _show_sample_files_dialog():
     """Display sample files available for download."""
@@ -253,7 +317,11 @@ def _show_sample_files_dialog():
     files_in_dir = os.listdir(str(samples_dir)) if os.path.isdir(str(samples_dir)) else []
     st.info(f"📁 Found samples at: `{samples_dir}` ({len(files_in_dir)} items)")
 
-    for sample in SAMPLE_FILES:
+    # Dynamically discover all samples
+    all_samples = _get_all_samples(samples_dir)
+    st.caption(f"Displaying {len(all_samples)} sample scenarios")
+
+    for sample in all_samples:
         with st.container(border=True):
             col1, col2 = st.columns([3, 1])
 
