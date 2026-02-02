@@ -58,7 +58,8 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 
 # Environment variables for Streamlit
 ENV STREAMLIT_SERVER_HEADLESS=true
-ENV STREAMLIT_SERVER_ENABLE_CORS=false
+ENV STREAMLIT_SERVER_ENABLE_CORS=true
+ENV STREAMLIT_SERVER_ENABLE_XSRF_PROTECTION=false
 ENV STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
 
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
