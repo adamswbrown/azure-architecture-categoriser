@@ -145,6 +145,8 @@ def _get_samples_directory() -> Path | None:
     3. Absolute path from project root environment variable
     4. Docker container standard location
     """
+    import sys
+
     # Approach 1: Relative to this file
     samples_dir = Path(__file__).parent.parent.parent / "examples" / "context_files"
     if samples_dir.exists():
@@ -160,6 +162,11 @@ def _get_samples_directory() -> Path | None:
     if samples_dir.exists():
         return samples_dir
 
+    # Approach 3b: Check /app/examples (without context_files subdirectory)
+    samples_dir = Path("/app/examples")
+    if samples_dir.exists() and (samples_dir / "context_files").exists():
+        return samples_dir / "context_files"
+
     # Approach 4: Check common development locations
     project_root_candidates = [
         Path(__file__).parent.parent.parent,
@@ -172,6 +179,14 @@ def _get_samples_directory() -> Path | None:
         samples_dir = root / "examples" / "context_files"
         if samples_dir.exists():
             return samples_dir
+
+    # Log what we're looking for (for debugging)
+    import logging
+    logger = logging.getLogger(__name__)
+    logger.debug(f"Could not find samples directory")
+    logger.debug(f"  __file__: {__file__}")
+    logger.debug(f"  cwd: {Path.cwd()}")
+    logger.debug(f"  sys.path: {sys.path[:3]}")
 
     return None
 
@@ -190,14 +205,21 @@ def _show_sample_files_dialog():
     samples_dir = _get_samples_directory()
 
     if not samples_dir:
-        st.error("""
+        import os
+        st.error(f"""
         **Sample files directory not found.**
 
         This can happen if:
-        - The Docker image wasn't built correctly
+        - The Docker image wasn't rebuilt or redeployed
         - The examples/ directory is missing from the deployment
+        - The container hasn't been restarted yet
 
         **Workaround:** Generate sample files by going to the Catalog Builder page, or download them from the [GitHub repository](https://github.com/adamswbrown/azure-architecture-categoriser/tree/main/examples/context_files).
+
+        **Debug info:**
+        - Current directory: {os.getcwd()}
+        - /app exists: {os.path.exists('/app')}
+        - /app/examples exists: {os.path.exists('/app/examples')}
         """)
         return
 
@@ -212,20 +234,23 @@ def _show_sample_files_dialog():
                 st.markdown(f"*Tech: {sample['tech']}*")
 
             with col2:
-                file_path = samples_dir / sample['file']
-                if file_path.exists():
-                    with open(file_path, 'r') as f:
-                        file_content = f.read()
-                    st.download_button(
-                        "Download",
-                        data=file_content,
-                        file_name=sample['file'],
-                        mime="application/json",
-                        key=f"download_{sample['file']}",
-                        use_container_width=True,
-                    )
-                else:
-                    st.caption(f"⚠️ Not found")
+                try:
+                    file_path = samples_dir / sample['file']
+                    if file_path.exists():
+                        with open(file_path, 'r') as f:
+                            file_content = f.read()
+                        st.download_button(
+                            "Download",
+                            data=file_content,
+                            file_name=sample['file'],
+                            mime="application/json",
+                            key=f"download_{sample['file']}",
+                            use_container_width=True,
+                        )
+                    else:
+                        st.caption(f"⚠️ Not found: {file_path}")
+                except Exception as e:
+                    st.caption(f"⚠️ Error: {str(e)}")
 
     st.markdown("---")
     st.caption("For production use, generate context files using [Dr. Migrate](https://drmigrate.com).")
