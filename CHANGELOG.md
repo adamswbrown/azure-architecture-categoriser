@@ -5,6 +5,27 @@ All notable changes to the Azure Architecture Recommender are documented in this
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-02-04
+
+### Added
+- **Dr. Migrate Integration**: Generate architecture recommendations for ALL applications, not just Java/.NET
+  - New `DrMigrateContextGenerator` converts Dr. Migrate data to context file format
+  - Auto-detection of Dr. Migrate vs App Cat format on file upload
+  - Comprehensive LLM prompt for extracting data from Dr. Migrate AI Advisor
+  - CLI commands: `generate-context` and `generate-sample-drmigrate`
+  - Full documentation at `docs/drmigrate-integration.md`
+- **New Pydantic Models**: `DrMigrateApplicationData` and related models for all Dr. Migrate data sources
+- **Technology Detection**: Pattern-based detection from OS, installed software, and tech stack fields
+- **Azure Service Mapping**: Automatic mapping of detected technologies to Azure services
+- **Inferred App Mod Results**: Generate compatibility assessments for non-Java/.NET applications
+
+### Changed
+- Upload section now accepts both App Cat context files and Dr. Migrate data exports
+- Validation errors now show LLM prompt to help users generate correct data format
+- Placeholder content updated to explain both supported file formats
+
+---
+
 ## [1.3.0] - 2026-01-31
 
 ### Added

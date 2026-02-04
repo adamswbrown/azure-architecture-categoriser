@@ -72,6 +72,33 @@ Validate catalog and context files:
 architecture-scorer validate -c catalog.json -x context.json
 ```
 
+### Generate Context Command
+
+Convert Dr. Migrate data exports to context file format:
+
+```bash
+# Basic usage
+architecture-scorer generate-context -i drmigrate-data.json -o context.json
+
+# Include cost comparison data
+architecture-scorer generate-context -i drmigrate-data.json -o context.json --include-costs
+
+# Include network dependency data
+architecture-scorer generate-context -i drmigrate-data.json -o context.json --include-network
+```
+
+This enables architecture recommendations for ALL applications - not just those with Java/.NET App Cat scans.
+
+### Generate Sample Dr. Migrate Input
+
+Create a sample Dr. Migrate input file to see the expected format:
+
+```bash
+architecture-scorer generate-sample-drmigrate -o sample.json -n "MyApplication"
+```
+
+See [Dr. Migrate Integration](drmigrate-integration.md) for full details on this workflow.
+
 ## Programmatic Usage
 
 ```python
@@ -256,4 +283,5 @@ Your Answers Applied:
 
 - [Catalog Builder](./catalog-builder.md) - Generate architecture catalogs
 - [Recommendations App](./recommendations-app.md) - Customer-facing web application
+- [Dr. Migrate Integration](./drmigrate-integration.md) - Get recommendations for all applications
 - [Scorer Spec](./design/architecture-scorer-prompt-v1.md) - Full specification

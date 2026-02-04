@@ -11,6 +11,169 @@ This integration allows you to:
 - Leverage existing Dr. Migrate data without additional scanning
 - Get architecture recommendations for your entire application portfolio
 
+## Quick Start: Web Upload
+
+The easiest way to use Dr. Migrate data is through the Recommendations App:
+
+1. **Get the LLM Prompt**: In the Recommendations App, expand "How to get data from Dr. Migrate AI Advisor" on the home page
+2. **Generate Data**: Copy the prompt into Dr. Migrate AI Advisor, replacing `YOUR_APPLICATION_NAME` with your app name
+3. **Save the Response**: Copy the JSON response and save it as a `.json` file
+4. **Upload**: Upload the file to the Recommendations App - it auto-detects the format and converts it
+
+If validation fails, the app shows the LLM prompt again with specific suggestions for fixing the data.
+
+## LLM Prompt for Dr. Migrate AI Advisor
+
+Copy this prompt into Dr. Migrate AI Advisor to extract data for any application:
+
+```
+For the application "YOUR_APPLICATION_NAME", please extract and return ALL available data as a JSON object.
+
+Query these data sources and return the complete information:
+
+**Required Data Sources:**
+1. Application_Overview - all fields for this application
+2. Server_Overview_Current - all servers belonging to this application
+3. InstalledApplications - all software installed on each server
+4. Key_Software - key software detected for this application
+5. Cloud_Server_Cost - projected cloud costs per server
+6. Current_Server_Cost - current on-premises costs per server
+7. Application_Cost_Comparison - aggregated cost comparison
+8. App_Modernization_Candidates - modernization candidate technologies (if any)
+9. network_application_overview - application dependencies (if available)
+
+Return the data in this exact JSON structure:
+
+{
+  "application_overview": {
+    "application": "",
+    "number_of_machines": null,
+    "number_of_environments": null,
+    "environment_names": "",
+    "planned_migration_wave": "",
+    "migration_squad": "",
+    "migration_start_date": "",
+    "migration_end_date": "",
+    "complexity_rating": "",
+    "migration_scope": "",
+    "app_function": "",
+    "app_type": "",
+    "app_owner": "",
+    "app_sme": "",
+    "high_availability": "",
+    "business_critical": "",
+    "inherent_risk": "",
+    "materiality": "",
+    "pii_data": "",
+    "disaster_recovery": "",
+    "number_of_unique_operating_systems": "",
+    "unique_operating_systems": "",
+    "number_of_machines_with_out_of_support_OS": "",
+    "sql_server_count": "",
+    "non_sql_databases": "",
+    "other_tech_stack_components": "",
+    "assigned_migration_strategy": "",
+    "suitable_migration_strategy_options": "",
+    "detected_app_components": "",
+    "app_component_modernization_options": ""
+  },
+  "server_overviews": [
+    {
+      "machine": "",
+      "application": "",
+      "environment": "",
+      "OperatingSystem": "",
+      "os_support_status": "",
+      "PowerStatus": "",
+      "CloudVMReadiness": "",
+      "AllocatedMemoryInGB": null,
+      "Cores": null,
+      "CPUUsageInPct": null,
+      "MemoryUsageInPct": null,
+      "StorageGB": null,
+      "DiskReadOpsPerSec": null,
+      "DiskWriteOpsPerSec": null,
+      "NetworkInMBPS": "",
+      "NetworkOutMBPS": ""
+    }
+  ],
+  "installed_applications": [
+    {
+      "machine": "",
+      "key_software": "",
+      "key_software_category": "",
+      "key_software_type": "",
+      "specific_software_detected": ""
+    }
+  ],
+  "key_software": [
+    {
+      "application": "",
+      "key_software": "",
+      "key_software_category": ""
+    }
+  ],
+  "cloud_server_costs": [
+    {
+      "machine": "",
+      "application": "",
+      "assigned_treatment": "",
+      "assigned_target": "",
+      "cloud_compute_cost_annual": null,
+      "cloud_storage_cost_annual": null,
+      "cloud_total_cost_annual": null
+    }
+  ],
+  "current_server_costs": [
+    {
+      "machine": "",
+      "hardware_cost_annual": null,
+      "software_cost_annual": null,
+      "electricity_cost_annual": null,
+      "data_center_cost_annual": null,
+      "virtualisation_cost_annual": null,
+      "networking_cost_annual": null,
+      "storage_cost_annual": null,
+      "backup_cost_annual": null,
+      "disaster_recovery_cost_annual": null,
+      "total_cost_annual": null
+    }
+  ],
+  "app_mod_candidates": [
+    {
+      "application": "",
+      "app_mod_candidate_technology": "",
+      "number_of_machines_with_tech": null
+    }
+  ],
+  "cost_comparison": {
+    "application": "",
+    "current_total_cost_annual": null,
+    "cloud_compute_cost_annual": null,
+    "cloud_storage_cost_annual": null,
+    "cloud_total_cost_annual": null,
+    "Currency": "",
+    "Symbol": ""
+  },
+  "network_dependencies": [
+    {
+      "source_application": "",
+      "destination_application": "",
+      "port": ""
+    }
+  ]
+}
+
+**Important Instructions:**
+- Include ALL servers associated with this application
+- Include ALL installed software on each server
+- Use null for missing numeric values, empty string "" for missing text
+- If a data source returns no results, use an empty array []
+- Return ONLY the JSON object, no additional text or explanation
+```
+
+Replace `YOUR_APPLICATION_NAME` with the actual application name before using.
+
 ## Data Source Mapping
 
 The following table shows how Dr. Migrate data sources map to context file fields:
