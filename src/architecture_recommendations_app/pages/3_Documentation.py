@@ -214,6 +214,35 @@ def main():
     # Custom CSS for better documentation display
     st.markdown("""
     <style>
+    /* Sticky sidebar navigation */
+    [data-testid="column"]:first-child {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+        padding-top: 1rem;
+        padding-bottom: 2rem;
+    }
+
+    /* Style the scrollbar for sidebar */
+    [data-testid="column"]:first-child::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    [data-testid="column"]:first-child::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 3px;
+    }
+
+    [data-testid="column"]:first-child::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 3px;
+    }
+
+    [data-testid="column"]:first-child::-webkit-scrollbar-thumb:hover {
+        background: #a1a1a1;
+    }
+
     /* Documentation content styling */
     .doc-content {
         max-width: 900px;
