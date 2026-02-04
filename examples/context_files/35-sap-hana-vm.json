@@ -1,0 +1,86 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "SAPERP",
+        "app_type": "Enterprise Resource Planning",
+        "business_crtiticality": "Critical",
+        "treatment": "Rehost"
+      }
+    ],
+    "detected_technology_running": [
+      "SAP S/4HANA",
+      "HANA Database",
+      "SAP NetWeaver",
+      "SUSE Linux Enterprise Server"
+    ],
+    "app_approved_azure_services": [
+      {
+        "SAP S/4HANA": "Azure VMs (SAP Certified)",
+        "HANA Database": "Azure Large Instances for SAP HANA"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "SAPHANA01",
+        "environment": "Production",
+        "OperatingSystem": "SUSE Linux Enterprise Server 15",
+        "ip_address": ["10.130.0.10"],
+        "StorageGB": 4096.0,
+        "MemoryGB": 512.0,
+        "Cores": 64.0,
+        "CPUUsage": 55.0,
+        "MemoryUsage": 70.0,
+        "DiskReadOpsPersec": 1000.0,
+        "DiskWriteOpsPerSec": 800.0,
+        "NetworkInMBPS": 200.0,
+        "NetworkOutMBPS": 150.0,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 8.0,
+        "AzureVMReadiness": "ReadyWithConditions",
+        "AzureReadinessIssues": "Requires SAP-certified Azure VMs",
+        "migration_strategy": "Rehost",
+        "treatment_option": "Azure VMs for SAP",
+        "detected_COTS": ["SAP S/4HANA", "HANA Database"],
+        "treatment_option_other": null
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": "SAP",
+        "summary": {
+          "sap_workload": true,
+          "high_memory": true,
+          "specialized_infrastructure": true,
+          "container_ready": false
+        },
+        "findings": [
+          {
+            "type": "Infrastructure",
+            "severity": "Critical",
+            "description": "SAP HANA requires SAP-certified Azure infrastructure."
+          },
+          {
+            "type": "Memory",
+            "severity": "High",
+            "description": "High memory requirements need M-series or Large Instance VMs."
+          }
+        ],
+        "compatibility": {
+          "azure_virtual_machines_sap": "SupportedWithConditions",
+          "azure_large_instances": "FullySupported",
+          "azure_kubernetes_service": "NotSupported"
+        },
+        "recommended_targets": [
+          "Azure VMs for SAP (M-series)",
+          "Azure Large Instances for SAP HANA"
+        ],
+        "blockers": [
+          "SAP requires certified infrastructure",
+          "HANA memory requirements exceed container limits"
+        ]
+      }
+    ]
+  }
+]

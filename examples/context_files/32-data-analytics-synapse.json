@@ -1,0 +1,79 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "SalesDataWarehouse",
+        "app_type": "Data Analytics Platform",
+        "business_crtiticality": "High",
+        "treatment": "Replatform"
+      }
+    ],
+    "detected_technology_running": [
+      "SQL Server 2019",
+      "SSIS Packages",
+      "Power BI",
+      "Analysis Services"
+    ],
+    "app_approved_azure_services": [
+      {
+        "SQL Server 2019": "Azure Synapse Analytics",
+        "SSIS Packages": "Azure Data Factory",
+        "Analysis Services": "Azure Analysis Services"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "DWSQL01",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2019",
+        "ip_address": ["10.100.0.20"],
+        "StorageGB": 2048.0,
+        "MemoryGB": 128.0,
+        "Cores": 16.0,
+        "CPUUsage": 60.0,
+        "MemoryUsage": 75.0,
+        "DiskReadOpsPersec": 500.0,
+        "DiskWriteOpsPerSec": 400.0,
+        "NetworkInMBPS": 50.0,
+        "NetworkOutMBPS": 100.0,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 4.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform",
+        "treatment_option": "Azure Synapse Analytics",
+        "detected_COTS": ["SQL Server", "SSIS"],
+        "treatment_option_other": null
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": "SQL Server DW",
+        "summary": {
+          "data_warehouse": true,
+          "etl_pipelines": true,
+          "container_ready": false,
+          "paas_ready": true
+        },
+        "findings": [
+          {
+            "type": "Architecture",
+            "severity": "Info",
+            "description": "Data warehouse workloads are best suited for Azure Synapse."
+          }
+        ],
+        "compatibility": {
+          "azure_synapse_analytics": "FullySupported",
+          "azure_sql_database": "SupportedWithChanges",
+          "azure_kubernetes_service": "NotApplicable"
+        },
+        "recommended_targets": [
+          "Azure Synapse Analytics",
+          "Azure Data Factory"
+        ],
+        "blockers": []
+      }
+    ]
+  }
+]

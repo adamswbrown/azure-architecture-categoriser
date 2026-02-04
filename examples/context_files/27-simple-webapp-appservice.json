@@ -1,0 +1,71 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "EmployeeDirectory",
+        "app_type": "Simple Web Application",
+        "business_crtiticality": "Low",
+        "treatment": "Replatform"
+      }
+    ],
+    "detected_technology_running": [
+      "ASP.NET Core 6.0",
+      "Azure SQL Database",
+      "Microsoft IIS"
+    ],
+    "app_approved_azure_services": [
+      {
+        "ASP.NET Core 6.0": "Azure App Service",
+        "Azure SQL Database": "Azure SQL Database"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "EMPDIR01",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2019",
+        "ip_address": ["10.50.0.10"],
+        "StorageGB": 50.0,
+        "MemoryGB": 4.0,
+        "Cores": 2.0,
+        "CPUUsage": 15.0,
+        "MemoryUsage": 30.0,
+        "DiskReadOpsPersec": 20.0,
+        "DiskWriteOpsPerSec": 15.0,
+        "NetworkInMBPS": 5.0,
+        "NetworkOutMBPS": 8.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform",
+        "treatment_option": "Azure App Service",
+        "detected_COTS": ["ASP.NET Core 6.0"],
+        "treatment_option_other": null
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": ".NET Core",
+        "summary": {
+          "total_projects": 1,
+          "unsupported_apis": 0,
+          "windows_dependencies": false,
+          "container_ready": true,
+          "complexity": "Low"
+        },
+        "findings": [],
+        "compatibility": {
+          "azure_app_service": "FullySupported",
+          "azure_container_apps": "Supported",
+          "azure_kubernetes_service": "Supported"
+        },
+        "recommended_targets": [
+          "Azure App Service"
+        ],
+        "blockers": []
+      }
+    ]
+  }
+]

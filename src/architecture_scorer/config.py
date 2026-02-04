@@ -13,9 +13,14 @@ class ScoringWeightsConfig(BaseModel):
 
     These weights control how much each factor contributes to the final
     match score. They should sum to approximately 1.0.
+
+    Note: Question-driven dimensions (cost, availability, operating_model)
+    have been increased to make user answers more impactful. Cost is
+    particularly important to prevent expensive architectures from being
+    recommended to cost-conscious users.
     """
     treatment_alignment: float = Field(
-        0.20,
+        0.18,
         description="Weight for migration treatment alignment (rehost, replatform, etc.)"
     )
     runtime_model_compatibility: float = Field(
@@ -23,36 +28,40 @@ class ScoringWeightsConfig(BaseModel):
         description="Weight for runtime model match (containers, VMs, serverless)"
     )
     platform_compatibility: float = Field(
-        0.15,
+        0.12,
         description="Weight for platform/technology compatibility"
     )
     app_mod_recommended: float = Field(
-        0.10,
+        0.08,
         description="Boost weight when App Mod recommends the target platform"
     )
     service_overlap: float = Field(
-        0.10,
+        0.06,
         description="Weight for overlap between required and architecture services"
     )
     browse_tag_overlap: float = Field(
-        0.05,
+        0.04,
         description="Weight for matching browse/topic tags"
     )
     availability_alignment: float = Field(
-        0.10,
+        0.12,
         description="Weight for availability/SLA requirements match"
     )
     operating_model_fit: float = Field(
-        0.08,
+        0.10,
         description="Weight for operational maturity alignment"
     )
     complexity_tolerance: float = Field(
-        0.07,
+        0.04,
         description="Weight for complexity vs. team capability match"
     )
     cost_posture_alignment: float = Field(
-        0.05,
-        description="Weight for cost optimization strategy alignment"
+        0.12,
+        description="Weight for cost optimization strategy alignment (increased for impact)"
+    )
+    security_alignment: float = Field(
+        0.04,
+        description="Weight for security requirements alignment"
     )
 
 

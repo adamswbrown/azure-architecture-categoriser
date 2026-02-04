@@ -1,0 +1,80 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "MarketingPortal",
+        "app_type": "Single Page Application",
+        "business_crtiticality": "Low",
+        "treatment": "Replatform"
+      }
+    ],
+    "detected_technology_running": [
+      "React 18",
+      "Node.js 16",
+      "REST API",
+      "Azure Blob Storage"
+    ],
+    "app_approved_azure_services": [
+      {
+        "React 18": "Azure Static Web Apps",
+        "Node.js 16": "Azure Functions"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "MKTPORTAL01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": ["10.80.0.5"],
+        "StorageGB": 20.0,
+        "MemoryGB": 2.0,
+        "Cores": 1.0,
+        "CPUUsage": 10.0,
+        "MemoryUsage": 20.0,
+        "DiskReadOpsPersec": 15.0,
+        "DiskWriteOpsPerSec": 5.0,
+        "NetworkInMBPS": 50.0,
+        "NetworkOutMBPS": 100.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform",
+        "treatment_option": "Static Web Apps with Functions backend",
+        "detected_COTS": ["React", "Node.js"],
+        "treatment_option_other": null
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": "JavaScript/React",
+        "summary": {
+          "frontend_only": true,
+          "static_content": true,
+          "api_backend": true,
+          "container_ready": false,
+          "serverless_candidate": true
+        },
+        "findings": [
+          {
+            "type": "Architecture",
+            "severity": "Info",
+            "description": "Static frontend with serverless API is ideal for Static Web Apps."
+          }
+        ],
+        "compatibility": {
+          "azure_static_web_apps": "FullySupported",
+          "azure_app_service": "Supported",
+          "azure_container_apps": "Supported",
+          "azure_kubernetes_service": "Overkill"
+        },
+        "recommended_targets": [
+          "Azure Static Web Apps",
+          "Azure Functions"
+        ],
+        "blockers": []
+      }
+    ]
+  }
+]

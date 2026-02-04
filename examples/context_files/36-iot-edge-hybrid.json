@@ -1,0 +1,80 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "FactoryIoTGateway",
+        "app_type": "IoT Edge Application",
+        "business_crtiticality": "High",
+        "treatment": "Refactor"
+      }
+    ],
+    "detected_technology_running": [
+      "Python 3.9",
+      "MQTT Broker",
+      "Azure IoT Edge",
+      "TimescaleDB"
+    ],
+    "app_approved_azure_services": [
+      {
+        "Python 3.9": "Azure IoT Edge Modules",
+        "MQTT Broker": "Azure IoT Hub",
+        "TimescaleDB": "Azure Database for PostgreSQL"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "IOTGW01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 20.04",
+        "ip_address": ["192.168.1.100"],
+        "StorageGB": 64.0,
+        "MemoryGB": 8.0,
+        "Cores": 4.0,
+        "CPUUsage": 40.0,
+        "MemoryUsage": 60.0,
+        "DiskReadOpsPersec": 200.0,
+        "DiskWriteOpsPerSec": 150.0,
+        "NetworkInMBPS": 50.0,
+        "NetworkOutMBPS": 30.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Refactor",
+        "treatment_option": "Azure IoT Edge",
+        "detected_COTS": ["Azure IoT Edge"],
+        "treatment_option_other": null
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": "IoT",
+        "summary": {
+          "edge_computing": true,
+          "hybrid_connectivity": true,
+          "container_ready": true,
+          "specialized_platform": true
+        },
+        "findings": [
+          {
+            "type": "Architecture",
+            "severity": "Info",
+            "description": "IoT workloads benefit from Azure IoT Edge for edge processing."
+          }
+        ],
+        "compatibility": {
+          "azure_iot_edge": "FullySupported",
+          "azure_iot_hub": "FullySupported",
+          "azure_kubernetes_service": "NotRecommended"
+        },
+        "recommended_targets": [
+          "Azure IoT Edge",
+          "Azure IoT Hub",
+          "Azure Stream Analytics"
+        ],
+        "blockers": []
+      }
+    ]
+  }
+]
