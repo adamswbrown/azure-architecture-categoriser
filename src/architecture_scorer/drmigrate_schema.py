@@ -320,7 +320,7 @@ class DrMigrateApplicationData(BaseModel):
     # Cloud cost projections
     cloud_server_costs: list[DrMigrateCloudServerCost] = Field(default_factory=list)
 
-    # Current on-prem costs
+    # Current on-prem costs (from Current_Server_Cost view)
     current_server_costs: list[DrMigrateCurrentServerCost] = Field(default_factory=list)
 
     # App modernization candidates (if any)
