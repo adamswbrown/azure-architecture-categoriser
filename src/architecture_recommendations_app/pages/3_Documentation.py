@@ -170,8 +170,9 @@ def render_table_of_contents(content: str) -> None:
 def render_sidebar_navigation(available_docs: list[dict], filtered_docs: list[dict]) -> None:
     """Render the documentation navigation in the sidebar."""
     with st.sidebar:
-        st.markdown("## 📖 Documentation")
-        st.caption("Browse project documentation")
+        st.markdown("---")
+        st.markdown("### 📖 Doc Navigation")
+        st.caption("Select a document to read")
 
         # Search
         search_term = st.text_input(
@@ -261,11 +262,6 @@ def main():
     # Custom CSS for documentation styling
     st.markdown("""
     <style>
-    /* Hide default sidebar decorations for cleaner look */
-    [data-testid="stSidebarNav"] {
-        display: none;
-    }
-
     /* Sidebar button styling */
     section[data-testid="stSidebar"] .stButton > button {
         text-align: left !important;
