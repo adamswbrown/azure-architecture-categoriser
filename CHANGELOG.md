@@ -5,9 +5,14 @@ All notable changes to the Azure Architecture Recommender are documented in this
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.5.0] - 2026-02-04
+## [2.0.0] - 2026-02-04
 
 ### Added
+- **Documentation Viewer**: New in-app documentation page with sidebar navigation
+  - Browse all project docs directly in the web app
+  - Search and filter documentation
+  - Auto-generated table of contents
+  - Sticky sidebar navigation
 - **10 New Sample Context Files**: Expanded test coverage with diverse migration scenarios (#27-36)
   - 27-simple-webapp-appservice.json (App Service replatform)
   - 28-serverless-functions-eventdriven.json (Functions event-driven)
