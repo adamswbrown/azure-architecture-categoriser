@@ -43,16 +43,17 @@ The scorer searches for config in this order:
 # scorer-config.yaml
 
 scoring_weights:
-  treatment_alignment: 0.20      # Migration treatment match weight
+  treatment_alignment: 0.18      # Migration treatment match weight
+  cost_posture_alignment: 0.12   # Cost strategy match (boosted to 0.18 when user answers)
+  availability_alignment: 0.12   # Availability requirements (boosted to 0.15 when user answers)
+  platform_compatibility: 0.12   # Platform/technology match
+  operating_model_fit: 0.10      # Operational maturity match
   runtime_model_compatibility: 0.10  # Runtime model match
-  platform_compatibility: 0.15    # Platform/technology match
-  app_mod_recommended: 0.10       # Boost for App Mod recommended
-  service_overlap: 0.10           # Service overlap weight
-  browse_tag_overlap: 0.05        # Browse tag match weight
-  availability_alignment: 0.10    # Availability requirements
-  operating_model_fit: 0.08       # Operational maturity match
-  complexity_tolerance: 0.07      # Complexity vs capability
-  cost_posture_alignment: 0.05    # Cost strategy match
+  app_mod_recommended: 0.08      # Boost for App Mod recommended
+  service_overlap: 0.06          # Service overlap weight
+  browse_tag_overlap: 0.04       # Browse tag match weight
+  complexity_tolerance: 0.04     # Complexity vs capability
+  security_alignment: 0.04       # Security requirements alignment
 
 quality_weights:
   curated: 1.0                    # Weight for curated architectures
@@ -79,17 +80,34 @@ question_generation:
 | Weight | Description | Range |
 |--------|-------------|-------|
 | `treatment_alignment` | How well the migration treatment (rehost, replatform, refactor) matches the architecture's supported treatments | 0.0-1.0 |
-| `runtime_model_compatibility` | How well the expected runtime model (microservices, n-tier, serverless) matches | 0.0-1.0 |
+| `cost_posture_alignment` | Alignment with cost optimization strategy. **Dynamic boost**: Weight increases by 50% (capped at 0.18) when user explicitly answers the cost question | 0.0-1.0 |
+| `availability_alignment` | How well availability requirements align. **Dynamic boost**: Weight increases by 25% (capped at 0.15) when user explicitly answers | 0.0-1.0 |
 | `platform_compatibility` | Technology/platform compatibility based on App Mod assessment | 0.0-1.0 |
+| `operating_model_fit` | Alignment between team maturity and required operating model | 0.0-1.0 |
+| `runtime_model_compatibility` | How well the expected runtime model (microservices, n-tier, serverless) matches | 0.0-1.0 |
 | `app_mod_recommended` | Boost when App Mod explicitly recommends the target platform | 0.0-1.0 |
 | `service_overlap` | Overlap between required services and architecture services | 0.0-1.0 |
 | `browse_tag_overlap` | Match on browse/topic tags | 0.0-1.0 |
-| `availability_alignment` | How well availability requirements align | 0.0-1.0 |
-| `operating_model_fit` | Alignment between team maturity and required operating model | 0.0-1.0 |
 | `complexity_tolerance` | Match between complexity and team capability | 0.0-1.0 |
-| `cost_posture_alignment` | Alignment with cost optimization strategy | 0.0-1.0 |
+| `security_alignment` | Alignment with security/compliance requirements | 0.0-1.0 |
 
 **Note:** Weights should sum to approximately 1.0 for normalized scoring.
+
+### Dynamic Weight Boosting
+
+Question-driven dimensions (`cost_posture_alignment`, `availability_alignment`, `operating_model_fit`) receive a weight boost when users explicitly answer clarification questions. This ensures user preferences have meaningful impact on recommendations.
+
+### Asymmetric Cost Penalties
+
+The cost scoring uses asymmetric penalties to protect cost-conscious users:
+
+| Scenario | Score |
+|----------|-------|
+| Perfect match | 1.0 |
+| 1-level mismatch | 0.6 |
+| Cost-minimized user vs innovation_first architecture | 0.1 |
+| Cost-minimized user vs scale_optimized architecture | 0.25 |
+| Architecture cheaper than requested | 0.5 |
 
 ## Confidence Threshold Tuning
 

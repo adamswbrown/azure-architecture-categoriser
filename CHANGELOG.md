@@ -5,6 +5,49 @@ All notable changes to the Azure Architecture Recommender are documented in this
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-02-04
+
+### Added
+- **10 New Sample Context Files**: Expanded test coverage with diverse migration scenarios (#27-36)
+  - 27-simple-webapp-appservice.json (App Service replatform)
+  - 28-serverless-functions-eventdriven.json (Functions event-driven)
+  - 29-legacy-vb6-vm-only.json (Legacy VB6 rehost)
+  - 30-static-webapp-spa.json (Static Web Apps)
+  - 31-container-apps-microservice.json (Container Apps refactor)
+  - 32-data-analytics-synapse.json (Synapse analytics)
+  - 33-wcf-service-appservice.json (WCF migration)
+  - 34-sharepoint-migration.json (SharePoint replace/SaaS)
+  - 35-sap-hana-vm.json (SAP HANA rehost)
+  - 36-iot-edge-hybrid.json (IoT Edge refactor)
+- **Filtered Modernization CSV**: `Modernisation_Options_Filtered.csv` with 1,209 rows (40% reduction)
+  - Removes non-architectural entries (endpoint management, security tools, backup utilities)
+  - Keeps architecturally-relevant technologies (runtimes, databases, containers, middleware)
+  - Loader defaults to filtered CSV; `use_full=True` loads original 2,028 rows
+- **Security Alignment Dimension**: New `security_alignment` scoring weight (4%)
+
+### Changed
+- **Enhanced Question Impact on Scoring**: User answers now have significantly more influence on recommendations
+  - `cost_posture_alignment`: 5% → 12% (boosted to 18% when user explicitly answers)
+  - `availability_alignment`: 10% → 12% (boosted to 15% when user answers)
+  - `operating_model_fit`: 8% → 10%
+- **Asymmetric Cost Mismatch Penalties**: Harsher penalties when expensive architectures are recommended to cost-conscious users
+  - Cost-minimized user vs innovation_first architecture: 0.1 score (was 0.5)
+  - Cost-minimized user vs scale_optimized architecture: 0.25 score
+  - Mild penalty when architecture is cheaper than requested (0.5)
+- **Stricter Operating Model Penalties**: Traditional IT vs SRE gap now scores 0.1 (3-level mismatch)
+- **Rebalanced Scoring Weights** to accommodate question-driven dimensions:
+  - `treatment_alignment`: 20% → 18%
+  - `platform_compatibility`: 15% → 12%
+  - `app_mod_recommended`: 10% → 8%
+  - `service_overlap`: 10% → 6%
+  - `browse_tag_overlap`: 5% → 4%
+  - `complexity_tolerance`: 7% → 4%
+
+### Fixed
+- AKS over-recommendation for cost-conscious users: Expensive AKS patterns now properly penalized when user selects "cost_minimized"
+
+---
+
 ## [1.4.0] - 2026-02-04
 
 ### Added

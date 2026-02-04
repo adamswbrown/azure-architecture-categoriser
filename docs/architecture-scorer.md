@@ -130,16 +130,19 @@ for rec in result.recommendations:
 
 | Dimension | Weight | Description |
 |-----------|--------|-------------|
-| treatment_alignment | 20% | Gartner 8R treatment match |
-| platform_compatibility | 15% | App Mod platform status |
-| app_mod_recommended | 10% | Boost for App Mod recommended targets |
+| treatment_alignment | 18% | Gartner 8R treatment match |
+| cost_posture_alignment | 12%* | Cost profile match (boosted to 18% when user answers) |
+| availability_alignment | 12%* | Availability model match (boosted to 15% when user answers) |
+| platform_compatibility | 12% | App Mod platform status |
+| operating_model_fit | 10% | Operational maturity fit |
 | runtime_model_compatibility | 10% | Runtime model match |
-| service_overlap | 10% | Approved Azure services match |
-| availability_alignment | 10% | Availability model match |
-| operating_model_fit | 8% | Operational maturity fit |
-| complexity_tolerance | 7% | Complexity vs business criticality |
-| browse_tag_overlap | 5% | Relevant browse tags match |
-| cost_posture_alignment | 5% | Cost profile match |
+| app_mod_recommended | 8% | Boost for App Mod recommended targets |
+| service_overlap | 6% | Approved Azure services match |
+| browse_tag_overlap | 4% | Relevant browse tags match |
+| complexity_tolerance | 4% | Complexity vs business criticality |
+| security_alignment | 4% | Security requirements alignment |
+
+*Question-driven dimensions have dynamic weight boosting when users explicitly answer questions (HIGH confidence signal).
 
 ## Catalog Quality Weights
 
