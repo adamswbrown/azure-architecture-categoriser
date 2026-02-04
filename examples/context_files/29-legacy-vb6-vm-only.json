@@ -1,0 +1,92 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "LegacyWarehouseSystem",
+        "app_type": "Desktop Application",
+        "business_crtiticality": "High",
+        "treatment": "Rehost"
+      }
+    ],
+    "detected_technology_running": [
+      "Visual Basic 6.0",
+      "Microsoft Access 2010",
+      "COM+ Components",
+      "Crystal Reports"
+    ],
+    "app_approved_azure_services": [
+      {
+        "Visual Basic 6.0": "Azure Virtual Machines",
+        "Microsoft Access 2010": "Azure Virtual Machines"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "WHSLEGACY01",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2012 R2",
+        "ip_address": ["10.70.0.20"],
+        "StorageGB": 100.0,
+        "MemoryGB": 8.0,
+        "Cores": 2.0,
+        "CPUUsage": 25.0,
+        "MemoryUsage": 45.0,
+        "DiskReadOpsPersec": 40.0,
+        "DiskWriteOpsPerSec": 30.0,
+        "NetworkInMBPS": 8.0,
+        "NetworkOutMBPS": 5.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 1.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "ReadyWithConditions",
+        "AzureReadinessIssues": "Legacy OS support ending",
+        "migration_strategy": "Rehost",
+        "treatment_option": "Lift and Shift to Azure VM",
+        "detected_COTS": ["Visual Basic 6.0", "Microsoft Access", "Crystal Reports"],
+        "treatment_option_other": null
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": "VB6",
+        "summary": {
+          "legacy_runtime": true,
+          "com_dependencies": true,
+          "container_ready": false,
+          "modernization_effort": "Very High"
+        },
+        "findings": [
+          {
+            "type": "Runtime",
+            "severity": "Critical",
+            "description": "VB6 runtime cannot run in containers or PaaS."
+          },
+          {
+            "type": "Database",
+            "severity": "High",
+            "description": "Microsoft Access database requires local file system."
+          },
+          {
+            "type": "Dependency",
+            "severity": "High",
+            "description": "COM+ components require Windows registry."
+          }
+        ],
+        "compatibility": {
+          "azure_virtual_machines": "SupportedWithConditions",
+          "azure_app_service": "NotSupported",
+          "azure_container_apps": "NotSupported",
+          "azure_kubernetes_service": "NotSupported"
+        },
+        "recommended_targets": [
+          "Azure Virtual Machines"
+        ],
+        "blockers": [
+          "VB6 runtime incompatible with containers",
+          "COM+ requires Windows registry access",
+          "Access database requires local file system"
+        ]
+      }
+    ]
+  }
+]

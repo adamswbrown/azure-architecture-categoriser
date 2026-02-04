@@ -1,0 +1,75 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "CompanyIntranet",
+        "app_type": "Content Management System",
+        "business_crtiticality": "Medium",
+        "treatment": "Replace"
+      }
+    ],
+    "detected_technology_running": [
+      "SharePoint Server 2016",
+      "SQL Server 2016",
+      "Windows Server 2016"
+    ],
+    "app_approved_azure_services": [
+      {
+        "SharePoint Server 2016": "SharePoint Online (M365)"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "SPWEB01",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2016",
+        "ip_address": ["10.120.0.10"],
+        "StorageGB": 500.0,
+        "MemoryGB": 32.0,
+        "Cores": 8.0,
+        "CPUUsage": 30.0,
+        "MemoryUsage": 50.0,
+        "DiskReadOpsPersec": 100.0,
+        "DiskWriteOpsPerSec": 80.0,
+        "NetworkInMBPS": 40.0,
+        "NetworkOutMBPS": 35.0,
+        "StandardSSDDisks": 2.0,
+        "StandardHDDDisks": 1.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replace",
+        "treatment_option": "SharePoint Online (SaaS)",
+        "detected_COTS": ["SharePoint Server"],
+        "treatment_option_other": null
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": "SharePoint",
+        "summary": {
+          "cots_application": true,
+          "saas_alternative": true,
+          "container_ready": false,
+          "customizations": "Minimal"
+        },
+        "findings": [
+          {
+            "type": "Migration",
+            "severity": "Info",
+            "description": "SharePoint Online provides feature parity with minimal customization migration."
+          }
+        ],
+        "compatibility": {
+          "sharepoint_online": "FullySupported",
+          "azure_virtual_machines": "Supported",
+          "azure_kubernetes_service": "NotApplicable"
+        },
+        "recommended_targets": [
+          "SharePoint Online (Microsoft 365)"
+        ],
+        "blockers": []
+      }
+    ]
+  }
+]

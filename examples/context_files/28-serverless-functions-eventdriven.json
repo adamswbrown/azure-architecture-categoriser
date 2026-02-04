@@ -1,0 +1,80 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "OrderNotificationService",
+        "app_type": "Event-Driven Microservice",
+        "business_crtiticality": "Medium",
+        "treatment": "Refactor"
+      }
+    ],
+    "detected_technology_running": [
+      "Node.js 18",
+      "Azure Service Bus",
+      "SendGrid",
+      "Cosmos DB"
+    ],
+    "app_approved_azure_services": [
+      {
+        "Node.js 18": "Azure Functions",
+        "Azure Service Bus": "Azure Service Bus",
+        "Cosmos DB": "Azure Cosmos DB"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "NOTIFY01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 20.04",
+        "ip_address": ["10.60.0.5"],
+        "StorageGB": 30.0,
+        "MemoryGB": 2.0,
+        "Cores": 1.0,
+        "CPUUsage": 5.0,
+        "MemoryUsage": 15.0,
+        "DiskReadOpsPersec": 10.0,
+        "DiskWriteOpsPerSec": 5.0,
+        "NetworkInMBPS": 2.0,
+        "NetworkOutMBPS": 5.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Refactor",
+        "treatment_option": "Azure Functions (Serverless)",
+        "detected_COTS": ["Node.js 18"],
+        "treatment_option_other": null
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": "Node.js",
+        "summary": {
+          "total_functions": 5,
+          "event_driven": true,
+          "stateless": true,
+          "container_ready": true,
+          "serverless_candidate": true
+        },
+        "findings": [
+          {
+            "type": "Architecture",
+            "severity": "Info",
+            "description": "Event-driven architecture is ideal for serverless."
+          }
+        ],
+        "compatibility": {
+          "azure_functions": "FullySupported",
+          "azure_container_apps": "Supported",
+          "azure_kubernetes_service": "Supported"
+        },
+        "recommended_targets": [
+          "Azure Functions",
+          "Azure Logic Apps"
+        ],
+        "blockers": []
+      }
+    ]
+  }
+]

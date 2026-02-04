@@ -37,17 +37,22 @@ from .schema import (
 
 @dataclass
 class ScoringWeights:
-    """Weights for scoring dimensions. Loaded from config."""
-    treatment_alignment: float = 0.20
+    """Weights for scoring dimensions. Loaded from config.
+
+    Note: Question-driven dimensions (cost, availability, operating_model)
+    have increased weights to make user answers more impactful.
+    """
+    treatment_alignment: float = 0.18
     runtime_model_compatibility: float = 0.10
-    platform_compatibility: float = 0.15
-    app_mod_recommended: float = 0.10
-    service_overlap: float = 0.10
-    browse_tag_overlap: float = 0.05
-    availability_alignment: float = 0.10
-    operating_model_fit: float = 0.08
-    complexity_tolerance: float = 0.07
-    cost_posture_alignment: float = 0.05
+    platform_compatibility: float = 0.12
+    app_mod_recommended: float = 0.08
+    service_overlap: float = 0.06
+    browse_tag_overlap: float = 0.04
+    availability_alignment: float = 0.12
+    operating_model_fit: float = 0.10
+    complexity_tolerance: float = 0.04
+    cost_posture_alignment: float = 0.12
+    security_alignment: float = 0.04
 
     @classmethod
     def from_config(cls) -> 'ScoringWeights':
@@ -64,6 +69,7 @@ class ScoringWeights:
             operating_model_fit=cfg.operating_model_fit,
             complexity_tolerance=cfg.complexity_tolerance,
             cost_posture_alignment=cfg.cost_posture_alignment,
+            security_alignment=getattr(cfg, 'security_alignment', 0.04),
         )
 
 
@@ -553,9 +559,14 @@ class ArchitectureScorer:
         mismatched: list[MismatchedDimension],
         assumptions: list[AssumptionMade],
     ) -> ScoringDimension:
-        """Score availability model alignment."""
+        """Score availability model alignment.
+
+        Applies harsher penalties when architecture doesn't meet availability
+        requirements, especially when user explicitly specified their needs.
+        """
         required = intent.availability_requirement.value
         supported = arch.availability_models
+        user_explicitly_answered = intent.availability_requirement.confidence == SignalConfidence.HIGH
 
         if required in supported:
             matched.append(MatchedDimension(
@@ -565,16 +576,22 @@ class ArchitectureScorer:
             ))
             score = 1.0
         elif self._availability_exceeds(supported, required):
-            # Architecture supports higher availability than required
-            score = 0.9
+            # Architecture supports higher availability than required - good but overkill
+            score = 0.85
         else:
             mismatched.append(MismatchedDimension(
                 dimension="Availability",
                 expected=required.value,
                 actual=", ".join(a.value for a in supported),
-                impact="May need architecture modifications for required availability"
+                impact="Architecture may not meet availability requirements"
             ))
-            score = 0.4
+            # Harsher penalty: 0.4 -> 0.2 for explicit mismatch
+            score = 0.2
+
+        # Dynamic weight boost when user explicitly answered
+        effective_weight = self.weights.availability_alignment
+        if user_explicitly_answered:
+            effective_weight = min(effective_weight * 1.25, 0.15)
 
         if intent.availability_requirement.confidence in (SignalConfidence.LOW, SignalConfidence.UNKNOWN):
             assumptions.append(AssumptionMade(
@@ -586,10 +603,11 @@ class ArchitectureScorer:
 
         return ScoringDimension(
             dimension="availability_alignment",
-            weight=self.weights.availability_alignment,
+            weight=effective_weight,
             raw_score=score * 100,
-            weighted_score=score * self.weights.availability_alignment,
-            reasoning=f"Required: {required.value}, Supported: {[a.value for a in supported]}",
+            weighted_score=score * effective_weight,
+            reasoning=f"Required: {required.value}, Supported: {[a.value for a in supported]}" +
+                      (" (user preference)" if user_explicitly_answered else ""),
         )
 
     def _availability_exceeds(
@@ -614,9 +632,15 @@ class ArchitectureScorer:
         mismatched: list[MismatchedDimension],
         assumptions: list[AssumptionMade],
     ) -> ScoringDimension:
-        """Score operating model fit."""
+        """Score operating model fit.
+
+        Applies harsher penalties when team maturity doesn't match architecture
+        requirements. Traditional IT teams shouldn't be recommended complex K8s
+        architectures that require SRE-level operations.
+        """
         app_maturity = intent.operational_maturity_estimate.value
         arch_required = arch.operating_model_required
+        user_explicitly_answered = intent.operational_maturity_estimate.confidence == SignalConfidence.HIGH
 
         hierarchy = {
             OperatingModel.TRADITIONAL_IT: 0,
@@ -642,9 +666,20 @@ class ArchitectureScorer:
                 dimension="Operating Model",
                 expected=arch_required.value,
                 actual=app_maturity.value,
-                impact=f"Team maturity gap of {gap} level(s)"
+                impact=f"Team may struggle with {arch_required.value} operations (gap: {gap} level(s))"
             ))
-            score = max(0.2, 1.0 - (gap * 0.3))
+            # Harsher penalties: Traditional IT -> SRE should be severely penalized
+            if gap >= 3:
+                score = 0.1  # Traditional IT trying to run SRE-level architecture
+            elif gap == 2:
+                score = 0.2  # Significant gap
+            else:
+                score = 0.4  # One level gap
+
+        # Dynamic weight boost when user explicitly answered
+        effective_weight = self.weights.operating_model_fit
+        if user_explicitly_answered:
+            effective_weight = min(effective_weight * 1.25, 0.125)
 
         if intent.operational_maturity_estimate.confidence in (SignalConfidence.LOW, SignalConfidence.UNKNOWN):
             assumptions.append(AssumptionMade(
@@ -656,10 +691,11 @@ class ArchitectureScorer:
 
         return ScoringDimension(
             dimension="operating_model_fit",
-            weight=self.weights.operating_model_fit,
+            weight=effective_weight,
             raw_score=score * 100,
-            weighted_score=score * self.weights.operating_model_fit,
-            reasoning=f"App: {app_maturity.value}, Required: {arch_required.value}",
+            weighted_score=score * effective_weight,
+            reasoning=f"App: {app_maturity.value}, Required: {arch_required.value}" +
+                      (" (user stated)" if user_explicitly_answered else ""),
         )
 
     def _score_complexity_tolerance(
@@ -726,9 +762,19 @@ class ArchitectureScorer:
         mismatched: list[MismatchedDimension],
         assumptions: list[AssumptionMade],
     ) -> ScoringDimension:
-        """Score cost profile alignment."""
+        """Score cost profile alignment.
+
+        Uses asymmetric penalties: cost-conscious users get much harsher
+        penalties for expensive architectures than vice versa. This prevents
+        AKS and other expensive patterns from being recommended to users
+        who explicitly indicate they want to minimize costs.
+
+        When user explicitly answers the cost question (HIGH confidence),
+        the weight is boosted by 50% to make their preference more impactful.
+        """
         required = intent.cost_posture.value
         arch_profile = arch.cost_profile
+        user_explicitly_answered = intent.cost_posture.confidence == SignalConfidence.HIGH
 
         profile_order = {
             CostProfile.COST_MINIMIZED: 0,
@@ -740,7 +786,8 @@ class ArchitectureScorer:
         required_level = profile_order.get(required, 1)
         arch_level = profile_order.get(arch_profile, 1)
 
-        diff = abs(arch_level - required_level)
+        diff = arch_level - required_level  # Signed difference (positive = arch is more expensive)
+
         if diff == 0:
             matched.append(MatchedDimension(
                 dimension="Cost Profile",
@@ -748,16 +795,32 @@ class ArchitectureScorer:
                 reasoning="Cost profile aligned"
             ))
             score = 1.0
-        elif diff == 1:
-            score = 0.8  # Close enough
-        else:
+        elif abs(diff) == 1:
+            # One level off - mild penalty
+            score = 0.6
+        elif diff >= 2:
+            # Architecture is significantly MORE expensive than requested
+            # Apply harsh penalty, especially for cost-minimized users
             mismatched.append(MismatchedDimension(
                 dimension="Cost Profile",
                 expected=required.value,
                 actual=arch_profile.value,
-                impact="Cost characteristics may not align with expectations"
+                impact=f"Architecture cost profile ({arch_profile.value}) significantly exceeds requirements ({required.value})"
             ))
-            score = 0.5
+            if required == CostProfile.COST_MINIMIZED:
+                # Very harsh: cost-minimized user vs expensive architecture
+                score = 0.1 if diff == 3 else 0.25  # innovation_first vs cost_minimized = 0.1
+            else:
+                score = 0.3
+        else:
+            # diff <= -2: Architecture is CHEAPER than requested (less of a problem)
+            score = 0.5  # Mild penalty - cheaper is usually okay
+
+        # Dynamic weight boost when user explicitly answered the question
+        effective_weight = self.weights.cost_posture_alignment
+        if user_explicitly_answered:
+            # Boost weight by 50% when user explicitly stated their cost preference
+            effective_weight = min(effective_weight * 1.5, 0.18)
 
         if intent.cost_posture.confidence in (SignalConfidence.LOW, SignalConfidence.UNKNOWN):
             assumptions.append(AssumptionMade(
@@ -769,10 +832,11 @@ class ArchitectureScorer:
 
         return ScoringDimension(
             dimension="cost_posture_alignment",
-            weight=self.weights.cost_posture_alignment,
+            weight=effective_weight,
             raw_score=score * 100,
-            weighted_score=score * self.weights.cost_posture_alignment,
-            reasoning=f"Required: {required.value}, Architecture: {arch_profile.value}",
+            weighted_score=score * effective_weight,
+            reasoning=f"Required: {required.value}, Architecture: {arch_profile.value}" +
+                      (" (user preference)" if user_explicitly_answered else ""),
         )
 
     def _calculate_confidence_penalty(

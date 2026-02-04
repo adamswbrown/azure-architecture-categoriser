@@ -1,0 +1,79 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "ProductCatalogAPI",
+        "app_type": "Microservice API",
+        "business_crtiticality": "Medium",
+        "treatment": "Refactor"
+      }
+    ],
+    "detected_technology_running": [
+      "Python 3.11",
+      "FastAPI",
+      "Redis",
+      "PostgreSQL"
+    ],
+    "app_approved_azure_services": [
+      {
+        "Python 3.11": "Azure Container Apps",
+        "Redis": "Azure Cache for Redis",
+        "PostgreSQL": "Azure Database for PostgreSQL"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "PRODCAT01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": ["10.90.0.10"],
+        "StorageGB": 40.0,
+        "MemoryGB": 4.0,
+        "Cores": 2.0,
+        "CPUUsage": 30.0,
+        "MemoryUsage": 50.0,
+        "DiskReadOpsPersec": 50.0,
+        "DiskWriteOpsPerSec": 30.0,
+        "NetworkInMBPS": 20.0,
+        "NetworkOutMBPS": 25.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Refactor",
+        "treatment_option": "Container Apps",
+        "detected_COTS": ["Python", "FastAPI"],
+        "treatment_option_other": null
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": "Python",
+        "summary": {
+          "services_scanned": 1,
+          "microservice": true,
+          "container_ready": true,
+          "kubernetes_complexity": "low"
+        },
+        "findings": [
+          {
+            "type": "Architecture",
+            "severity": "Info",
+            "description": "Simple stateless API is ideal for Container Apps over AKS."
+          }
+        ],
+        "compatibility": {
+          "azure_container_apps": "FullySupported",
+          "azure_app_service": "Supported",
+          "azure_kubernetes_service": "Supported"
+        },
+        "recommended_targets": [
+          "Azure Container Apps",
+          "Azure App Service"
+        ],
+        "blockers": []
+      }
+    ]
+  }
+]

@@ -1,0 +1,87 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "LegacyPaymentGateway",
+        "app_type": "SOAP Web Service",
+        "business_crtiticality": "Critical",
+        "treatment": "Replatform"
+      }
+    ],
+    "detected_technology_running": [
+      "WCF Service",
+      ".NET Framework 4.8",
+      "SQL Server 2017",
+      "Microsoft IIS"
+    ],
+    "app_approved_azure_services": [
+      {
+        "WCF Service": "Azure App Service",
+        ".NET Framework 4.8": "Azure App Service",
+        "SQL Server 2017": "Azure SQL Managed Instance"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "PAYGW01",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2019",
+        "ip_address": ["10.110.0.10"],
+        "StorageGB": 100.0,
+        "MemoryGB": 16.0,
+        "Cores": 4.0,
+        "CPUUsage": 40.0,
+        "MemoryUsage": 55.0,
+        "DiskReadOpsPersec": 80.0,
+        "DiskWriteOpsPerSec": 60.0,
+        "NetworkInMBPS": 30.0,
+        "NetworkOutMBPS": 25.0,
+        "StandardSSDDisks": 2.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform",
+        "treatment_option": "Azure App Service with WCF",
+        "detected_COTS": ["WCF", ".NET Framework 4.8"],
+        "treatment_option_other": null
+      }
+    ],
+    "App Mod results": [
+      {
+        "technology": ".NET Framework WCF",
+        "summary": {
+          "wcf_services": true,
+          "soap_endpoints": true,
+          "windows_dependencies": true,
+          "container_ready": false
+        },
+        "findings": [
+          {
+            "type": "Framework",
+            "severity": "Medium",
+            "description": "WCF services require Windows hosting but can run in App Service."
+          },
+          {
+            "type": "Integration",
+            "severity": "High",
+            "description": "SOAP contracts must be maintained for existing integrations."
+          }
+        ],
+        "compatibility": {
+          "azure_app_service": "SupportedWithConditions",
+          "azure_container_apps": "NotSupported",
+          "azure_kubernetes_service": "NotSupported"
+        },
+        "recommended_targets": [
+          "Azure App Service (Windows)",
+          "Azure SQL Managed Instance"
+        ],
+        "blockers": [
+          "WCF requires .NET Framework, not .NET Core",
+          "SOAP contracts require Windows IIS"
+        ]
+      }
+    ]
+  }
+]
