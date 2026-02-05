@@ -133,21 +133,43 @@ for rec in result.recommendations:
 
 ## Scoring Dimensions
 
+The scoring engine uses 15 dimensions organized into two groups: **Core Dimensions** (derived from context data and user answers) and **Content Insight Dimensions** (derived from catalog content analysis).
+
+### Core Dimensions
+
 | Dimension | Weight | Description |
 |-----------|--------|-------------|
-| treatment_alignment | 18% | Gartner 8R treatment match |
-| cost_posture_alignment | 12%* | Cost profile match (boosted to 18% when user answers) |
-| availability_alignment | 12%* | Availability model match (boosted to 15% when user answers) |
-| platform_compatibility | 12% | App Mod platform status |
-| operating_model_fit | 10% | Operational maturity fit |
-| runtime_model_compatibility | 10% | Runtime model match |
-| app_mod_recommended | 8% | Boost for App Mod recommended targets |
-| service_overlap | 6% | Approved Azure services match |
-| browse_tag_overlap | 4% | Relevant browse tags match |
-| complexity_tolerance | 4% | Complexity vs business criticality |
-| security_alignment | 4% | Security requirements alignment |
+| treatment_alignment | 16% | Gartner 8R treatment match |
+| cost_posture_alignment | 11%* | Cost profile match (boosted to 16.5% when user answers) |
+| availability_alignment | 11%* | Availability model match + SLO bonus (boosted to 14% when user answers) |
+| platform_compatibility | 11% | App Mod platform status |
+| operating_model_fit | 9% | Operational maturity fit |
+| runtime_model_compatibility | 9% | Runtime model match |
+| app_mod_recommended | 7% | Boost for App Mod recommended targets |
+| service_overlap | 5% | Approved Azure services match |
+| browse_tag_overlap | 3% | Relevant browse tags match |
+| complexity_tolerance | 3% | Complexity vs business criticality |
+| security_alignment | 3% | Security requirements alignment |
 
 *Question-driven dimensions have dynamic weight boosting when users explicitly answer questions (HIGH confidence signal).
+
+### Content Insight Dimensions
+
+These dimensions leverage metadata extracted from architecture documentation during catalog building:
+
+| Dimension | Weight | Description |
+|-----------|--------|-------------|
+| audience_fit | 4% | Matches architecture intended audience (poc/baseline/production/mission_critical) to app criticality |
+| maturity_alignment | 4% | Matches architecture maturity tier to team operational capability |
+| design_pattern_relevance | 2% | Relevance of design patterns (active-active, zero-trust, etc.) to app requirements |
+| prerequisite_match | 2% | Team skills coverage against architecture prerequisites |
+
+### SLO Bonus Signal
+
+The `availability_alignment` dimension includes an SLO bonus when:
+- The architecture catalog entry has an explicit `target_slo` in content insights
+- The application requires high availability (zone-redundant or multi-region)
+- Bonus values: +10% for ≥99.99% SLO, +5% for ≥99.9% SLO
 
 ## Catalog Quality Weights
 

@@ -18,50 +18,72 @@ class ScoringWeightsConfig(BaseModel):
     have been increased to make user answers more impactful. Cost is
     particularly important to prevent expensive architectures from being
     recommended to cost-conscious users.
+
+    Content insight dimensions (audience_fit, maturity_alignment, etc.)
+    provide valuable signals from document analysis and are weighted
+    to complement the core dimensions.
     """
     treatment_alignment: float = Field(
-        0.18,
+        0.16,
         description="Weight for migration treatment alignment (rehost, replatform, etc.)"
     )
     runtime_model_compatibility: float = Field(
-        0.10,
+        0.09,
         description="Weight for runtime model match (containers, VMs, serverless)"
     )
     platform_compatibility: float = Field(
-        0.12,
+        0.11,
         description="Weight for platform/technology compatibility"
     )
     app_mod_recommended: float = Field(
-        0.08,
+        0.07,
         description="Boost weight when App Mod recommends the target platform"
     )
     service_overlap: float = Field(
-        0.06,
+        0.05,
         description="Weight for overlap between required and architecture services"
     )
     browse_tag_overlap: float = Field(
-        0.04,
+        0.03,
         description="Weight for matching browse/topic tags"
     )
     availability_alignment: float = Field(
-        0.12,
-        description="Weight for availability/SLA requirements match"
+        0.11,
+        description="Weight for availability/SLA requirements match (includes SLO bonus)"
     )
     operating_model_fit: float = Field(
-        0.10,
+        0.09,
         description="Weight for operational maturity alignment"
     )
     complexity_tolerance: float = Field(
-        0.04,
+        0.03,
         description="Weight for complexity vs. team capability match"
     )
     cost_posture_alignment: float = Field(
-        0.12,
+        0.11,
         description="Weight for cost optimization strategy alignment (increased for impact)"
     )
     security_alignment: float = Field(
-        0.04,
+        0.03,
         description="Weight for security requirements alignment"
+    )
+
+    # Content insight dimensions (extracted from document analysis)
+    audience_fit: float = Field(
+        0.04,
+        description="Weight for matching architecture audience (poc/baseline/production/mission_critical) to app criticality"
+    )
+    maturity_alignment: float = Field(
+        0.04,
+        description="Weight for matching architecture maturity tier to team operational maturity"
+    )
+    design_pattern_relevance: float = Field(
+        0.02,
+        description="Weight for relevance of design patterns (active-active, zero-trust, etc.) to app requirements"
+    )
+    prerequisite_match: float = Field(
+        0.02,
+        description="Weight for matching team skills to architecture prerequisites"
     )
 
 

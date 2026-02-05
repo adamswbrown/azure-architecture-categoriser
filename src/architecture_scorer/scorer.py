@@ -13,6 +13,9 @@ from catalog_builder.schema import (
     CatalogQuality,
     ComplexityLevel,
     CostProfile,
+    DesignPattern,
+    IntendedAudience,
+    MaturityTier,
     OperatingModel,
     RuntimeModel,
     SecurityLevel,
@@ -41,18 +44,27 @@ class ScoringWeights:
 
     Note: Question-driven dimensions (cost, availability, operating_model)
     have increased weights to make user answers more impactful.
+
+    Content insight dimensions (audience_fit, maturity_alignment, etc.)
+    use moderate weights as they provide valuable but secondary signals.
     """
-    treatment_alignment: float = 0.18
-    runtime_model_compatibility: float = 0.10
-    platform_compatibility: float = 0.12
-    app_mod_recommended: float = 0.08
-    service_overlap: float = 0.06
-    browse_tag_overlap: float = 0.04
-    availability_alignment: float = 0.12
-    operating_model_fit: float = 0.10
-    complexity_tolerance: float = 0.04
-    cost_posture_alignment: float = 0.12
-    security_alignment: float = 0.04
+    treatment_alignment: float = 0.16
+    runtime_model_compatibility: float = 0.09
+    platform_compatibility: float = 0.11
+    app_mod_recommended: float = 0.07
+    service_overlap: float = 0.05
+    browse_tag_overlap: float = 0.03
+    availability_alignment: float = 0.11
+    operating_model_fit: float = 0.09
+    complexity_tolerance: float = 0.03
+    cost_posture_alignment: float = 0.11
+    security_alignment: float = 0.03
+
+    # Content insight dimensions (new)
+    audience_fit: float = 0.04
+    maturity_alignment: float = 0.04
+    design_pattern_relevance: float = 0.02
+    prerequisite_match: float = 0.02
 
     @classmethod
     def from_config(cls) -> 'ScoringWeights':
@@ -69,7 +81,12 @@ class ScoringWeights:
             operating_model_fit=cfg.operating_model_fit,
             complexity_tolerance=cfg.complexity_tolerance,
             cost_posture_alignment=cfg.cost_posture_alignment,
-            security_alignment=getattr(cfg, 'security_alignment', 0.04),
+            security_alignment=getattr(cfg, 'security_alignment', 0.03),
+            # Content insight dimensions
+            audience_fit=getattr(cfg, 'audience_fit', 0.04),
+            maturity_alignment=getattr(cfg, 'maturity_alignment', 0.04),
+            design_pattern_relevance=getattr(cfg, 'design_pattern_relevance', 0.02),
+            prerequisite_match=getattr(cfg, 'prerequisite_match', 0.02),
         )
 
 
@@ -163,6 +180,12 @@ class ArchitectureScorer:
         dimensions.append(self._score_operating_model_fit(arch, intent, matched, mismatched, assumptions))
         dimensions.append(self._score_complexity_tolerance(arch, context, intent, matched, mismatched))
         dimensions.append(self._score_cost_posture(arch, intent, matched, mismatched, assumptions))
+
+        # Content insight dimensions (when available)
+        dimensions.append(self._score_audience_fit(arch, context, intent, matched, mismatched))
+        dimensions.append(self._score_maturity_alignment(arch, intent, matched, mismatched))
+        dimensions.append(self._score_design_pattern_relevance(arch, context, intent, matched, mismatched))
+        dimensions.append(self._score_prerequisite_match(arch, context, matched, mismatched))
 
         # Calculate base score
         total_weighted = sum(d.weighted_score for d in dimensions)
@@ -563,6 +586,9 @@ class ArchitectureScorer:
 
         Applies harsher penalties when architecture doesn't meet availability
         requirements, especially when user explicitly specified their needs.
+
+        When content_insights.target_slo is available, provides a bonus signal
+        for high-availability requirements matching architectures with strong SLOs.
         """
         required = intent.availability_requirement.value
         supported = arch.availability_models
@@ -588,6 +614,38 @@ class ArchitectureScorer:
             # Harsher penalty: 0.4 -> 0.2 for explicit mismatch
             score = 0.2
 
+        # SLO Bonus Signal: When architecture has explicit SLO target and user wants high availability
+        slo_bonus = 0.0
+        slo_reasoning = ""
+        if arch.content_insights and arch.content_insights.target_slo:
+            target_slo = arch.content_insights.target_slo
+            # High availability requirements benefit from explicit SLO targets
+            if required in (AvailabilityModel.MULTI_REGION_ACTIVE_ACTIVE,
+                           AvailabilityModel.MULTI_REGION_ACTIVE_PASSIVE,
+                           AvailabilityModel.ZONE_REDUNDANT):
+                try:
+                    slo_value = float(target_slo.replace('%', ''))
+                    if slo_value >= 99.99:
+                        slo_bonus = 0.10  # Strong bonus for 99.99%+ SLO
+                        matched.append(MatchedDimension(
+                            dimension="SLO Target",
+                            value=f"{target_slo}%",
+                            reasoning=f"Architecture targets {target_slo}% SLO"
+                        ))
+                    elif slo_value >= 99.9:
+                        slo_bonus = 0.05  # Moderate bonus for 99.9%+ SLO
+                        matched.append(MatchedDimension(
+                            dimension="SLO Target",
+                            value=f"{target_slo}%",
+                            reasoning=f"Architecture targets {target_slo}% SLO"
+                        ))
+                    slo_reasoning = f", SLO: {target_slo}%"
+                except (ValueError, TypeError):
+                    pass  # Invalid SLO format, ignore
+
+        # Apply SLO bonus (capped at 1.0)
+        score = min(1.0, score + slo_bonus)
+
         # Dynamic weight boost when user explicitly answered
         effective_weight = self.weights.availability_alignment
         if user_explicitly_answered:
@@ -606,7 +664,7 @@ class ArchitectureScorer:
             weight=effective_weight,
             raw_score=score * 100,
             weighted_score=score * effective_weight,
-            reasoning=f"Required: {required.value}, Supported: {[a.value for a in supported]}" +
+            reasoning=f"Required: {required.value}, Supported: {[a.value for a in supported]}{slo_reasoning}" +
                       (" (user preference)" if user_explicitly_answered else ""),
         )
 
@@ -878,3 +936,349 @@ class ArchitectureScorer:
         for m in mismatched[:3]:  # Top 3 mismatches
             summaries.append(f"{m.dimension}: {m.impact}")
         return summaries
+
+    # =========================================================================
+    # Content Insight Scoring Dimensions
+    # =========================================================================
+
+    def _score_audience_fit(
+        self,
+        arch: ArchitectureEntry,
+        context: ApplicationContext,
+        intent: DerivedIntent,
+        matched: list[MatchedDimension],
+        mismatched: list[MismatchedDimension],
+    ) -> ScoringDimension:
+        """Score architecture intended audience against application needs.
+
+        Maps business criticality and modernization intent to appropriate
+        architecture audience tiers. POC architectures shouldn't be recommended
+        for mission-critical apps, and vice versa.
+        """
+        # If no content insights, neutral score
+        if not arch.content_insights or not arch.content_insights.intended_audience:
+            return ScoringDimension(
+                dimension="audience_fit",
+                weight=self.weights.audience_fit,
+                raw_score=50,
+                weighted_score=0.5 * self.weights.audience_fit,
+                reasoning="No audience metadata available",
+            )
+
+        arch_audience = arch.content_insights.intended_audience
+        app_criticality = context.app_overview.business_criticality
+        treatment = intent.treatment.value
+
+        # Map app criticality to expected audience
+        criticality_to_audience = {
+            BusinessCriticality.MISSION_CRITICAL: [IntendedAudience.MISSION_CRITICAL, IntendedAudience.PRODUCTION],
+            BusinessCriticality.HIGH: [IntendedAudience.PRODUCTION, IntendedAudience.MISSION_CRITICAL, IntendedAudience.BASELINE],
+            BusinessCriticality.MEDIUM: [IntendedAudience.BASELINE, IntendedAudience.PRODUCTION],
+            BusinessCriticality.LOW: [IntendedAudience.BASELINE, IntendedAudience.POC, IntendedAudience.DEVELOPMENT],
+        }
+
+        expected_audiences = criticality_to_audience.get(app_criticality, [IntendedAudience.BASELINE])
+
+        # Perfect match
+        if arch_audience in expected_audiences:
+            matched.append(MatchedDimension(
+                dimension="Intended Audience",
+                value=arch_audience.value,
+                reasoning=f"Architecture designed for {arch_audience.value} aligns with {app_criticality.value} criticality"
+            ))
+            score = 1.0
+        # POC/dev architectures for critical apps = bad fit
+        elif arch_audience in (IntendedAudience.POC, IntendedAudience.DEVELOPMENT) and \
+             app_criticality in (BusinessCriticality.HIGH, BusinessCriticality.MISSION_CRITICAL):
+            mismatched.append(MismatchedDimension(
+                dimension="Intended Audience",
+                expected=f"production or mission_critical",
+                actual=arch_audience.value,
+                impact=f"Architecture designed for {arch_audience.value} may not meet {app_criticality.value} requirements"
+            ))
+            score = 0.2
+        # Mission-critical architecture for low-criticality apps = overkill but acceptable
+        elif arch_audience == IntendedAudience.MISSION_CRITICAL and \
+             app_criticality in (BusinessCriticality.LOW, BusinessCriticality.MEDIUM):
+            score = 0.7  # Over-engineered but functional
+        else:
+            # Partial match
+            score = 0.6
+
+        return ScoringDimension(
+            dimension="audience_fit",
+            weight=self.weights.audience_fit,
+            raw_score=score * 100,
+            weighted_score=score * self.weights.audience_fit,
+            reasoning=f"Architecture: {arch_audience.value}, App criticality: {app_criticality.value}",
+        )
+
+    def _score_maturity_alignment(
+        self,
+        arch: ArchitectureEntry,
+        intent: DerivedIntent,
+        matched: list[MatchedDimension],
+        mismatched: list[MismatchedDimension],
+    ) -> ScoringDimension:
+        """Score architecture maturity tier against team operational maturity.
+
+        Advanced/mission-critical architectures require higher operational
+        maturity. Basic architectures are suitable for traditional IT teams.
+        """
+        # If no content insights, neutral score
+        if not arch.content_insights or not arch.content_insights.maturity_tier:
+            return ScoringDimension(
+                dimension="maturity_alignment",
+                weight=self.weights.maturity_alignment,
+                raw_score=50,
+                weighted_score=0.5 * self.weights.maturity_alignment,
+                reasoning="No maturity metadata available",
+            )
+
+        arch_maturity = arch.content_insights.maturity_tier
+        team_maturity = intent.operational_maturity_estimate.value
+
+        # Maturity hierarchy (architecture complexity)
+        arch_levels = {
+            MaturityTier.BASIC: 0,
+            MaturityTier.BASELINE: 1,
+            MaturityTier.STANDARD: 2,
+            MaturityTier.ADVANCED: 3,
+            MaturityTier.MISSION_CRITICAL: 4,
+        }
+
+        # Team capability levels
+        team_levels = {
+            OperatingModel.TRADITIONAL_IT: 1,
+            OperatingModel.TRANSITIONAL: 2,
+            OperatingModel.DEVOPS: 3,
+            OperatingModel.SRE: 4,
+        }
+
+        arch_level = arch_levels.get(arch_maturity, 2)
+        team_level = team_levels.get(team_maturity, 1)
+
+        # Team can handle architecture at or below their level
+        if team_level >= arch_level:
+            matched.append(MatchedDimension(
+                dimension="Maturity Tier",
+                value=arch_maturity.value,
+                reasoning=f"Team maturity ({team_maturity.value}) supports {arch_maturity.value} architecture"
+            ))
+            score = 1.0
+        else:
+            gap = arch_level - team_level
+            if gap >= 3:
+                mismatched.append(MismatchedDimension(
+                    dimension="Maturity Tier",
+                    expected=f"max {['basic', 'baseline', 'standard', 'advanced'][min(team_level, 3)]}",
+                    actual=arch_maturity.value,
+                    impact=f"Architecture maturity ({arch_maturity.value}) exceeds team capability"
+                ))
+                score = 0.2
+            elif gap == 2:
+                score = 0.4
+            else:
+                score = 0.65
+
+        return ScoringDimension(
+            dimension="maturity_alignment",
+            weight=self.weights.maturity_alignment,
+            raw_score=score * 100,
+            weighted_score=score * self.weights.maturity_alignment,
+            reasoning=f"Architecture: {arch_maturity.value}, Team: {team_maturity.value}",
+        )
+
+    def _score_design_pattern_relevance(
+        self,
+        arch: ArchitectureEntry,
+        context: ApplicationContext,
+        intent: DerivedIntent,
+        matched: list[MatchedDimension],
+        mismatched: list[MismatchedDimension],
+    ) -> ScoringDimension:
+        """Score relevance of architecture's design patterns to application needs.
+
+        Matches design patterns (active-active, zero-trust, microservices, etc.)
+        to the application's requirements based on availability, security, and
+        runtime model needs.
+        """
+        # If no content insights, neutral score
+        if not arch.content_insights or not arch.content_insights.design_patterns:
+            return ScoringDimension(
+                dimension="design_pattern_relevance",
+                weight=self.weights.design_pattern_relevance,
+                raw_score=50,
+                weighted_score=0.5 * self.weights.design_pattern_relevance,
+                reasoning="No design pattern metadata available",
+            )
+
+        patterns = arch.content_insights.design_patterns
+        relevant_patterns = []
+        irrelevant_patterns = []
+
+        # Determine which patterns are relevant based on intent
+        availability_req = intent.availability_requirement.value
+        security_req = intent.security_requirement.value
+        runtime_model = intent.likely_runtime_model.value
+
+        for pattern in patterns:
+            # High availability patterns
+            if pattern in (DesignPattern.ACTIVE_ACTIVE, DesignPattern.ACTIVE_PASSIVE):
+                if availability_req in (AvailabilityModel.MULTI_REGION_ACTIVE_ACTIVE,
+                                        AvailabilityModel.MULTI_REGION_ACTIVE_PASSIVE,
+                                        AvailabilityModel.ZONE_REDUNDANT):
+                    relevant_patterns.append(pattern)
+                else:
+                    irrelevant_patterns.append(pattern)
+
+            # Security patterns
+            elif pattern in (DesignPattern.ZERO_TRUST, DesignPattern.PRIVATE_NETWORKING):
+                if security_req in (SecurityLevel.REGULATED, SecurityLevel.HIGHLY_REGULATED, SecurityLevel.ENTERPRISE):
+                    relevant_patterns.append(pattern)
+                else:
+                    # Security patterns are generally good, just less impactful
+                    pass
+
+            # Microservices patterns
+            elif pattern in (DesignPattern.MICROSERVICES, DesignPattern.EVENT_DRIVEN,
+                           DesignPattern.CQRS, DesignPattern.SAGA, DesignPattern.CIRCUIT_BREAKER):
+                if runtime_model in (RuntimeModel.MICROSERVICES, RuntimeModel.EVENT_DRIVEN, RuntimeModel.API):
+                    relevant_patterns.append(pattern)
+                elif runtime_model == RuntimeModel.MONOLITH:
+                    irrelevant_patterns.append(pattern)
+
+            # Deployment patterns (generally positive)
+            elif pattern in (DesignPattern.BLUE_GREEN, DesignPattern.CANARY):
+                relevant_patterns.append(pattern)
+
+            # Networking patterns
+            elif pattern == DesignPattern.HUB_SPOKE:
+                relevant_patterns.append(pattern)  # Generally useful
+
+        if relevant_patterns:
+            matched.append(MatchedDimension(
+                dimension="Design Patterns",
+                value=", ".join(p.value for p in relevant_patterns[:3]),
+                reasoning=f"Relevant patterns for your requirements"
+            ))
+
+        # Calculate score based on relevance ratio
+        total = len(patterns)
+        relevant_count = len(relevant_patterns)
+        irrelevant_count = len(irrelevant_patterns)
+
+        if total == 0:
+            score = 0.5
+        elif irrelevant_count > relevant_count:
+            score = 0.4  # More irrelevant than relevant
+        elif relevant_count > 0:
+            score = 0.6 + (0.4 * (relevant_count / total))  # Up to 1.0
+        else:
+            score = 0.5
+
+        return ScoringDimension(
+            dimension="design_pattern_relevance",
+            weight=self.weights.design_pattern_relevance,
+            raw_score=score * 100,
+            weighted_score=score * self.weights.design_pattern_relevance,
+            reasoning=f"{relevant_count} relevant, {irrelevant_count} irrelevant patterns of {total} total",
+        )
+
+    def _score_prerequisite_match(
+        self,
+        arch: ArchitectureEntry,
+        context: ApplicationContext,
+        matched: list[MatchedDimension],
+        mismatched: list[MismatchedDimension],
+    ) -> ScoringDimension:
+        """Score match between team skills and architecture prerequisites.
+
+        Checks if detected technologies and patterns align with the team's
+        existing capabilities based on their current technology stack.
+        """
+        # If no content insights, neutral score
+        if not arch.content_insights or not arch.content_insights.team_prerequisites:
+            return ScoringDimension(
+                dimension="prerequisite_match",
+                weight=self.weights.prerequisite_match,
+                raw_score=50,
+                weighted_score=0.5 * self.weights.prerequisite_match,
+                reasoning="No prerequisite metadata available",
+            )
+
+        prerequisites = [p.lower() for p in arch.content_insights.team_prerequisites]
+
+        # Build team capabilities from detected technology
+        team_skills = set()
+        for tech in context.detected_technology.technologies:
+            team_skills.add(tech.lower())
+
+        # Add framework-based skills
+        for fw in context.detected_technology.frameworks:
+            team_skills.add(fw.lower())
+
+        # Infer skills from primary runtime
+        runtime = (context.detected_technology.primary_runtime or "").lower()
+        if runtime:
+            team_skills.add(runtime)
+            if runtime in ("java", ".net", "dotnet"):
+                team_skills.add("enterprise development")
+            if "spring" in runtime:
+                team_skills.add("spring")
+                team_skills.add("java")
+
+        # Check for container experience
+        if context.detected_technology.containerized:
+            team_skills.update(["docker", "containers", "container"])
+
+        # Match prerequisites against team skills
+        matched_prereqs = []
+        unmatched_prereqs = []
+
+        for prereq in prerequisites:
+            prereq_lower = prereq.lower()
+            # Check if team has this skill or something similar
+            skill_found = False
+            for skill in team_skills:
+                if prereq_lower in skill or skill in prereq_lower:
+                    skill_found = True
+                    break
+
+            if skill_found:
+                matched_prereqs.append(prereq)
+            else:
+                unmatched_prereqs.append(prereq)
+
+        total = len(prerequisites)
+        matched_count = len(matched_prereqs)
+
+        if matched_count > 0:
+            matched.append(MatchedDimension(
+                dimension="Team Prerequisites",
+                value=f"{matched_count}/{total} skills",
+                reasoning=f"Team has experience with: {', '.join(matched_prereqs[:3])}"
+            ))
+
+        if len(unmatched_prereqs) > total * 0.5:
+            mismatched.append(MismatchedDimension(
+                dimension="Team Prerequisites",
+                expected=", ".join(unmatched_prereqs[:3]),
+                actual="Not detected",
+                impact="Team may need training for these skills"
+            ))
+
+        # Calculate score
+        if total == 0:
+            score = 0.5
+        else:
+            match_ratio = matched_count / total
+            score = 0.3 + (0.7 * match_ratio)  # 30% base + up to 70% for matches
+
+        return ScoringDimension(
+            dimension="prerequisite_match",
+            weight=self.weights.prerequisite_match,
+            raw_score=score * 100,
+            weighted_score=score * self.weights.prerequisite_match,
+            reasoning=f"{matched_count}/{total} prerequisites matched",
+        )

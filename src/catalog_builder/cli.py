@@ -96,6 +96,12 @@ def main():
     default='auto',
     help='LLM provider for semantic extraction (auto-detects from env vars)'
 )
+@click.option(
+    '--api-key',
+    type=str,
+    envvar=['ANTHROPIC_API_KEY', 'OPENAI_API_KEY'],
+    help='API key for LLM provider (or set ANTHROPIC_API_KEY/OPENAI_API_KEY env var)'
+)
 def build_catalog_cmd(
     repo_path: Path,
     out: Path,
@@ -109,7 +115,8 @@ def build_catalog_cmd(
     validate_only: bool,
     extract_insights: bool,
     use_llm: bool,
-    llm_provider: str
+    llm_provider: str,
+    api_key: str
 ):
     """Build the architecture catalog from source documentation.
 
@@ -174,6 +181,18 @@ def build_catalog_cmd(
     if extract_insights:
         console.print(f"Content Insights: enabled (LLM: {llm_provider if use_llm else 'disabled'})")
     console.print()
+
+    # Set API key in environment if provided via CLI
+    if api_key and use_llm:
+        import os
+        if llm_provider == 'anthropic':
+            os.environ['ANTHROPIC_API_KEY'] = api_key
+        elif llm_provider == 'openai':
+            os.environ['OPENAI_API_KEY'] = api_key
+        elif llm_provider == 'auto':
+            # Set both for auto-detection
+            os.environ['ANTHROPIC_API_KEY'] = api_key
+            os.environ['OPENAI_API_KEY'] = api_key
 
     # Create generation settings to document what was included
     generation_settings = GenerationSettings(
@@ -306,6 +325,59 @@ def _print_summary(catalog: ArchitectureCatalog):
     table.add_row("", "")
     table.add_row("AI-Suggested Classifications", str(ai_suggested))
     table.add_row("Require Human Review", str(ai_suggested))
+
+    # Content insights statistics
+    with_insights = [a for a in catalog.architectures if a.content_insights]
+    if with_insights:
+        table.add_row("", "")
+        table.add_row("[bold]Content Insights[/bold]", "")
+
+        # Extraction source breakdown
+        hybrid_count = sum(1 for a in with_insights if a.content_insights.extraction_source == "hybrid")
+        rule_only = len(with_insights) - hybrid_count
+        table.add_row("  LLM-enhanced (hybrid)", str(hybrid_count))
+        table.add_row("  Rule-based only", str(rule_only))
+
+        # Intended audience distribution
+        audiences = {}
+        for arch in with_insights:
+            if arch.content_insights.intended_audience:
+                aud = arch.content_insights.intended_audience.value
+                audiences[aud] = audiences.get(aud, 0) + 1
+
+        if audiences:
+            table.add_row("", "")
+            table.add_row("[bold]Intended Audience[/bold]", "")
+            for aud, count in sorted(audiences.items(), key=lambda x: -x[1]):
+                table.add_row(f"  {aud}", str(count))
+
+        # Maturity tier distribution
+        tiers = {}
+        for arch in with_insights:
+            if arch.content_insights.maturity_tier:
+                tier = arch.content_insights.maturity_tier.value
+                tiers[tier] = tiers.get(tier, 0) + 1
+
+        if tiers:
+            table.add_row("", "")
+            table.add_row("[bold]Maturity Tier[/bold]", "")
+            for tier, count in sorted(tiers.items(), key=lambda x: -x[1]):
+                table.add_row(f"  {tier}", str(count))
+
+        # Design patterns found
+        all_patterns = set()
+        for arch in with_insights:
+            all_patterns.update(p.value for p in arch.content_insights.design_patterns)
+        if all_patterns:
+            table.add_row("", "")
+            table.add_row("Design Patterns Found", str(len(all_patterns)))
+
+        # WAF pillars coverage
+        all_pillars = set()
+        for arch in with_insights:
+            all_pillars.update(p.value for p in arch.content_insights.waf_pillars_covered)
+        if all_pillars:
+            table.add_row("WAF Pillars Covered", str(len(all_pillars)))
 
     console.print(table)
 
@@ -451,6 +523,43 @@ def _print_architecture_detail(arch):
         for warning in arch.extraction_warnings:
             console.print(f"  • {warning}")
 
+    # Content insights
+    if arch.content_insights:
+        ci = arch.content_insights
+        console.print(f"\n[bold]Content Insights[/bold] (source: {ci.extraction_source})")
+
+        if ci.intended_audience:
+            console.print(f"  Intended Audience: {ci.intended_audience.value}")
+        if ci.maturity_tier:
+            console.print(f"  Maturity Tier: {ci.maturity_tier.value}")
+        if ci.target_slo:
+            console.print(f"  Target SLO: {ci.target_slo}%")
+
+        if ci.waf_pillars_covered:
+            console.print(f"\n  [bold]WAF Pillars:[/bold]")
+            for pillar in ci.waf_pillars_covered:
+                console.print(f"    • {pillar.value}")
+
+        if ci.design_patterns:
+            console.print(f"\n  [bold]Design Patterns:[/bold]")
+            for pattern in ci.design_patterns:
+                console.print(f"    • {pattern.value}")
+
+        if ci.team_prerequisites:
+            console.print(f"\n  [bold]Team Prerequisites:[/bold]")
+            for prereq in ci.team_prerequisites:
+                console.print(f"    • {prereq}")
+
+        if ci.key_tradeoffs:
+            console.print(f"\n  [bold]Key Tradeoffs:[/bold]")
+            for tradeoff in ci.key_tradeoffs:
+                console.print(f"    • {tradeoff}")
+
+        if ci.explicit_limitations:
+            console.print(f"\n  [bold]Limitations:[/bold]")
+            for limitation in ci.explicit_limitations:
+                console.print(f"    • {limitation}")
+
 
 @main.command()
 @click.option(
@@ -531,6 +640,62 @@ def stats(catalog: Path):
     console.print(f"\n[bold]Top 10 Azure Services[/bold]")
     for service, count in sorted(service_counts.items(), key=lambda x: -x[1])[:10]:
         console.print(f"  {count:3d} × {service}")
+
+    # Content insights statistics
+    with_insights = [a for a in cat.architectures if a.content_insights]
+    if with_insights:
+        console.print(f"\n[bold]Content Insights[/bold]")
+        hybrid_count = sum(1 for a in with_insights if a.content_insights.extraction_source == "hybrid")
+        rule_only = len(with_insights) - hybrid_count
+        console.print(f"  With insights: {len(with_insights)}/{cat.total_architectures}")
+        console.print(f"  LLM-enhanced (hybrid): {hybrid_count}")
+        console.print(f"  Rule-based only: {rule_only}")
+
+        # Intended audience distribution
+        audiences = {}
+        for arch in with_insights:
+            if arch.content_insights.intended_audience:
+                aud = arch.content_insights.intended_audience.value
+                audiences[aud] = audiences.get(aud, 0) + 1
+
+        if audiences:
+            console.print(f"\n[bold]Intended Audience Distribution[/bold]")
+            for aud, count in sorted(audiences.items(), key=lambda x: -x[1]):
+                console.print(f"  {count:3d} × {aud}")
+
+        # Maturity tier distribution
+        tiers = {}
+        for arch in with_insights:
+            if arch.content_insights.maturity_tier:
+                tier = arch.content_insights.maturity_tier.value
+                tiers[tier] = tiers.get(tier, 0) + 1
+
+        if tiers:
+            console.print(f"\n[bold]Maturity Tier Distribution[/bold]")
+            for tier, count in sorted(tiers.items(), key=lambda x: -x[1]):
+                console.print(f"  {count:3d} × {tier}")
+
+        # Top design patterns
+        pattern_counts = {}
+        for arch in with_insights:
+            for p in arch.content_insights.design_patterns:
+                pattern_counts[p.value] = pattern_counts.get(p.value, 0) + 1
+
+        if pattern_counts:
+            console.print(f"\n[bold]Top Design Patterns[/bold]")
+            for pattern, count in sorted(pattern_counts.items(), key=lambda x: -x[1])[:8]:
+                console.print(f"  {count:3d} × {pattern}")
+
+        # WAF pillars coverage
+        pillar_counts = {}
+        for arch in with_insights:
+            for p in arch.content_insights.waf_pillars_covered:
+                pillar_counts[p.value] = pillar_counts.get(p.value, 0) + 1
+
+        if pillar_counts:
+            console.print(f"\n[bold]WAF Pillar Coverage[/bold]")
+            for pillar, count in sorted(pillar_counts.items(), key=lambda x: -x[1]):
+                console.print(f"  {count:3d} × {pillar}")
 
 
 @main.command(name='list-filters')
