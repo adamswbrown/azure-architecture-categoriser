@@ -18,10 +18,25 @@ class CatalogBuilder:
     def __init__(
         self,
         repo_path: Path,
-        progress_callback: Optional[Callable[[str], None]] = None
+        progress_callback: Optional[Callable[[str], None]] = None,
+        extract_content_insights: bool = False,
+        use_llm: bool = True,
+        llm_provider: str = "auto"
     ):
+        """Initialize the catalog builder.
+
+        Args:
+            repo_path: Path to the architecture-center repository
+            progress_callback: Optional callback for progress messages
+            extract_content_insights: Enable hybrid content extraction
+            use_llm: Use LLM for semantic extraction (requires API key)
+            llm_provider: LLM provider ("openai", "anthropic", "mock", "auto")
+        """
         self.repo_path = repo_path
         self.progress = progress_callback or (lambda x: None)
+        self.extract_content_insights = extract_content_insights
+        self.use_llm = use_llm
+        self.llm_provider = llm_provider
 
         # Initialize components
         self.parser = MarkdownParser()
@@ -110,6 +125,14 @@ class CatalogBuilder:
         # Add AI-suggested classifications
         entry = self.classifier.suggest_classifications(entry, doc)
 
+        # Extract content-derived insights (hybrid extraction)
+        if self.extract_content_insights:
+            entry = self.extractor.extract_content_insights(
+                entry, doc,
+                use_llm=self.use_llm,
+                llm_provider=self.llm_provider
+            )
+
         return entry
 
     def save_catalog(
@@ -175,7 +198,10 @@ def build_catalog(
     repo_path: Path,
     output_path: Path,
     progress_callback: Optional[Callable[[str], None]] = None,
-    generation_settings: Optional[GenerationSettings] = None
+    generation_settings: Optional[GenerationSettings] = None,
+    extract_content_insights: bool = False,
+    use_llm: bool = True,
+    llm_provider: str = "auto"
 ) -> tuple[ArchitectureCatalog, list[str]]:
     """Build and save the architecture catalog.
 
@@ -184,10 +210,19 @@ def build_catalog(
         output_path: Path to save the catalog JSON
         progress_callback: Optional callback for progress messages
         generation_settings: Optional settings documenting how the catalog was filtered
+        extract_content_insights: Enable hybrid content extraction from full text
+        use_llm: Use LLM for semantic extraction (requires API key)
+        llm_provider: LLM provider ("openai", "anthropic", "mock", "auto")
 
     Returns the catalog and a list of validation issues.
     """
-    builder = CatalogBuilder(repo_path, progress_callback)
+    builder = CatalogBuilder(
+        repo_path,
+        progress_callback,
+        extract_content_insights=extract_content_insights,
+        use_llm=use_llm,
+        llm_provider=llm_provider
+    )
     catalog = builder.build(generation_settings=generation_settings)
 
     validator = CatalogValidator()

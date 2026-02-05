@@ -1,3 +1,8 @@
+---
+layout: default
+title: Reviewing the Catalog
+---
+
 # Reviewing the Architecture Catalog
 
 This guide explains how to review and validate the architecture catalog to ensure it meets your organization's needs.

@@ -1,3 +1,8 @@
+---
+layout: default
+title: Azure Deployment
+---
+
 # Deploying to Azure Container Apps
 
 This guide covers deploying the Azure Architecture Recommender to Azure Container Apps using GitHub Actions.

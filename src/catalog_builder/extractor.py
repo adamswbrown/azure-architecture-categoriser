@@ -12,9 +12,12 @@ from .schema import (
     ArchitectureEntry,
     CatalogQuality,
     ClassificationMeta,
+    ContentDerivedInsights,
+    DesignPattern,
     ExpectedCharacteristics,
     ExtractionConfidence,
     TrinaryOption,
+    WellArchitectedPillar,
 )
 
 
@@ -143,6 +146,79 @@ class MetadataExtractor:
         if not browse_tags:
             entry.extraction_warnings.append("No browse tags from YML metadata")
 
+        return entry
+
+    def extract_content_insights(
+        self,
+        entry: ArchitectureEntry,
+        doc: ParsedDocument,
+        use_llm: bool = True,
+        llm_provider: str = "auto"
+    ) -> ArchitectureEntry:
+        """Extract content-derived insights from full document text.
+
+        This runs the hybrid extraction pipeline:
+        1. Rule-based extraction for deterministic patterns
+        2. LLM extraction for semantic understanding (if enabled)
+        3. Merge results into ContentDerivedInsights
+
+        Args:
+            entry: The architecture entry to enhance
+            doc: Parsed document with full content
+            use_llm: Whether to use LLM for semantic extraction
+            llm_provider: LLM provider ("openai", "anthropic", "mock", "auto")
+
+        Returns:
+            Enhanced ArchitectureEntry with content_insights populated
+        """
+        from .content_analyzer import ContentAnalyzer
+        from .llm_extractor import LLMExtractor
+
+        # Phase 1: Rule-based extraction
+        analyzer = ContentAnalyzer()
+        rule_result = analyzer.analyze(doc.content, doc.path)
+
+        # Initialize insights with rule-based results
+        insights = ContentDerivedInsights(
+            target_slo=rule_result.target_slo,
+            waf_pillars_covered=rule_result.waf_pillars,
+            design_patterns=rule_result.design_patterns,
+            team_prerequisites=rule_result.team_prerequisites,
+            upgrade_paths=rule_result.upgrade_paths,
+            extraction_source="rule_based"
+        )
+
+        # Phase 2: LLM extraction (if enabled)
+        if use_llm:
+            try:
+                extractor = LLMExtractor(provider_name=llm_provider)
+                llm_result = extractor.extract(
+                    content=doc.content,
+                    rule_based_result=rule_result,
+                    title=doc.title or entry.name
+                )
+
+                if llm_result.extraction_successful:
+                    insights.intended_audience = llm_result.intended_audience
+                    insights.maturity_tier = llm_result.maturity_tier
+                    insights.key_tradeoffs = llm_result.key_tradeoffs
+                    insights.explicit_limitations = llm_result.explicit_limitations
+                    insights.extraction_source = "hybrid"
+                else:
+                    # Fall back to rule-based only
+                    insights.explicit_limitations = rule_result.raw_limitations[:5]
+                    if llm_result.error_message:
+                        entry.extraction_warnings.append(
+                            f"LLM extraction failed: {llm_result.error_message}"
+                        )
+            except Exception as e:
+                entry.extraction_warnings.append(f"LLM extraction error: {str(e)}")
+                insights.explicit_limitations = rule_result.raw_limitations[:5]
+        else:
+            # Use raw limitations from rule-based
+            insights.explicit_limitations = rule_result.raw_limitations[:5]
+
+        entry.content_insights = insights
         return entry
 
     def _get_classification_config(self):

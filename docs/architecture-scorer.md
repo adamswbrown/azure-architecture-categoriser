@@ -1,3 +1,8 @@
+---
+layout: default
+title: Architecture Scorer
+---
+
 # Architecture Scorer
 
 The Architecture Scorer is the runtime engine that evaluates application contexts against the architecture catalog and returns ranked recommendations with explanations.

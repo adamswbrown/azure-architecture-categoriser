@@ -1,3 +1,8 @@
+---
+layout: default
+title: Recommendations App
+---
+
 # Architecture Recommendations App
 
 A customer-facing web application that provides Azure architecture recommendations based on application context data.

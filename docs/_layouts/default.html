@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: "en-US" }}">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% seo %}
+    <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
+    {% include head-custom.html %}
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="{{ "/" | absolute_url }}">{{ site.title | default: "Azure Architecture Categoriser" }}</a></h1>
+        
+        {% if site.logo %}
+          <img src="{{site.logo | relative_url}}" alt="Logo" />
+        {% endif %}
+
+        <p>{{ site.description | default: "A comprehensive tool for categorizing and recommending Azure architecture patterns" }}</p>
+
+        {% if site.github.is_user_page %}
+          <p class="view"><a href="{{ site.github.owner_url }}">View My GitHub Profile</a></p>
+        {% elsif site.github.is_project_page %}
+          <p class="view"><a href="{{ site.github.repository_url }}">View on GitHub</a></p>
+        {% endif %}
+
+        <div class="nav-section">
+          <h3>Documentation</h3>
+          <ul>
+            <li><a href="{{ "/" | relative_url }}">Home</a></li>
+            <li><a href="{{ "/recommendations-app.md" | relative_url }}">Recommendations App</a></li>
+            <li><a href="{{ "/catalog-builder.md" | relative_url }}">Catalog Builder</a></li>
+            <li><a href="{{ "/architecture-scorer.md" | relative_url }}">Architecture Scorer</a></li>
+            <li><a href="{{ "/configuration.md" | relative_url }}">Configuration</a></li>
+            <li><a href="{{ "/azure-deployment.md" | relative_url }}">Deployment</a></li>
+          </ul>
+        </div>
+
+        <div class="nav-section">
+          <h3>Reference</h3>
+          <ul>
+            <li><a href="{{ "/architecture-categorization-guide.md" | relative_url }}">Categorization Guide</a></li>
+            <li><a href="{{ "/drmigrate-integration.md" | relative_url }}">Dr. Migrate Integration</a></li>
+            <li><a href="{{ "/design/" | relative_url }}">Design Decisions</a></li>
+            <li><a href="{{ "/reviewing-the-catalog.md" | relative_url }}">Reviewing the Catalog</a></li>
+          </ul>
+        </div>
+
+        {% if site.github.is_project_page %}
+          <ul class="downloads">
+            <li><a href="{{ site.github.zip_url }}">Download <strong>ZIP File</strong></a></li>
+            <li><a href="{{ site.github.tar_url }}">Download <strong>TAR Ball</strong></a></li>
+            <li><a href="{{ site.github.repository_url }}">View On <strong>GitHub</strong></a></li>
+          </ul>
+        {% endif %}
+      </header>
+      <section>
+
+      {{ content }}
+
+      </section>
+      <footer>
+        {% if site.github.is_project_page %}
+          <p>This project is maintained by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></p>
+        {% endif %}
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist/minimal">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="{{ "/assets/js/scale.fix.js" | relative_url }}"></script>
+  </body>
+</html>

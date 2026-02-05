@@ -1,3 +1,8 @@
+---
+layout: default
+title: Catalog Builder
+---
+
 # Catalog Builder
 
 The Catalog Builder compiles Azure Architecture Center documentation into a structured architecture catalog that can be used for matching applications to recommended architectures.

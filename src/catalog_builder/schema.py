@@ -100,6 +100,49 @@ class CostProfile(str, Enum):
     INNOVATION_FIRST = "innovation_first"
 
 
+class IntendedAudience(str, Enum):
+    """Target audience/use case for the architecture."""
+    POC = "poc"  # Proof of concept, learning, evaluation
+    DEVELOPMENT = "development"  # Dev/test environments
+    BASELINE = "baseline"  # Production starting point
+    PRODUCTION = "production"  # Production-ready
+    MISSION_CRITICAL = "mission_critical"  # High availability, enterprise-grade
+
+
+class MaturityTier(str, Enum):
+    """Architecture maturity/complexity tier."""
+    BASIC = "basic"  # Learning, minimal features
+    BASELINE = "baseline"  # Production foundation
+    STANDARD = "standard"  # Common production patterns
+    ADVANCED = "advanced"  # Enhanced features, multi-region
+    MISSION_CRITICAL = "mission_critical"  # Maximum reliability
+
+
+class WellArchitectedPillar(str, Enum):
+    """Azure Well-Architected Framework pillars."""
+    RELIABILITY = "reliability"
+    SECURITY = "security"
+    COST_OPTIMIZATION = "cost_optimization"
+    OPERATIONAL_EXCELLENCE = "operational_excellence"
+    PERFORMANCE_EFFICIENCY = "performance_efficiency"
+
+
+class DesignPattern(str, Enum):
+    """Common architectural design patterns."""
+    ACTIVE_ACTIVE = "active_active"
+    ACTIVE_PASSIVE = "active_passive"
+    BLUE_GREEN = "blue_green"
+    CANARY = "canary"
+    ZERO_TRUST = "zero_trust"
+    PRIVATE_NETWORKING = "private_networking"
+    HUB_SPOKE = "hub_spoke"
+    MICROSERVICES = "microservices"
+    EVENT_DRIVEN = "event_driven"
+    CQRS = "cqrs"
+    SAGA = "saga"
+    CIRCUIT_BREAKER = "circuit_breaker"
+
+
 class ComplexityLevel(str, Enum):
     """Complexity level rating."""
     LOW = "low"
@@ -173,6 +216,59 @@ class ClassificationMeta(BaseModel):
     """Metadata about how a value was determined."""
     confidence: ExtractionConfidence
     source: Optional[str] = None  # e.g., "filename", "frontmatter", "content_analysis"
+
+
+class ContentDerivedInsights(BaseModel):
+    """Metadata extracted from full document content analysis.
+
+    This captures rich contextual information from the prose content
+    that cannot be reliably extracted from frontmatter alone.
+    """
+    # Rule-based extractions (high confidence)
+    target_slo: Optional[str] = Field(
+        None,
+        description="Target SLO/SLA percentage (e.g., '99.99')"
+    )
+    waf_pillars_covered: list[WellArchitectedPillar] = Field(
+        default_factory=list,
+        description="Well-Architected Framework pillars with dedicated sections"
+    )
+    design_patterns: list[DesignPattern] = Field(
+        default_factory=list,
+        description="Architectural patterns mentioned (active-active, zero-trust, etc.)"
+    )
+    team_prerequisites: list[str] = Field(
+        default_factory=list,
+        description="Required team skills/technologies (kubernetes, terraform, etc.)"
+    )
+    upgrade_paths: list[str] = Field(
+        default_factory=list,
+        description="Links to more advanced/robust architecture alternatives"
+    )
+
+    # LLM-derived extractions (semantic understanding)
+    intended_audience: Optional[IntendedAudience] = Field(
+        None,
+        description="Target audience/use case (poc, baseline, production, mission_critical)"
+    )
+    maturity_tier: Optional[MaturityTier] = Field(
+        None,
+        description="Architecture maturity level"
+    )
+    key_tradeoffs: list[str] = Field(
+        default_factory=list,
+        description="Key design tradeoffs (e.g., 'Cost over reliability')"
+    )
+    explicit_limitations: list[str] = Field(
+        default_factory=list,
+        description="Documented limitations or exclusions"
+    )
+
+    # Extraction metadata
+    extraction_source: str = Field(
+        default="hybrid",
+        description="How insights were extracted: 'rule_based', 'llm', 'hybrid'"
+    )
 
 
 class ArchitectureEntry(BaseModel):
@@ -319,6 +415,12 @@ class ArchitectureEntry(BaseModel):
     catalog_quality: CatalogQuality = Field(
         default=CatalogQuality.AI_SUGGESTED,
         description="Quality level of this catalog entry"
+    )
+
+    # Content-derived insights (from full document analysis)
+    content_insights: Optional[ContentDerivedInsights] = Field(
+        None,
+        description="Rich metadata extracted from full document content"
     )
 
     # Extraction metadata

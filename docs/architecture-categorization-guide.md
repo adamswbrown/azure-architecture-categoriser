@@ -1,3 +1,8 @@
+---
+layout: default
+title: Architecture Categorization Guide
+---
+
 # Architecture Categorization Guide
 
 This document explains how architectures are categorized in the catalog, where the data comes from, and how to validate classifications during manual review.

@@ -1,0 +1,40 @@
+title: Azure Architecture Categoriser
+description: A comprehensive tool for categorizing and recommending Azure architecture patterns
+theme: jekyll-theme-minimal
+logo: images/architecture%20recommendations-gui.png
+show_downloads: false
+
+# Navigation
+nav_links:
+  - Home: /
+  - Getting Started: /getting-started
+  - Architecture Recommender: /recommendations-app
+  - Catalog Builder: /catalog-builder
+  - Scoring System: /architecture-scorer
+  - Configuration: /configuration
+  - Deployment: /azure-deployment
+  - Design Decisions: /design
+
+# Build settings
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Exclude files/folders
+exclude:
+  - bin/
+  - scripts/
+  - tests/
+  - infra/
+  - __pycache__/
+  - .gitignore
+  - Dockerfile
+  - docker-compose.yml
+  - docker-entrypoint.sh
+  - pyproject.toml
+  - README.md

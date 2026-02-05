@@ -1,3 +1,8 @@
+---
+layout: default
+title: Configuration Reference
+---
+
 # Configuration Reference
 
 This document covers configuration for both the **Catalog Builder** and **Architecture Scorer**.

@@ -1,3 +1,8 @@
+---
+layout: default
+title: Dr. Migrate Integration
+---
+
 # Dr. Migrate Integration
 
 This document describes how to generate architecture recommendation context files from Dr. Migrate data sources, enabling architecture recommendations for ALL applications—not just those with Java/.NET App Cat scans.

@@ -1,3 +1,8 @@
+---
+layout: default
+title: Design Decisions
+---
+
 # Design Decisions
 
 This folder documents the key design decisions behind the Azure Architecture Recommender. If you're wondering **"why does it work this way?"**, start here.

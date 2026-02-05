@@ -80,6 +80,22 @@ def main():
     is_flag=True,
     help='Only validate an existing catalog, do not build'
 )
+@click.option(
+    '--extract-insights',
+    is_flag=True,
+    help='Extract content-derived insights from full document text (hybrid extraction)'
+)
+@click.option(
+    '--use-llm/--no-llm',
+    default=True,
+    help='Use LLM for semantic extraction (default: enabled if API key available)'
+)
+@click.option(
+    '--llm-provider',
+    type=click.Choice(['auto', 'openai', 'anthropic', 'mock']),
+    default='auto',
+    help='LLM provider for semantic extraction (auto-detects from env vars)'
+)
 def build_catalog_cmd(
     repo_path: Path,
     out: Path,
@@ -90,7 +106,10 @@ def build_catalog_cmd(
     require_yml: bool,
     exclude_examples: bool,
     verbose: bool,
-    validate_only: bool
+    validate_only: bool,
+    extract_insights: bool,
+    use_llm: bool,
+    llm_provider: str
 ):
     """Build the architecture catalog from source documentation.
 
@@ -151,6 +170,9 @@ def build_catalog_cmd(
 
     if active_filters:
         console.print(f"Filters: {'; '.join(active_filters)}")
+
+    if extract_insights:
+        console.print(f"Content Insights: enabled (LLM: {llm_provider if use_llm else 'disabled'})")
     console.print()
 
     # Create generation settings to document what was included
@@ -179,7 +201,10 @@ def build_catalog_cmd(
                 repo_path,
                 out,
                 progress_callback,
-                generation_settings=generation_settings
+                generation_settings=generation_settings,
+                extract_content_insights=extract_insights,
+                use_llm=use_llm,
+                llm_provider=llm_provider
             )
         except Exception as e:
             console.print(f"\n[red]Error building catalog:[/red] {e}")

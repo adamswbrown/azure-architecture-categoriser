@@ -42,7 +42,7 @@ For applications **without Java/.NET components**, you can generate context data
 
 Simply paste the provided LLM prompt into Dr. Migrate AI Advisor, save the JSON response, and upload it. The tool auto-detects the format and converts it automatically.
 
-See [Dr. Migrate Integration](docs/drmigrate-integration.md) for the full LLM prompt and details.
+See the [Dr. Migrate Integration Guide](https://adamswbrown.github.io/azure-architecture-categoriser/drmigrate-integration.html) for the full LLM prompt and details.
 
 ### Integration with Dr. Migrate
 
@@ -300,16 +300,20 @@ See [examples/context_files/README.md](examples/context_files/README.md) for the
 
 ## Documentation
 
+**📖 [Full Documentation on GitHub Pages](https://adamswbrown.github.io/azure-architecture-categoriser)** ← Start here for guides and references!
+
+### Key Guides
+
 | Document | Description |
 |----------|-------------|
-| [Catalog Builder](docs/catalog-builder.md) | Building architecture catalogs |
-| [Architecture Scorer](docs/architecture-scorer.md) | Scoring engine details |
-| [Recommendations App](docs/recommendations-app.md) | Customer-facing web app |
-| [**Dr. Migrate Integration**](docs/drmigrate-integration.md) | **Get recommendations for ALL apps** |
-| [Configuration](docs/configuration.md) | Full configuration reference |
-| [**Design Decisions**](docs/design/README.md) | **Why does it work this way?** |
-| [Catalog Comparison](docs/catalog-comparison.md) | Quick Build vs Full Build |
-| [Azure Deployment](docs/azure-deployment.md) | Deploy to Azure Container Apps |
+| [Getting Started](https://adamswbrown.github.io/azure-architecture-categoriser/getting-started.html) | Installation and first run |
+| [Recommendations App](https://adamswbrown.github.io/azure-architecture-categoriser/recommendations-app.html) | Customer-facing web app guide |
+| [Catalog Builder](https://adamswbrown.github.io/azure-architecture-categoriser/catalog-builder.html) | Building architecture catalogs |
+| [Architecture Scorer](https://adamswbrown.github.io/azure-architecture-categoriser/architecture-scorer.html) | Scoring engine details |
+| [Dr. Migrate Integration](https://adamswbrown.github.io/azure-architecture-categoriser/drmigrate-integration.html) | Get recommendations for ALL apps |
+| [Configuration](https://adamswbrown.github.io/azure-architecture-categoriser/configuration.html) | Full configuration reference |
+| [Design Decisions](https://adamswbrown.github.io/azure-architecture-categoriser/design/) | Why does it work this way? |
+| [Azure Deployment](https://adamswbrown.github.io/azure-architecture-categoriser/azure-deployment.html) | Deploy to Azure Container Apps |
 
 ## Repository Structure
 

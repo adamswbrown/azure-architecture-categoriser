@@ -1,3 +1,8 @@
+---
+layout: default
+title: Security Audit Report
+---
+
 # Security Audit Report
 
 **Date:** January 2025
